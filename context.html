@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link href="./output.css" rel="stylesheet" />
+    <script type="module" src="./floating.js"></script>
+    <script defer src="./transition-plugin.js"></script>
+    <script defer type="module" src="./dropdown-context.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    <button x-data @contextmenu.prevent="$dispatch('open-contextmenu', {id: 'context', data: 'data', $event})">open context</button>
+    <div x-data="dropdownContext" id="context">
+      <div x-bind="menu" x-cloak>
+        <div class="card">
+          <ul>
+            <li>button</li>
+            <li>button</li>
+            <li x-text="data"></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

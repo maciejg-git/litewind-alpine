@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link href="./output.css" rel="stylesheet" />
+    <script type="module" src="./floating.js"></script>
+    <script defer src="./transition-plugin.js"></script>
+    <script defer type="module" src="./dropdown.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    <div x-data="dropdown">
+      <button x-bind="trigger">dropdown</button>
+      <div x-bind="menu" x-cloak x-alt-transition="{
+              enter: ['opacity-0 scale-y-[0.5]', 'transition ease-out duration-100 origin-top', 'opacity-100'],
+              leave: ['opacity-100', 'transition ease-in duration-100 origin-top', 'opacity-0 scale-y-[0.5]'],
+            }">
+        <div class="card w-[320px]">
+          <ul>
+            <li>button</li>
+            <li>button</li>
+            <li>button</li>
+            <li>button</li>
+            <li>button</li>
+            <li>button</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

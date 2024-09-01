@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+
+[x-cloak] { display: none !important; }
+
+@tailwind utilities;
+
+@layer components {
+  .btn {
+    @apply px-4 py-1 rounded
+  }
+
+  .btn-primary {
+    @apply 
+      text-gray-100
+      bg-violet-500
+      dark:bg-violet-500
+      hover:bg-violet-600
+      dark:hover:bg-violet-600
+      border-violet-700
+      focus:ring-violet-200
+  }
+
+  .card {
+    @apply
+      p-4
+      rounded-md
+      shadow-md
+      border
+      dark:text-gray-300
+      bg-white
+      dark:bg-neutral-800
+      border-gray-200
+      dark:border-neutral-700
+  }
+}

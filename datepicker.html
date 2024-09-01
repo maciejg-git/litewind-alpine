@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="./output.css" rel="stylesheet" />
+    <script defer src="./transition-plugin.js"></script>
+    <script defer src="./datepicker.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    <div class="w-[320px] rounded-md shadow-md border border-neutral-300 overflow-hidden">
+      <div x-data="datepicker" class="overflow-hidden bg-white text-center text-gray-800 dark:bg-neutral-800 dark:text-gray-300">
+        <div class="my-4 grid grid-flow-col grid-cols-6">
+          <button x-bind="prevYearButton" class="mx-auto flex flex-col justify-center rounded px-2 py-1 leading-none focus:outline-none focus:ring-2 focus:ring-violet-200 dark:focus:ring-violet-400"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+  <path fill-rule="evenodd" d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+</svg></button>
+          <button x-bind="prevMonthButton" class="mx-auto flex flex-col justify-center rounded px-2 py-1 leading-none focus:outline-none focus:ring-2 focus:ring-violet-200 dark:focus:ring-violet-400"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+</svg></button>
+          <div x-text="currentDate" class="col-span-2 inline-block font-bold">
+      
+          </div>
+          <button x-bind="nextMonthButton" class="mx-auto flex flex-col justify-center rounded px-2 py-1 leading-none focus:outline-none focus:ring-2 focus:ring-violet-200 dark:focus:ring-violet-400"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+</svg></button>
+          <button x-bind="nextYearButton" class="mx-auto flex flex-col justify-center rounded px-2 py-1 leading-none focus:outline-none focus:ring-2 focus:ring-violet-200 dark:focus:ring-violet-400"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708"/>
+  <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708"/>
+</svg></button>
+        </div>
+      
+        <div class="mb-2 grid grid-cols-7">
+          <template x-for="weekday in weekdays">
+            <div x-text="weekday" class="text-sm font-semibold dark:text-gray-300">
+            
+            </div>
+          </template>
+        </div>
+      
+        <div class="relative mb-2 grid grid-cols-7">
+          <template x-for="d in days" :key="d.toISOString()">
+            <a x-bind="day" x-text="d.getDate()" class="mx-1 my-1 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full py-1 text-sm font-semibold hover:bg-neutral-200" class:today="!font-bold text-violet-400 dark:text-violet-400 border border-violet-400"
+              class:adjacent="text-gray-800/20 dark:text-gray-200/10" class:selected="!text-white dark:text-gray-200 bg-violet-400 dark:bg-violet-500 hover:!bg-violet-600 dark:hover:bg-violet-700" class:selected-range="!text-white dark:text-gray-200 bg-violet-400 dark:bg-neutral-600 hover:!bg-violet-600 dark:hover:bg-neutral-500" class:partially-selected="text-gray-800 dark:text-gray-300 bg-gray-300 dark:bg-neutral-700"></a>
+          </template>
+        </div>
+      
+        <div x-text="todayFormatted" class="bg-gray-100 py-1 text-sm font-semibold dark:bg-neutral-700 dark:text-gray-300">
+      
+        </div>
+      
+        <div>
+          <button></button>
+          <button></button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

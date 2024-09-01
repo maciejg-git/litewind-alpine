@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link href="./output.css" rel="stylesheet" />
+    <script type="module" src="./floating.js"></script>
+    <script defer src="./transition-plugin.js"></script>
+    <script defer src="./tabs.js"></script>
+    <script defer type="module" src="./tooltip.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    <div
+      x-data="tabs('tab 2', {
+      content: { 'x-alt-transition': {
+          enter: ['opacity-0', 'transition ease-out duration-100 delay-100', 'opacity-100'],
+          leave: ['opacity-100', 'transition ease-in duration-100 absolute top-0', 'opacity-0'],
+        }
+        }})"
+    >
+      <ul
+        class="flex flex-auto items-center border-b pl-2 dark:border-neutral-600"
+      >
+        <li>
+          <button
+            data-tab="tab 2"
+            x-bind="label"
+            class="-mb-px -ml-px block overflow-ellipsis whitespace-nowrap rounded-t-md border border-gray-300 bg-gray-100 p-2 px-4 transition-all duration-200 hover:bg-gray-50 data-selected:border-b-transparent data-selected:bg-white data-selected:shadow-none data-selected:hover:bg-white dark:border-neutral-600 dark:bg-neutral-900 dark:text-gray-300/80 dark:hover:bg-neutral-800 data-selected:dark:border-neutral-600 data-selected:dark:border-b-transparent data-selected:dark:bg-neutral-800 data-selected:dark:text-gray-300 data-selected:dark:hover:bg-neutral-800"
+          >
+            tab 2
+          </button>
+        </li>
+        <li>
+          <button
+            data-tab="tab 3"
+            x-bind="label"
+            class="-mb-px -ml-px block overflow-ellipsis whitespace-nowrap rounded-t-md border border-gray-300 bg-gray-100 p-2 px-4 transition-all duration-200 hover:bg-gray-50 data-selected:border-b-transparent data-selected:bg-white data-selected:shadow-none data-selected:hover:bg-white dark:border-neutral-600 dark:bg-neutral-900 dark:text-gray-300/80 dark:hover:bg-neutral-800 data-selected:dark:border-neutral-600 data-selected:dark:border-b-transparent data-selected:dark:bg-neutral-800 data-selected:dark:text-gray-300 data-selected:dark:hover:bg-neutral-800"
+          >
+            tab 3
+          </button>
+        </li>
+        <li>
+          <button
+            data-tab="tab 5"
+            x-bind="label"
+            class="-mb-px -ml-px block overflow-ellipsis whitespace-nowrap rounded-t-md border border-gray-300 bg-gray-100 p-2 px-4 transition-all duration-200 hover:bg-gray-50 data-selected:border-b-transparent data-selected:bg-white data-selected:shadow-none data-selected:hover:bg-white dark:border-neutral-600 dark:bg-neutral-900 dark:text-gray-300/80 dark:hover:bg-neutral-800 data-selected:dark:border-neutral-600 data-selected:dark:border-b-transparent data-selected:dark:bg-neutral-800 data-selected:dark:text-gray-300 data-selected:dark:hover:bg-neutral-800"
+          >
+            tab 5
+          </button>
+        </li>
+      </ul>
+      <div class="p-4">
+        <div class="relative">
+          <div data-tab="tab 2" x-bind="content">tab 2
+            <div x-tooltip="tooltip">item</div>
+          </div>
+          <div data-tab="tab 3" x-bind="content">tab 3</div>
+          <div data-tab="tab 5" x-bind="content">tab 5</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
