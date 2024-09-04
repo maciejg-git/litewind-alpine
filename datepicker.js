@@ -83,10 +83,10 @@ document.addEventListener('alpine:init', () => {
           return date
         }
         if (format === 'array') {
-          return [date.getFullYear(), date.getMonth(), date.getDate()]
+          return [date.getFullYear(), date.getMonth() + 1, date.getDate()]
         }
         if (format === 'string') {
-          return [date.getFullYear(), date.getMonth(), date.getDate()].join('-')
+          return [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('-')
         }
       },
       todayFormatted() {

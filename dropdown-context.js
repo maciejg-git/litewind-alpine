@@ -4,12 +4,17 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("dropdownContext", (defaults = {}, opts = {}) => ({
     isShow: false,
     floating: null,
-    data: null,
+    contextData: null,
 
     init() {
       this.$nextTick(() => {
         this.floating = useFloating(null, this.$refs.menu, opts);
       });
+      Alpine.bind(this.$el, {
+        ['@keydown.escape.window.prevent']() {
+          this.close()
+        }
+      })
     },
     open() {
       this.floating.startAutoUpdate();
@@ -29,7 +34,7 @@ document.addEventListener("alpine:init", () => {
         }
         let mouseEvent = this.$event.detail.$event;
         this.floating.updateVirtualElement(mouseEvent);
-        this.data = this.$event.detail.data;
+        this.contextData = this.$event.detail.data;
         this.open();
       },
       ["x-ref"]: "menu",

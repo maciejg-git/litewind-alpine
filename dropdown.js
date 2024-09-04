@@ -13,6 +13,11 @@ document.addEventListener('alpine:init', () => {
       this.$nextTick(() => {
         this.floating = useFloating(this.$refs.trigger, this.$refs.menu, opts)
       })
+      Alpine.bind(this.$el, {
+        ['@keydown.escape.prevent']() {
+          this.close()
+        }
+      })
     },
     scheduleHide() {
       return setTimeout(() => {
