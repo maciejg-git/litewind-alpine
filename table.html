@@ -12,20 +12,41 @@
     ></script>
   </head>
   <body>
-    <table x-data="table">
+    <table x-data="table" class="border-collapse
+      text-left
+      table-fixed">
       <thead>
         <tr>
-          <td>
-
-          </td>
+          <template x-for="key in keys">
+            <td x-bind="header" x-text="key" class="font-semibold
+      py-2
+      px-2
+      dark:text-gray-200
+      border-gray-300
+      dark:border-neutral-700
+      border-b">
+            
+            </td>
+          </template>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>
-
-          </td>
-        </tr>
+        <template x-for="row in getDataFiltered">
+          <tr>
+            <template x-for="col in row">
+              <td x-text="col" class="border-t
+      transition-colors
+      duration-200
+      py-2
+      px-2
+      border-gray-300
+      dark:border-neutral-700
+      border-t">
+              
+              </td>
+            </template>
+          </tr>
+        </template>
       </tbody>
     </table>
   </body>
