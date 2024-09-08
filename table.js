@@ -19,50 +19,125 @@ let itemCompare = (a, b, direction, localeCompare) => {
   return localeCompare(a, b) * direction;
 };
 
-document.addEventListener('alpine:init', () => {
-  Alpine.data('table', (defaults = {}) => ({
+let formatLabelCase = (value) =>
+  value.replace(
+    /\w\S*/g,
+    (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+  );
+
+let definitionDefaults = {
+  sortable: false,
+  filterable: true,
+  visible: true,
+};
+
+document.addEventListener("alpine:init", () => {
+  Alpine.data("table", (props, defaults = {}) => ({
     tableData: [],
-    dataSorted: [],
-    dataFiltered: [],
-    dataPaginated: [],
-    keys: [],
-    sortKey: "last_name",
+    definition: [],
+    sortKey: "",
     sortAsc: 1,
     filter: "",
-    props: {
-      locale: defaults.locale ?? "en-GB"
-    },
+    page: 1,
+    itemsPerPage: 0,
+    locale: props.locale ?? "en-GB",
 
     init() {
-      this.tableData = [{"id":1,"first_name":"Anthony","last_name":"Linbohm","city":"Makui","department":"Business Development","title":"Quality Engineer"},
-{"id":2,"first_name":"Richard","last_name":"Moult","city":"Xihu","department":"Legal","title":"Budget/Accounting Analyst IV"},
-{"id":3,"first_name":"Chance","last_name":"Dallas","city":"Moncton","department":"Support","title":"Product Engineer"},
-{"id":4,"first_name":"Rozamond","last_name":"Abbatucci","city":"Chico","department":"Legal","title":"Software Consultant"},] 
-      this.keys = Object.keys(this.tableData[0])
+      Alpine.effect(() => {
+        this.tableData = [...props.data];
+        this.definition = this.getDefinition();
+      });
+      Alpine.effect(() => {
+        this.filter = props.filter;
+        this.page = 1;
+      });
+      Alpine.effect(() => {
+        this.page = props.page;
+      });
+      Alpine.effect(() => {
+        this.itemsPerPage = props.itemsPerPage;
+        this.page = 1;
+      });
+    },
+    generateDefinitionFromData() {
+      if (!this.tableData || !this.tableData.length) return [];
+
+      return Object.keys(this.tableData[0]).map((item) => {
+        return { key: item };
+      });
+    },
+    getUserDefinition() {
+      if (!Array.isArray(props.definition)) return false;
+      return props.definition.every((i) => i.key) && props.definition;
+    },
+    getDefinition() {
+      let definition =
+        this.getUserDefinition() || this.generateDefinitionFromData();
+
+      return definition.map((i) => {
+        return {
+          ...definitionDefaults,
+          ...i,
+          label: i.label || formatLabelCase(i.key),
+        };
+      });
     },
     getDataSorted() {
-      if (!this.sortKey) return this.tableData
+      if (!this.sortKey) return this.tableData;
 
       let compare = new Intl.Collator(this.locale).compare;
 
-      return this.tableData.sort((a, b) => itemCompare(a[this.sortKey], b[this.sortKey], this.sortAsc, compare));
+      return this.tableData.sort((a, b) =>
+        itemCompare(a[this.sortKey], b[this.sortKey], this.sortAsc, compare)
+      );
+    },
+    getFilterableKeys() {
+      return this.definition
+        .filter((k) => k.filterable !== false && k.visible !== false)
+        .map((k) => k.key);
     },
     getDataFiltered() {
-      if (!this.filter) return this.getDataSorted()
+      if (!this.filter) return this.getDataSorted();
 
-      let filter = new RegExp(this.filter.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&"), "i");
+      let filter = new RegExp(
+        this.filter.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&"),
+        "i"
+      );
+
+      let filterableKeys = this.getFilterableKeys();
 
       return this.getDataSorted().filter((item) => {
-        return this.keys.some((key) => {
-          return (item[key] + "").search(filter) !== -1
-        })
-      })
+        return filterableKeys.some((key) => {
+          return (item[key] + "").search(filter) !== -1;
+        });
+      });
+    },
+    getDataPaginated() {
+      if (!this.itemsPerPage) return this.getDataFiltered();
+
+      return this.getDataFiltered().slice(
+        (this.page - 1) * this.itemsPerPage,
+        this.page * this.itemsPerPage
+      );
+    },
+    isSortable() {
+      return this.col.sortable;
+    },
+    isSorted() {
+      return this.sortKey === this.col.key;
+    },
+    isSortedAsc() {
+      return this.isSorted() && this.sortAsc === 1;
+    },
+    isSortedDesc() {
+      return this.isSorted() && this.sortAsc === -1;
     },
     header: {
-      ['@click']() {
-        this.sortAsc = this.sortKey === this.key ? -this.sortAsc : 1
-        this.sortKey = this.key
-      }
-    }
-  }))
-})
+      ["@click"]() {
+        if (!this.isSortable()) return;
+        this.sortAsc = this.sortKey === this.col.key ? -this.sortAsc : 1;
+        this.sortKey = this.col.key;
+      },
+    },
+  }));
+});
