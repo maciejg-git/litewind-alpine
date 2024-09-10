@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link href="./output.css" rel="stylesheet" />
+    <script type="module" src="./floating.js"></script>
+    <script defer src="./transition-plugin.js"></script>
+    <script defer src="./pagination.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    <nav x-data="pagination" class="relative z-0 flex w-auto">
+      <a x-bind="prevButton" class="flex flex-col justify-center items-center
+        border
+      text-sm
+      font-medium
+      cursor-pointer
+      rounded
+      w-12
+      p-2
+      hover:bg-gray-50
+        border-gray-300
+        dark:text-gray-300
+        dark:hover:bg-neutral-700
+        dark:border-neutral-700">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+</svg>
+      </a>
+      <template x-for="page in getPages">
+        <a x-bind="pageButton" x-text="page" class="z-10 cursor-pointer flex justify-center items-center transition-shadow flex-none
+          border
+      text-sm
+      font-semibold
+      rounded
+      w-12
+      h-10
+      mx-0.5
+      hover:bg-gray-50
+        border-gray-300
+        dark:text-gray-300
+        dark:hover:bg-neutral-700
+        dark:border-neutral-70">
+        
+        </a>
+      </template>
+      <a x-bind="nextButton" class="flex flex-col justify-center items-center
+        border
+      text-sm
+      font-medium
+      cursor-pointer
+      rounded
+      w-12
+      p-2
+      hover:bg-gray-50
+        border-gray-300
+        dark:text-gray-300
+        dark:hover:bg-neutral-700
+        dark:border-neutral-700">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+</svg>
+      </a>
+    </nav>
+  </body>
+</html>

@@ -1,7 +1,7 @@
 import { useFloating } from "./floating.js";
 
 document.addEventListener("alpine:init", () => {
-  Alpine.data("dropdownContext", (defaults = {}, opts = {}) => ({
+  Alpine.data("dropdownContext", (opts = {}) => ({
     isShow: false,
     floating: null,
     contextData: null,

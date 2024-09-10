@@ -1,5 +1,5 @@
 document.addEventListener('alpine:init', () => {
-  Alpine.data('datepicker', (defaults = {}) => {
+  Alpine.data('datepicker', (props = {}) => {
     let getNumberRange = (from, count) => {
       return Array.from({ length: count }, (_, i) => i + from);
     };
@@ -23,6 +23,8 @@ document.addEventListener('alpine:init', () => {
 
     let parseDate = (d) => d.split("-").map((i) => +i);
 
+    let isFunction = (f) => typeof f === "function"
+
     let isDate = (d) => Object.prototype.toString.call(d) === "[object Date]";
 
     let isMonthValid = (m) => typeof m === "number" && m <= 11 && m >= 0;
@@ -43,13 +45,11 @@ document.addEventListener('alpine:init', () => {
         months: null,
         weekdays: null,
       },
-      props: {
-        locale: defaults.locale ?? 'en-GB',
-        mondayFirstWeekday: defaults.mondayFirstWeekday ?? true,
-        adjacentMonthsDays: defaults.adjacentMonthsDays ?? true,
-        range: defaults.range ?? true,
-        modelFormat: defaults.modelFormat ?? 'date',
-      },
+      locale: 'en-GB',
+      mondayFirstWeekday: true,
+      adjacentMonthsDays: true,
+      range: true,
+      modalFormat: 'date',
       model: null,
       selectedSingle: null,
       selectedRange: [],
@@ -60,14 +60,31 @@ document.addEventListener('alpine:init', () => {
         this.today.setHours(0, 0, 0, 0);
         this.month = this.today.getMonth()
         this.year = this.today.getFullYear()
+
+        Alpine.effect(() => {
+          this.locale = isFunction(props.locale) ? props.locale() : props.locale ?? this.locale
+        })
+        Alpine.effect(() => {
+          this.mondayFirstWeekday = isFunction(props.mondayFirstWeekday) ? props.mondayFirstWeekday() : props.mondayFirstWeekday ?? this.mondayFirstWeekday
+        })
+        Alpine.effect(() => {
+          this.adjacentMonthsDays = isFunction(props.adjacentMonthsDays) ? props.adjacentMonthsDays() : props.adjacentMonthsDays ?? this.adjacentMonthsDays
+        })
+        Alpine.effect(() => {
+          this.range = isFunction(props.range) ? props.range() : props.range ?? this.range
+        })
+        Alpine.effect(() => {
+          this.modelFormat = isFunction(props.modelFormat) ? props.modelFormat() : props.modelFormat ?? this.modelFormat
+        })
+
         this.names.months = Array.from({ length: 12 }, (v, i) =>
-          new Date(0, i, 1).toLocaleString(this.props.locale, {
+          new Date(0, i, 1).toLocaleString(this.locale, {
             month: "short",
           })
         )
         this.names.weekdays = Array.from({ length: 7 }, (v, i) =>
-          new Date(2021, 1, this.props.mondayFirstWeekday ? i + 1 : i).toLocaleString(
-            this.props.locale,
+          new Date(2021, 1, this.mondayFirstWeekday ? i + 1 : i).toLocaleString(
+            this.locale,
             {
               weekday: "short",
             }
@@ -78,7 +95,7 @@ document.addEventListener('alpine:init', () => {
         })
       },
       dateToModelFormat(date) {
-        let format = this.props.modelFormat
+        let format = this.modelFormat
         if (format === 'date') {
           return date
         }
@@ -90,7 +107,7 @@ document.addEventListener('alpine:init', () => {
         }
       },
       todayFormatted() {
-        return this.today.toLocaleDateString(this.props.locale, {
+        return this.today.toLocaleDateString(this.locale, {
           weekday: "long",
           year: "numeric",
           month: "long",
@@ -119,7 +136,7 @@ document.addEventListener('alpine:init', () => {
         return this.names.weekdays
       },
       days() {
-        let day = getFirstDay(this.year, this.month, this.props.mondayFirstWeekday);
+        let day = getFirstDay(this.year, this.month, this.mondayFirstWeekday);
         let daysInMonth = getCountDaysInMonth(this.year, this.month);
 
         let days = getNumberRange(1, daysInMonth);
@@ -130,7 +147,7 @@ document.addEventListener('alpine:init', () => {
         let daysCountPrev = getCountDaysInMonth(y, m);
 
         let prevMonthDays = getNumberRange(daysCountPrev - day + 1, day);
-        if (!this.props.adjacentMonthsDays) {
+        if (!this.adjacentMonthsDays) {
           prevMonthDays = prevMonthDays.map((i) => "");
         } else {
           prevMonthDays = prevMonthDays.map((i) => new Date(y, m, i))
@@ -142,7 +159,7 @@ document.addEventListener('alpine:init', () => {
 
         let nextMonthDays = null
 
-        if (!this.props.adjacentMonthsDays) {
+        if (!this.adjacentMonthsDays) {
           nextMonthDays = []
         } else {
           nextMonthDays = getNumberRange(1, daysCountNext)
@@ -184,13 +201,13 @@ document.addEventListener('alpine:init', () => {
         return this.selectedSingle && this.selectedSingle.getTime() == this.d.getTime()
       },
       isSelectedRange() {
-        if (this.props.range && this.rangeState === rangeSelectionStates.TO_SELECTED) {
+        if (this.range && this.rangeState === rangeSelectionStates.TO_SELECTED) {
           return this.selectedRange[0] <= this.d && this.d <= this.selectedRange[1]
         }
         return false
       },
       isPartiallySelected() {
-        if (this.props.range && this.rangeState === rangeSelectionStates.FROM_SELECTED) {
+        if (this.range && this.rangeState === rangeSelectionStates.FROM_SELECTED) {
           return (this.mouseOverDate >= this.d && this.d >= this.selectedRange[0]) ||
             (this.mouseOverDate <= this.d && this.d <= this.selectedRange[0])
         }
@@ -201,7 +218,7 @@ document.addEventListener('alpine:init', () => {
           this.month = this.d.getMonth()
           this.year = this.d.getFullYear()
         }
-        if (this.props.range) {
+        if (this.range) {
           this.addRange()
           this.model = this.selectedRange.map((d) => this.dateToModelFormat(d))
           return

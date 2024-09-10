@@ -25,6 +25,8 @@ let formatLabelCase = (value) =>
     (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
   );
 
+let isFunction = (f) => typeof f === "function"
+
 let definitionDefaults = {
   sortable: false,
   filterable: true,
@@ -40,24 +42,29 @@ document.addEventListener("alpine:init", () => {
     filter: "",
     page: 1,
     itemsPerPage: 0,
-    locale: props.locale ?? "en-GB",
+    locale: "en-GB",
+    primaryKey: props.primaryKey ?? "",
 
     init() {
       Alpine.effect(() => {
-        this.tableData = [...props.data];
+        let data = isFunction(props.data) ? props.data() : props.data ?? []
+        this.tableData = [...data];
         this.definition = this.getDefinition();
       });
       Alpine.effect(() => {
-        this.filter = props.filter;
+        this.filter = isFunction(props.filter) ? props.filter() : props.filter ?? this.filter;
         this.page = 1;
       });
       Alpine.effect(() => {
-        this.page = props.page;
+        this.page = isFunction(props.page) ? props.page() : props.page ?? this.page;
       });
       Alpine.effect(() => {
-        this.itemsPerPage = props.itemsPerPage;
+        this.itemsPerPage = isFunction(props.itemsPerPage) ? props.itemsPerPage() : props.itemsPerPage ?? this.itemsPerPage;
         this.page = 1;
       });
+      Alpine.effect(() => {
+        this.locale = isFunction(props.locale) ? props.locale() : props.locale ?? this.locale
+      })
     },
     generateDefinitionFromData() {
       if (!this.tableData || !this.tableData.length) return [];
@@ -132,12 +139,23 @@ document.addEventListener("alpine:init", () => {
     isSortedDesc() {
       return this.isSorted() && this.sortAsc === -1;
     },
+    highlight(string, match, classes) {
+      classes = classes || 'match'
+
+      return (string + "").replace(
+        new RegExp(`(${match.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&")})`, "i"),
+        `<span class='${classes}'>$1</span>`
+      );
+    },
     header: {
       ["@click"]() {
         if (!this.isSortable()) return;
         this.sortAsc = this.sortKey === this.col.key ? -this.sortAsc : 1;
         this.sortKey = this.col.key;
       },
+      [":class"]() {
+        return this.isSortable() ? "cursor-pointer" : ""
+      }
     },
   }));
 });

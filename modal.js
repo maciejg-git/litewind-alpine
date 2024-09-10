@@ -1,10 +1,15 @@
-document.addEventListener('alpine:init', () => {
-  Alpine.data('modal', (defaults = {}) => ({
-    isOpen: false,
-    props: {
-      isStatic: defaults.static ?? false,
-    },
+let isFunction = (f) => typeof f === "function"
 
+document.addEventListener('alpine:init', () => {
+  Alpine.data('modal', (props = {}) => ({
+    isOpen: false,
+    isStatic: false,
+
+    init() {
+      Alpine.effect(() => {
+        this.isStatic = isFunction(props.isStatic) ? props.isStatic() : props.isStatic ?? this.isStatic
+      })
+    },
     open() {
       document.body.style.overflow = 'hidden'
       this.isOpen = true
@@ -24,7 +29,7 @@ document.addEventListener('alpine:init', () => {
         }
       },
       ['@click']() {
-        if (this.props.isStatic) return
+        if (this.isStatic) return
         this.close()
       }
     },

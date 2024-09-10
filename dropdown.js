@@ -1,17 +1,20 @@
 import { useFloating } from "./floating.js"
 
+let isFunction = (f) => typeof f === "function"
+
 document.addEventListener('alpine:init', () => {
-  Alpine.data('dropdown', (defaults = {}, opts = {}) => ({
+  Alpine.data('dropdown', (props = {}, opts = {}) => ({
     isShow: false,
     floating: null,
-    props: {
-      triggerEv: defaults.trigger ?? 'click',
-    },
+    triggerEv: 'click',
     hideTimeout: null,
 
     init() {
       this.$nextTick(() => {
         this.floating = useFloating(this.$refs.trigger, this.$refs.menu, opts)
+      })
+      Alpine.effect(() => {
+        this.triggerEv = isFunction(props.triggerEv) ? props.triggerEv() : props.triggerEv ?? this.triggerEv
       })
       Alpine.bind(this.$el, {
         ['@keydown.escape.prevent']() {
@@ -26,7 +29,7 @@ document.addEventListener('alpine:init', () => {
       }, 100)
     },
     open() {
-      if (this.props.triggerEv === 'hover') {
+      if (this.triggerEv === 'hover') {
         clearTimeout(this.hideTimeout)
       }
       this.floating.startAutoUpdate()
@@ -34,7 +37,7 @@ document.addEventListener('alpine:init', () => {
     },
     close() {
       if (!this.isShow) return
-      if (this.props.triggerEv === 'hover') {
+      if (this.triggerEv === 'hover') {
         this.hideTimeout = this.scheduleHide()
         return
       }
@@ -42,12 +45,12 @@ document.addEventListener('alpine:init', () => {
       this.isShow = false
     },
     preventHiding() {
-      if (this.props.triggerEv === 'hover') {
+      if (this.triggerEv === 'hover') {
         clearTimeout(this.hideTimeout)
       }
     },
     allowHiding() {
-      if (this.props.triggerEv === 'hover') {
+      if (this.triggerEv === 'hover') {
         this.hideTimeout = this.scheduleHide()
       }
     },
@@ -56,12 +59,12 @@ document.addEventListener('alpine:init', () => {
     },
     trigger() {
       let t = {}
-      if (this.props.triggerEv === "click") {
+      if (this.triggerEv === "click") {
         t['@click'] = function() {
           this.toggle()
         }
       }
-      if (this.props.triggerEv === "hover") {
+      if (this.triggerEv === "hover") {
         t['@mouseenter'] = function() {
           this.open()
         }
