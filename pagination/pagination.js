@@ -7,7 +7,7 @@ let getNumberRange = (from, count) => {
 let isFunction = (f) => typeof f === "function"
 
 document.addEventListener('alpine:init', () => {
-  Alpine.data('pagination', (props = {}, defaults = {}) => ({
+  Alpine.data('pagination', (props = {}) => ({
     currentPage: 1,
     itemsCount: 0,
     itemsPerPage: 10,
@@ -52,6 +52,9 @@ document.addEventListener('alpine:init', () => {
       }
       return p;
     },
+    isSelected() {
+      return this.currentPage === this.page
+    },
     handleClickPrev() {
       let p = this.currentPage - 1
       this.currentPage = p <= 1 ? 1 : p
@@ -78,6 +81,15 @@ document.addEventListener('alpine:init', () => {
     pageButton: {
       ['@click']() {
         this.handleClickPage()
+      },
+      [':class']() {
+        let classes = this.$el.attributes
+        let c = ""
+        if (this.isSelected()) {
+          c = classes['class:selected']?.textContent || ''
+        }
+
+        return c
       }
     }
   }))

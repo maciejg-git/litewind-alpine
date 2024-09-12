@@ -1,4 +1,4 @@
-import { useFloating } from "./floating.js"
+import { useFloating } from "../floating.js"
 
 let isFunction = (f) => typeof f === "function"
 

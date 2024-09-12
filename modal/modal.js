@@ -1,5 +1,12 @@
 let isFunction = (f) => typeof f === "function"
 
+let aria = {
+  content: {
+    role: "dialog",
+    ['aria-modal']: 'true',
+  },
+}
+
 document.addEventListener('alpine:init', () => {
   Alpine.data('modal', (props = {}) => ({
     isOpen: false,

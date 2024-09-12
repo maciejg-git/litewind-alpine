@@ -4,9 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title></title>
-    <link href="./output.css" rel="stylesheet" />
-    <script type="module" src="./floating.js"></script>
-    <script defer src="./transition-plugin.js"></script>
+    <link href="/output.css" rel="stylesheet" />
     <script defer type="module" src="./input.js"></script>
     <script
       defer
@@ -29,7 +27,21 @@
       </div>
       <div class="ml-2"></div>
       <div class="flex items-center">
-        <div></div>
+        <div class="mr-2">
+      <svg
+        viewBox="25 25 50 50"
+        fill="none"
+        class="spinner-svg w-5 h-5"
+      >
+        <circle
+          cx="50"
+          cy="50"
+          r="20"
+          stroke-width="4"
+          stroke-miterlimit="10"
+        />
+      </svg>
+        </div>
         <div>
           <button @click="clear()" class="flex items-center">
             <svg

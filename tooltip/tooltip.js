@@ -1,4 +1,4 @@
-import { useFloating } from "./floating.js"
+import { useFloating } from "../floating.js"
 
 document.addEventListener("alpine:init", () => {
   const correctPlacement = ["top", "bottom", "right", "left"]

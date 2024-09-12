@@ -33,4 +33,40 @@
       border-gray-200
       dark:border-neutral-700
   }
+
+  .spinner-svg {
+    animation: loader-rotate 1s linear infinite;
+    transform-origin: center center;
+  }
+
+  .spinner-svg circle {
+    stroke: currentColor;
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
+    animation: loader-dash 1s ease-in-out infinite;
+    stroke-linecap: round;
+  }
+
+  @keyframes loader-rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes loader-dash {
+    0% {
+      stroke-dasharray: 1, 200;
+      stroke-dashoffset: 0;
+    }
+
+    50% {
+      stroke-dasharray: 89, 200;
+      stroke-dashoffset: -35px;
+    }
+
+    100% {
+      stroke-dasharray: 89, 200;
+      stroke-dashoffset: -124px;
+    }
+  }
 }
