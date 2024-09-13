@@ -49,7 +49,7 @@ document.addEventListener('alpine:init', () => {
       mondayFirstWeekday: true,
       adjacentMonthsDays: true,
       range: true,
-      modalFormat: 'date',
+      modelFormat: isFunction(props.modelFormat) ? props.modelFormat() : props.modelFormat ?? 'string',
       model: null,
       selectedSingle: null,
       selectedRange: [],
@@ -63,6 +63,8 @@ document.addEventListener('alpine:init', () => {
 
         Alpine.effect(() => {
           this.locale = isFunction(props.locale) ? props.locale() : props.locale ?? this.locale
+          this.names.months = this.getMonthNames()
+          this.names.weekdays = this.getWeekdayNames()
         })
         Alpine.effect(() => {
           this.mondayFirstWeekday = isFunction(props.mondayFirstWeekday) ? props.mondayFirstWeekday() : props.mondayFirstWeekday ?? this.mondayFirstWeekday
@@ -73,16 +75,34 @@ document.addEventListener('alpine:init', () => {
         Alpine.effect(() => {
           this.range = isFunction(props.range) ? props.range() : props.range ?? this.range
         })
+
         Alpine.effect(() => {
-          this.modelFormat = isFunction(props.modelFormat) ? props.modelFormat() : props.modelFormat ?? this.modelFormat
+          let dateRegexp = /^\d\d\d\d-\d?\d-\d?\d$/
+
+          if (this.range && this.model?.length === 2) {
+            if (this.modelFormat === 'string' && dateRegexp.test(this.model[0]) && dateRegexp.test(this.model[1])) {
+              this.selectedRange = this.model.map((d) => {
+                let date = new Date(d)
+                date.setHours(0, 0, 0, 0)
+                return date
+              })
+            }
+          }       
         })
 
-        this.names.months = Array.from({ length: 12 }, (v, i) =>
+        Alpine.bind(this.$el, {
+          ['x-modelable']: 'model'
+        })
+      },
+      getMonthNames() {
+        return Array.from({ length: 12 }, (v, i) =>
           new Date(0, i, 1).toLocaleString(this.locale, {
             month: "short",
           })
         )
-        this.names.weekdays = Array.from({ length: 7 }, (v, i) =>
+      },
+      getWeekdayNames() {
+        return Array.from({ length: 7 }, (v, i) =>
           new Date(2021, 1, this.mondayFirstWeekday ? i + 1 : i).toLocaleString(
             this.locale,
             {
@@ -90,20 +110,14 @@ document.addEventListener('alpine:init', () => {
             }
           )
         )
-        Alpine.bind(this.$el, {
-          ['x-modelable']: 'model'
-        })
       },
       dateToModelFormat(date) {
         let format = this.modelFormat
-        if (format === 'date') {
-          return date
-        }
         if (format === 'array') {
-          return [date.getFullYear(), date.getMonth() + 1, date.getDate()]
+          return [date.getFullYear(), date.getMonth(), date.getDate()]
         }
         if (format === 'string') {
-          return [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('-')
+          return [date.getFullYear(), pad(date.getMonth() + 1), pad(date.getDate())].join('-')
         }
       },
       todayFormatted() {
@@ -224,7 +238,7 @@ document.addEventListener('alpine:init', () => {
           return
         }
         this.selectedSingle = this.d
-        this.model = this.selectedSingle
+        this.model = this.dateToModelFormat(this.selectedSingle)
       },
       prevMonthButton: {
         ['@click']() {
