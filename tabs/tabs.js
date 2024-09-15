@@ -4,14 +4,14 @@ let aria = {
   },
   label: {
     role: "tab",
-    [':aria-selected']() {
-      return this.isSelected()
-    }
+    [":aria-selected"]() {
+      return this.isSelected();
+    },
   },
   content: {
     role: "tabpanel",
-  }
-}
+  },
+};
 
 document.addEventListener("alpine:init", () => {
   Alpine.data("tabs", (tab, { label = {}, content = {} } = {}) => ({
@@ -37,13 +37,13 @@ document.addEventListener("alpine:init", () => {
         this.$el.dataset.selected = this.isSelected();
       },
       [":class"]() {
-        let classes = this.$el.attributes
-        let c = ""
+        let classes = this.$el.attributes;
+        let c = "";
         if (this.isSelected()) {
-          c = classes['class:selected']?.textContent || ''
+          c = classes["class:selected"]?.textContent || "";
         }
 
-        return c
+        return c;
       },
       ...aria.label,
       ...label,

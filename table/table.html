@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title></title>
     <link href="/output.css" rel="stylesheet" />
     <script defer type="module" src="./table.js"></script>
@@ -13,32 +13,54 @@
     ></script>
   </head>
   <body>
-    <input x-data x-model="$store.table.filter" type="text">
-    <table x-data="table($store.table)" class="border-collapse
-      text-left
-      table-fixed">
+    <input x-data x-model="$store.table.filter" type="text" />
+    <table
+      x-data="table($store.table)"
+      class="table-fixed border-collapse text-left"
+    >
       <thead>
         <tr>
           <template x-for="col in definition">
-            <td x-bind="header" class="font-semibold
-      py-2
-      px-2
-      dark:text-gray-200
-      border-gray-300
-      dark:border-neutral-700
-      border-b">
-            <div class="flex items-center">
-              <span x-text="col.label"></span>
-<template x-if="isSortable() && !isSorted()">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="ml-3 h-4 w-4 opacity-30"><path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8L32 224c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z"/></svg>
-</template>
-<template x-if="isSortedAsc()">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="ml-3 h-4 w-4 opacity-70"><path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8l256 0c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
-</template>
-<template x-if="isSortedDesc()">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="ml-3 h-4 w-4 opacity-70"><path d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"/></svg>
-</template>
-            </div>
+            <td
+              x-bind="header"
+              class="border-b border-gray-300 px-2 py-2 font-semibold dark:border-neutral-700 dark:text-gray-200"
+            >
+              <div class="flex items-center">
+                <span x-text="col.label"></span>
+                <template x-if="isSortable() && !isSorted()">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 320 512"
+                    class="ml-3 h-4 w-4 opacity-30"
+                  >
+                    <path
+                      d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8L32 224c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z"
+                    />
+                  </svg>
+                </template>
+                <template x-if="isSortedAsc()">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 320 512"
+                    class="ml-3 h-4 w-4 opacity-70"
+                  >
+                    <path
+                      d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8l256 0c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"
+                    />
+                  </svg>
+                </template>
+                <template x-if="isSortedDesc()">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 320 512"
+                    class="ml-3 h-4 w-4 opacity-70"
+                  >
+                    <path
+                      d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"
+                    />
+                  </svg>
+                </template>
+              </div>
             </td>
           </template>
         </tr>
@@ -47,16 +69,10 @@
         <template x-for="row in getDataPaginated" :key="row[primaryKey]">
           <tr>
             <template x-for="col in definition">
-              <td x-text="row[col.key]" class="border-t
-      transition-colors
-      duration-200
-      py-2
-      px-2
-      border-gray-300
-      dark:border-neutral-700
-      border-t">
-              
-              </td>
+              <td
+                x-text="row[col.key]"
+                class="border-t border-t border-gray-300 px-2 py-2 transition-colors duration-200 dark:border-neutral-700"
+              ></td>
             </template>
           </tr>
         </template>

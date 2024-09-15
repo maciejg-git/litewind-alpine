@@ -11,10 +11,10 @@ document.addEventListener("alpine:init", () => {
         this.floating = useFloating(null, this.$refs.menu, opts);
       });
       Alpine.bind(this.$el, {
-        ['@keydown.escape.window.prevent']() {
-          this.close()
-        }
-      })
+        ["@keydown.escape.window.prevent"]() {
+          this.close();
+        },
+      });
     },
     open() {
       this.floating.startAutoUpdate();

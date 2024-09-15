@@ -1,55 +1,57 @@
-let isFunction = (f) => typeof f === "function"
+let isFunction = (f) => typeof f === "function";
 
 let aria = {
   content: {
     role: "dialog",
-    ['aria-modal']: 'true',
+    ["aria-modal"]: "true",
   },
-}
+};
 
-document.addEventListener('alpine:init', () => {
-  Alpine.data('modal', (props = {}) => ({
+document.addEventListener("alpine:init", () => {
+  Alpine.data("modal", (props = {}) => ({
     isOpen: false,
     isStatic: false,
 
     init() {
       Alpine.effect(() => {
-        this.isStatic = isFunction(props.isStatic) ? props.isStatic() : props.isStatic ?? this.isStatic
-      })
+        this.isStatic = isFunction(props.isStatic)
+          ? props.isStatic()
+          : props.isStatic ?? this.isStatic;
+      });
     },
     open() {
-      document.body.style.overflow = 'hidden'
-      this.isOpen = true
+      document.body.style.overflow = "hidden";
+      this.isOpen = true;
     },
     close() {
-      document.body.style.overflow = ''
-      this.isOpen = false
+      document.body.style.overflow = "";
+      this.isOpen = false;
     },
     container: {
-      ['x-show']() {
-        return this.isOpen
+      ["x-show"]() {
+        return this.isOpen;
       },
-      ['@open-modal.window']() {
-        let id = this.$event.detail.id || this.$event.detail
+      ["@open-modal.window"]() {
+        let id = this.$event.detail.id || this.$event.detail;
         if (id === this.$root.id) {
-          this.open()
+          this.open();
         }
       },
-      ['@click']() {
-        if (this.isStatic) return
-        this.close()
-      }
+      ["@click"]() {
+        if (this.isStatic) return;
+        this.close();
+      },
     },
     content: {
-      ['x-show']() {
-        return this.isOpen
+      ["x-show"]() {
+        return this.isOpen;
       },
-      ['@click.stop']() {}
+      ["@click.stop"]() {},
     },
     backdrop: {
-      ['x-show']() {
-        return this.isOpen
+      ["x-show"]() {
+        return this.isOpen;
       },
-    }
-  }))
-})
+    },
+  }));
+});

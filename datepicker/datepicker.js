@@ -1,10 +1,8 @@
-document.addEventListener('alpine:init', () => {
-  Alpine.data('datepicker', (props = {}) => {
+document.addEventListener("alpine:init", () => {
+  Alpine.data("datepicker", (props = {}) => {
     let getNumberRange = (from, count) => {
       return Array.from({ length: count }, (_, i) => i + from);
     };
-
-    let pad = (d) => (d < 10 ? "0" + d : d);
 
     let getCountDaysInMonth = (y, m) => 32 - new Date(y, m, 32).getDate();
 
@@ -21,22 +19,14 @@ document.addEventListener('alpine:init', () => {
       return mondayFirstWeekday ? (6 + d) % 7 : d;
     };
 
-    let parseDate = (d) => d.split("-").map((i) => +i);
+    let isFunction = (f) => typeof f === "function";
 
-    let isFunction = (f) => typeof f === "function"
-
-    let isDate = (d) => Object.prototype.toString.call(d) === "[object Date]";
-
-    let isMonthValid = (m) => typeof m === "number" && m <= 11 && m >= 0;
-
-    let isYearValid = (y) => typeof y === "number";
-    
     let rangeSelectionStates = {
       UNSELECTED: 0,
       FROM_SELECTED: 1,
       TO_SELECTED: 2,
-    }
-    
+    };
+
     return {
       today: new Date(),
       month: null,
@@ -45,11 +35,10 @@ document.addEventListener('alpine:init', () => {
         months: null,
         weekdays: null,
       },
-      locale: 'en-GB',
+      locale: "en-GB",
       mondayFirstWeekday: true,
       adjacentMonthsDays: true,
       range: true,
-      modelFormat: isFunction(props.modelFormat) ? props.modelFormat() : props.modelFormat ?? 'string',
       model: null,
       selectedSingle: null,
       selectedRange: [],
@@ -57,49 +46,53 @@ document.addEventListener('alpine:init', () => {
       mouseOverDate: null,
 
       init() {
-        this.today.setHours(0, 0, 0, 0);
-        this.month = this.today.getMonth()
-        this.year = this.today.getFullYear()
+        this.month = this.today.getMonth();
+        this.year = this.today.getFullYear();
 
         Alpine.effect(() => {
-          this.locale = isFunction(props.locale) ? props.locale() : props.locale ?? this.locale
-          this.names.months = this.getMonthNames()
-          this.names.weekdays = this.getWeekdayNames()
-        })
+          this.locale = isFunction(props.locale)
+            ? props.locale()
+            : props.locale ?? this.locale;
+          this.names.months = this.getMonthNames();
+          this.names.weekdays = this.getWeekdayNames();
+        });
         Alpine.effect(() => {
-          this.mondayFirstWeekday = isFunction(props.mondayFirstWeekday) ? props.mondayFirstWeekday() : props.mondayFirstWeekday ?? this.mondayFirstWeekday
-        })
+          this.mondayFirstWeekday = isFunction(props.mondayFirstWeekday)
+            ? props.mondayFirstWeekday()
+            : props.mondayFirstWeekday ?? this.mondayFirstWeekday;
+        });
         Alpine.effect(() => {
-          this.adjacentMonthsDays = isFunction(props.adjacentMonthsDays) ? props.adjacentMonthsDays() : props.adjacentMonthsDays ?? this.adjacentMonthsDays
-        })
+          this.adjacentMonthsDays = isFunction(props.adjacentMonthsDays)
+            ? props.adjacentMonthsDays()
+            : props.adjacentMonthsDays ?? this.adjacentMonthsDays;
+        });
         Alpine.effect(() => {
-          this.range = isFunction(props.range) ? props.range() : props.range ?? this.range
-        })
+          this.range = isFunction(props.range)
+            ? props.range()
+            : props.range ?? this.range;
+        });
 
         Alpine.effect(() => {
-          let dateRegexp = /^\d\d\d\d-\d?\d-\d?\d$/
+          let dateRegexp = /^\d\d\d\d-\d\d-\d\d$/;
 
           if (this.range && this.model?.length === 2) {
-            if (this.modelFormat === 'string' && dateRegexp.test(this.model[0]) && dateRegexp.test(this.model[1])) {
-              this.selectedRange = this.model.map((d) => {
-                let date = new Date(d)
-                date.setHours(0, 0, 0, 0)
-                return date
-              })
+            if (this.model.every((d) => dateRegexp.test(d))) {
+              this.selectedRange = this.model.map((d) => new Date(d));
+              this.rangeState = rangeSelectionStates.TO_SELECTED
             }
-          }       
-        })
+          }
+        });
 
         Alpine.bind(this.$el, {
-          ['x-modelable']: 'model'
-        })
+          ["x-modelable"]: "model",
+        });
       },
       getMonthNames() {
         return Array.from({ length: 12 }, (v, i) =>
           new Date(0, i, 1).toLocaleString(this.locale, {
             month: "short",
           })
-        )
+        );
       },
       getWeekdayNames() {
         return Array.from({ length: 7 }, (v, i) =>
@@ -109,16 +102,10 @@ document.addEventListener('alpine:init', () => {
               weekday: "short",
             }
           )
-        )
+        );
       },
-      dateToModelFormat(date) {
-        let format = this.modelFormat
-        if (format === 'array') {
-          return [date.getFullYear(), date.getMonth(), date.getDate()]
-        }
-        if (format === 'string') {
-          return [date.getFullYear(), pad(date.getMonth() + 1), pad(date.getDate())].join('-')
-        }
+      dateToModel(date) {
+        return date.toISOString().substring(0, 10);
       },
       todayFormatted() {
         return this.today.toLocaleDateString(this.locale, {
@@ -126,35 +113,29 @@ document.addEventListener('alpine:init', () => {
           year: "numeric",
           month: "long",
           day: "numeric",
-        })
+        });
       },
       setNextMonth() {
-        ({ m: this.month, y: this.year } = nextMonth(
-          this.month,
-          this.year
-        ));
+        ({ m: this.month, y: this.year } = nextMonth(this.month, this.year));
       },
       setPrevMonth() {
-        ({ m: this.month, y: this.year } = prevMonth(
-          this.month,
-          this.year
-        ));
+        ({ m: this.month, y: this.year } = prevMonth(this.month, this.year));
       },
       setNextYear() {
-        this.year++
+        this.year++;
       },
       setPrevYear() {
-        this.year--
+        this.year--;
       },
       weekdays() {
-        return this.names.weekdays
+        return this.names.weekdays;
       },
       days() {
         let day = getFirstDay(this.year, this.month, this.mondayFirstWeekday);
         let daysInMonth = getCountDaysInMonth(this.year, this.month);
 
         let days = getNumberRange(1, daysInMonth);
-        days = days.map((i) => new Date(this.year, this.month, i));
+        days = days.map((i) => new Date(Date.UTC(this.year, this.month, i)));
 
         let { m, y } = prevMonth(this.month, this.year);
 
@@ -164,131 +145,148 @@ document.addEventListener('alpine:init', () => {
         if (!this.adjacentMonthsDays) {
           prevMonthDays = prevMonthDays.map((i) => "");
         } else {
-          prevMonthDays = prevMonthDays.map((i) => new Date(y, m, i))
+          prevMonthDays = prevMonthDays.map((i) => new Date(y, m, i));
         }
 
-        ({m, y} = nextMonth(this.month, this.year))
+        ({ m, y } = nextMonth(this.month, this.year));
 
-        let daysCountNext = 42 - daysInMonth - day
+        let daysCountNext = 42 - daysInMonth - day;
 
-        let nextMonthDays = null
+        let nextMonthDays = null;
 
         if (!this.adjacentMonthsDays) {
-          nextMonthDays = []
+          nextMonthDays = [];
         } else {
-          nextMonthDays = getNumberRange(1, daysCountNext)
-          nextMonthDays = nextMonthDays.map((i) => new Date(y, m, i))
+          nextMonthDays = getNumberRange(1, daysCountNext);
+          nextMonthDays = nextMonthDays.map((i) => new Date(y, m, i));
         }
 
         return [...prevMonthDays, ...days, ...nextMonthDays];
       },
       currentDate() {
-        return `${this.names.months[this.month]} ${this.year}`
+        return `${this.names.months[this.month]} ${this.year}`;
       },
       reset() {
-        this.selectedSingle = ""
-        this.selectedRange = []
-        this.model = null
-        this.rangeState = rangeSelectionStates.UNSELECTED
-        this.mouseOverDate = null
+        this.selectedSingle = "";
+        this.selectedRange = [];
+        this.model = null;
+        this.rangeState = rangeSelectionStates.UNSELECTED;
+        this.mouseOverDate = null;
       },
       addRange() {
         if (this.rangeState === rangeSelectionStates.TO_SELECTED) {
-          this.selectedRange = []
-          this.rangeState = rangeSelectionStates.UNSELECTED
+          this.selectedRange = [];
+          this.rangeState = rangeSelectionStates.UNSELECTED;
         }
-        this.selectedRange[this.rangeState] = this.d
-        this.rangeState++
+        this.selectedRange[this.rangeState] = this.d;
+        this.rangeState++;
         if (this.rangeState === rangeSelectionStates.TO_SELECTED) {
           if (this.selectedRange[0] > this.selectedRange[1]) {
-            this.selectedRange.reverse()
+            this.selectedRange.reverse();
           }
         }
       },
       isToday() {
-        return this.today.getTime() == this.d.getTime()
+        return (
+          this.today.getDate() === this.d.getUTCDate() &&
+          this.today.getMonth() === this.d.getUTCMonth() &&
+          this.today.getFullYear() === this.d.getUTCFullYear()
+        );
       },
       isAdjacent() {
-        return this.d.getMonth() !== this.month
+        return this.d.getMonth() !== this.month;
       },
       isSelected() {
-        return this.selectedSingle && this.selectedSingle.getTime() == this.d.getTime()
+        return (
+          this.selectedSingle &&
+          this.selectedSingle.getTime() == this.d.getTime()
+        );
       },
       isSelectedRange() {
-        if (this.range && this.rangeState === rangeSelectionStates.TO_SELECTED) {
-          return this.selectedRange[0] <= this.d && this.d <= this.selectedRange[1]
+        if (
+          this.range &&
+          this.rangeState === rangeSelectionStates.TO_SELECTED
+        ) {
+          return (
+            this.selectedRange[0] <= this.d && this.d <= this.selectedRange[1]
+          );
         }
-        return false
+        return false;
       },
       isPartiallySelected() {
-        if (this.range && this.rangeState === rangeSelectionStates.FROM_SELECTED) {
-          return (this.mouseOverDate >= this.d && this.d >= this.selectedRange[0]) ||
+        if (
+          this.range &&
+          this.rangeState === rangeSelectionStates.FROM_SELECTED
+        ) {
+          return (
+            (this.mouseOverDate >= this.d && this.d >= this.selectedRange[0]) ||
             (this.mouseOverDate <= this.d && this.d <= this.selectedRange[0])
+          );
         }
-        return false
+        return false;
       },
       handleDayClick() {
         if (this.isAdjacent()) {
-          this.month = this.d.getMonth()
-          this.year = this.d.getFullYear()
+          this.month = this.d.getMonth();
+          this.year = this.d.getFullYear();
         }
         if (this.range) {
-          this.addRange()
-          this.model = this.selectedRange.map((d) => this.dateToModelFormat(d))
-          return
+          this.addRange();
+          this.model = this.selectedRange.map((d) => this.dateToModel(d));
+          return;
         }
-        this.selectedSingle = this.d
-        this.model = this.dateToModelFormat(this.selectedSingle)
+        this.selectedSingle = this.d;
+        this.model = this.dateToModel(this.selectedSingle);
       },
       prevMonthButton: {
-        ['@click']() {
-          this.setPrevMonth()
-        }
+        ["@click"]() {
+          this.setPrevMonth();
+        },
       },
       nextMonthButton: {
-        ['@click']() {
-          this.setNextMonth()
-        }
+        ["@click"]() {
+          this.setNextMonth();
+        },
       },
       prevYearButton: {
-        ['@click']() {
-          this.setPrevYear()
-        }
+        ["@click"]() {
+          this.setPrevYear();
+        },
       },
       nextYearButton: {
-        ['@click']() {
-          this.setNextYear()
-        }
+        ["@click"]() {
+          this.setNextYear();
+        },
       },
       day: {
-        [':class']() {
-          let classes = this.$el.attributes
-          let c = ""
+        [":class"]() {
+          let classes = this.$el.attributes;
+          let c = "";
           if (this.isAdjacent()) {
-            return (classes['class:adjacent']?.textContent || '')
+            return classes["class:adjacent"]?.textContent || "";
           }
 
           if (this.isSelected()) {
-            c += (classes['class:selected']?.textContent || '') + ' '
+            c += (classes["class:selected"]?.textContent || "") + " ";
           } else if (this.isSelectedRange()) {
-            c += (classes['class:selected-range']?.textContent || '') + ' '
+            c += (classes["class:selected-range"]?.textContent || "") + " ";
           } else if (this.isPartiallySelected()) {
-            c += (classes['class:partially-selected']?.textContent || '') + ' '
+            c += (classes["class:partially-selected"]?.textContent || "") + " ";
           }
 
           if (this.isToday()) {
-            c += (classes['class:today']?.textContent || '') + ' '
+            c += (classes["class:today"]?.textContent || "") + " ";
           }
 
-          return c
+          return c;
         },
-        ['@click']() {
-          this.handleDayClick()
+        ["@click"]() {
+          this.handleDayClick();
         },
-        ['@mouseenter']() {
-          this.mouseOverDate = this.d
-        }
-      }
-    }
-  })
-})
+        ["@mouseenter"]() {
+          this.mouseOverDate = this.d;
+        },
+      },
+    };
+  });
+});

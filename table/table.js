@@ -25,7 +25,7 @@ let formatLabelCase = (value) =>
     (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
   );
 
-let isFunction = (f) => typeof f === "function"
+let isFunction = (f) => typeof f === "function";
 
 let definitionDefaults = {
   sortable: false,
@@ -47,24 +47,32 @@ document.addEventListener("alpine:init", () => {
 
     init() {
       Alpine.effect(() => {
-        let data = isFunction(props.data) ? props.data() : props.data ?? []
+        let data = isFunction(props.data) ? props.data() : props.data ?? [];
         this.tableData = [...data];
         this.definition = this.getDefinition();
       });
       Alpine.effect(() => {
-        this.filter = isFunction(props.filter) ? props.filter() : props.filter ?? this.filter;
+        this.filter = isFunction(props.filter)
+          ? props.filter()
+          : props.filter ?? this.filter;
         this.page = 1;
       });
       Alpine.effect(() => {
-        this.page = isFunction(props.page) ? props.page() : props.page ?? this.page;
+        this.page = isFunction(props.page)
+          ? props.page()
+          : props.page ?? this.page;
       });
       Alpine.effect(() => {
-        this.itemsPerPage = isFunction(props.itemsPerPage) ? props.itemsPerPage() : props.itemsPerPage ?? this.itemsPerPage;
+        this.itemsPerPage = isFunction(props.itemsPerPage)
+          ? props.itemsPerPage()
+          : props.itemsPerPage ?? this.itemsPerPage;
         this.page = 1;
       });
       Alpine.effect(() => {
-        this.locale = isFunction(props.locale) ? props.locale() : props.locale ?? this.locale
-      })
+        this.locale = isFunction(props.locale)
+          ? props.locale()
+          : props.locale ?? this.locale;
+      });
     },
     generateDefinitionFromData() {
       if (!this.tableData || !this.tableData.length) return [];
@@ -140,7 +148,7 @@ document.addEventListener("alpine:init", () => {
       return this.isSorted() && this.sortAsc === -1;
     },
     highlight(string, match, classes) {
-      classes = classes || 'match'
+      classes = classes || "match";
 
       return (string + "").replace(
         new RegExp(`(${match.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&")})`, "i"),
@@ -154,8 +162,8 @@ document.addEventListener("alpine:init", () => {
         this.sortKey = this.col.key;
       },
       [":class"]() {
-        return this.isSortable() ? "cursor-pointer" : ""
-      }
+        return this.isSortable() ? "cursor-pointer" : "";
+      },
     },
   }));
 });

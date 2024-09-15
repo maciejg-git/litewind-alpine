@@ -13,56 +13,52 @@
   </head>
   <body>
     <nav x-data="pagination" class="relative z-0 flex w-auto">
-      <a x-bind="prevButton" class="flex flex-col justify-center items-center
-        border
-      text-sm
-      font-medium
-      cursor-pointer
-      rounded
-      w-12
-      p-2
-      hover:bg-gray-50
-        border-gray-300
-        dark:text-gray-300
-        dark:hover:bg-neutral-700
-        dark:border-neutral-700">
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
-</svg>
+      <a
+        x-bind="prevButton"
+        class="flex w-12 cursor-pointer flex-col items-center justify-center rounded border border-gray-300 p-2 text-sm font-medium hover:bg-gray-50 dark:border-neutral-700 dark:text-gray-300 dark:hover:bg-neutral-700"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-chevron-left"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+          />
+        </svg>
       </a>
+
       <template x-for="page in getPages">
-        <a x-bind="pageButton" x-text="page" class="z-10 cursor-pointer flex justify-center items-center transition-shadow flex-none
-          border
-      text-sm
-      font-semibold
-      rounded
-      w-12
-      h-10
-      mx-0.5
-      hover:bg-gray-50
-        border-gray-300
-        dark:text-gray-300
-        dark:hover:bg-neutral-700
-        dark:border-neutral-70" class:selected="ring-2 font-semibold text-white bg-violet-500 hover:bg-violet-400 dark:bg-violet-500 dark:hover:bg-violet-300 border-violet-200 ring-violet-200 dark:text-gray-100 dark:border-violet-500 dark:ring-violet-100">
-        
+        <a
+          x-bind="pageButton"
+          x-text="page"
+          class="dark:border-neutral-70 z-10 mx-0.5 flex h-10 w-12 flex-none cursor-pointer items-center justify-center rounded border border-gray-300 text-sm font-semibold transition-shadow hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-neutral-700"
+          class:selected="ring-2 font-semibold text-white bg-violet-500 hover:bg-violet-400 dark:bg-violet-500 dark:hover:bg-violet-300 border-violet-200 ring-violet-200 dark:text-gray-100 dark:border-violet-500 dark:ring-violet-100"
+        >
         </a>
       </template>
-      <a x-bind="nextButton" class="flex flex-col justify-center items-center
-        border
-      text-sm
-      font-medium
-      cursor-pointer
-      rounded
-      w-12
-      p-2
-      hover:bg-gray-50
-        border-gray-300
-        dark:text-gray-300
-        dark:hover:bg-neutral-700
-        dark:border-neutral-700">
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
-</svg>
+
+      <a
+        x-bind="nextButton"
+        class="flex w-12 cursor-pointer flex-col items-center justify-center rounded border border-gray-300 p-2 text-sm font-medium hover:bg-gray-50 dark:border-neutral-700 dark:text-gray-300 dark:hover:bg-neutral-700"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-chevron-right"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+          />
+        </svg>
       </a>
     </nav>
   </body>
