@@ -6,18 +6,14 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("dropdown", (props = {}, opts = {}) => ({
     isShow: false,
     floating: null,
-    triggerEv: "click",
+    triggerEv: props.triggerEv ?? 'click',
     hideTimeout: null,
 
     init() {
       this.$nextTick(() => {
         this.floating = useFloating(this.$refs.trigger, this.$refs.menu, opts);
       });
-      Alpine.effect(() => {
-        this.triggerEv = isFunction(props.triggerEv)
-          ? props.triggerEv()
-          : props.triggerEv ?? this.triggerEv;
-      });
+
       Alpine.bind(this.$el, {
         ["@keydown.escape.prevent"]() {
           this.close();
