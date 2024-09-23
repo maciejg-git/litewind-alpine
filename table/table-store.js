@@ -34,5 +34,9 @@
           page: 1,
           itemsPerPage: 10,
           primaryKey: 'id',
+          filteredItemsCount: 0,
+          onFilter(filteredData) {
+            this.filteredItemsCount = filteredData.length
+          }
         })
       })

@@ -122,16 +122,24 @@ document.addEventListener("alpine:init", () => {
 
         let filterableKeys = this.getFilterableKeys();
 
-        return this.getDataSorted().filter((item) => {
+        let filteredData = this.getDataSorted().filter((item) => {
           return filterableKeys.some((key) => {
             return (item[key] + "").search(filter) !== -1;
           });
         });
+
+        return filteredData
       },
       getDataPaginated() {
-        if (!this.itemsPerPage) return this.getDataFiltered();
+        let filteredData = this.getDataFiltered()
 
-        return this.getDataFiltered().slice(
+        if (isFunction(props.onFilter)) {
+          props.onFilter(filteredData)
+        }
+
+        if (!this.itemsPerPage) return filteredData;
+
+        return filteredData.slice(
           (this.page - 1) * this.itemsPerPage,
           this.page * this.itemsPerPage
         );

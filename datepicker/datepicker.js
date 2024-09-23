@@ -39,7 +39,7 @@ document.addEventListener("alpine:init", () => {
       mondayFirstWeekday: true,
       adjacentMonthsDays: true,
       range: true,
-      model: null,
+      _model: null,
       selectedSingle: null,
       selectedRange: [],
       rangeState: 0,
@@ -75,16 +75,16 @@ document.addEventListener("alpine:init", () => {
         Alpine.effect(() => {
           let dateRegexp = /^\d\d\d\d-\d\d-\d\d$/;
 
-          if (this.range && this.model?.length === 2) {
-            if (this.model.every((d) => dateRegexp.test(d))) {
-              this.selectedRange = this.model.map((d) => new Date(d));
+          if (this.range && this._model?.length === 2) {
+            if (this._model.every((d) => dateRegexp.test(d))) {
+              this.selectedRange = this._model.map((d) => new Date(d));
               this.rangeState = rangeSelectionStates.TO_SELECTED
             }
           }
         });
 
         Alpine.bind(this.$el, {
-          ["x-modelable"]: "model",
+          ["x-modelable"]: "_model",
         });
       },
       getMonthNames() {
@@ -169,7 +169,7 @@ document.addEventListener("alpine:init", () => {
       reset() {
         this.selectedSingle = "";
         this.selectedRange = [];
-        this.model = null;
+        this._model = null;
         this.rangeState = rangeSelectionStates.UNSELECTED;
         this.mouseOverDate = null;
       },
@@ -232,11 +232,11 @@ document.addEventListener("alpine:init", () => {
         }
         if (this.range) {
           this.addRange();
-          this.model = this.selectedRange.map((d) => this.dateToModel(d));
+          this._model = this.selectedRange.map((d) => this.dateToModel(d));
           return;
         }
         this.selectedSingle = this.d;
-        this.model = this.dateToModel(this.selectedSingle);
+        this._model = this.dateToModel(this.selectedSingle);
       },
       prevMonthButton: {
         ["@click"]() {
