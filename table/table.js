@@ -45,6 +45,7 @@ document.addEventListener("alpine:init", () => {
       itemsPerPage: 0,
       locale: "en-GB",
       primaryKey: props.primaryKey ?? "",
+      data: [],
 
       init() {
         Alpine.effect(() => {
@@ -74,6 +75,11 @@ document.addEventListener("alpine:init", () => {
             ? props.locale()
             : props.locale ?? this.locale;
         });
+        Alpine.effect(() => {
+          if (props.data) return
+          this.tableData = [...this.data]
+          this.definition = this.getDefinition();
+        })
       },
       generateDefinitionFromData() {
         if (!this.tableData || !this.tableData.length) return [];

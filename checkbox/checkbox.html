@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="/output.css" rel="stylesheet" />
+  </head>
+  <body>
+    <label>
+      <div class="relative cursor-pointer flex items-center">
+        <input x-model="range" type="checkbox" class="sr-only peer">
+        <div class="rounded-full bg-neutral-200 w-11 h-6 peer-checked:bg-violet-400 peer-focus:ring-4 ring-violet-200">
+        </div>
+        <div class="absolute rounded-full bg-white w-5 h-5 left-0.5 top-0.5 border border-neutral-300 peer-checked:translate-x-full peer-checked:border-0 transition-all shadow"></div>
+        <span class="ml-2">
+          Range mode
+        </span>
+      </div>
+    </label>
+  </body>
+</html>
