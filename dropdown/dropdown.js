@@ -8,12 +8,13 @@ document.addEventListener("alpine:init", () => {
       isShow: false,
       floating: null,
       triggerEv: props.triggerEv ?? "click",
+      autoClose: props.autoClose ?? false,
       hideTimeout: null,
 
       init() {
         this.$nextTick(() => {
           this.floating = useFloating(
-            this.$refs.trigger,
+            this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"),
             this.$refs.menu,
             opts
           );
@@ -94,6 +95,11 @@ document.addEventListener("alpine:init", () => {
         ["@click.outside"]() {
           this.close();
         },
+        "@click"() {
+          if (this.autoClose && this.$el.contains(this.$event.target)) {
+            this.close()
+          }
+        }
       },
     };
   });

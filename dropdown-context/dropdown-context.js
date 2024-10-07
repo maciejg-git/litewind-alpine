@@ -1,11 +1,12 @@
 import { useFloating } from "../floating.js";
 
 document.addEventListener("alpine:init", () => {
-  Alpine.data("dropdownContext", (opts = {}) => {
+  Alpine.data("dropdownContext", (props = {}, opts = {}) => {
     return {
       isShow: false,
       floating: null,
-      contextData: null,
+      contextData: {},
+      autoClose: props.autoClose ?? false,
 
       init() {
         this.$nextTick(() => {
@@ -42,6 +43,11 @@ document.addEventListener("alpine:init", () => {
         ["@click.outside"]() {
           this.close();
         },
+        "@click"() {
+          if (this.autoClose && this.$el.contains(this.$event.target)) {
+            this.close()
+          }
+        }
       },
     };
   });

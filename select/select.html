@@ -13,19 +13,31 @@
     ></script>
   </head>
   <body>
-    <div x-data="select" class="w-[340px]">
+    <div x-data="select" x-init="selectData = [
+          'spanish',
+          'french',
+          'portuguese',
+          'german',
+          'japanese',
+          'korean',
+          'italian',
+          'polish',
+          'greek',
+          'swedish',
+      ]" class="w-[340px]">
       <div x-bind="trigger">
         <div
           x-data="input"
           class="flex flex-1 items-center rounded border border-gray-300 bg-white px-3 py-2 outline-none transition-shadow duration-200 focus-within:border-gray-400 focus-within:ring focus-within:ring-violet-200 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-gray-300 dark:focus-within:ring-violet-300"
           >
-          <div class="mr-2"></div>
+          <div x-text="selected[0]" class="mr-2"></div>
           <div class="mr-2"></div>
           <div class="flex flex-1 flex-wrap">
             <input
             x-bind="input"
             type="text"
             class="min-w-0 flex-1 border-0 bg-transparent p-0 outline-none focus:min-w-[64px] focus:outline-none"
+            readonly
             />
           </div>
           <div class="ml-2"></div>
@@ -63,7 +75,11 @@
       <div x-bind="menu" class="rounded-md border border-neutral-300 shadow-md">
         <ul>
           <template x-for="menuItem in selectData">
-            <li x-text="menuItem"></li>
+            <li>
+              <button x-bind="option" x-text="menuItem">
+
+              </button>
+            </li>
           </template>
         </ul>
       </div>

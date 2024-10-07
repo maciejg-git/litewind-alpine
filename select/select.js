@@ -7,23 +7,12 @@ document.addEventListener('alpine:init', () => {
       floating: null,
       selectData: [],
       _value: '',
+      selected: [],
 
       init() {
         this.$nextTick(() => {
-          this.floating = useFloating(this.$refs.trigger, this.$refs.menu, opts)
+          this.floating = useFloating(this.$refs.trigger, this.$refs.menu, { ...opts, resize: true })
         })
-        this.selectData = [
-          "spanish",
-          "french",
-          "portuguese",
-          "german",
-          "japanese",
-          "korean",
-          "italian",
-          "polish",
-          "greek",
-          "swedish",
-        ]
       },
       open() {
         this.floating.startAutoUpdate()
@@ -33,12 +22,18 @@ document.addEventListener('alpine:init', () => {
         this.floating.destroy()
         this.isOpen = false
       },
+      select(value) {
+        this.selected[0] = value
+      },
       trigger: {
         'x-ref': 'trigger',
         ['@focusin']() {
           this.open()
         },
         ['@focusout']() {
+          if (this.$refs.menu.contains(this.$event.relatedTarget)) {
+            return
+          }
           this.close()
         }
       },
@@ -46,6 +41,12 @@ document.addEventListener('alpine:init', () => {
         'x-ref': 'menu',
         ['x-show']() {
           return this.isOpen
+        },
+        '@mousedown.prevent'() {},
+      },
+      option: {
+        '@click'() {
+          this.select(this.menuItem)
         }
       }
     }
