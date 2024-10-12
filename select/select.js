@@ -5,14 +5,49 @@ document.addEventListener('alpine:init', () => {
     return {
       isOpen: false, 
       floating: null,
-      selectData: [],
+      items: [],
       _value: '',
       selected: [],
+      _items: [],
+      multiple: props.multiple ?? false,
+      _model: null,
 
       init() {
         this.$nextTick(() => {
-          this.floating = useFloating(this.$refs.trigger, this.$refs.menu, { ...opts, resize: true })
+          this.floating = useFloating(this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"), this.$refs.menu, { ...opts, resize: true })
         })
+        Alpine.effect(() => {
+          if (!this.items.length) {
+            this._items = []
+            return
+          }
+          if (typeof this.items[0] === "string") {
+            this._items = this.items.map((i) => {
+              return {
+                text: i,
+                value: i,
+                origin: null,
+                _selected: false,
+              }
+            })
+          }
+          if (typeof this.items[0] === "object") {
+            this._items = this.items.map((i) => {
+              return {
+                text: i.text,
+                value: i.value,
+                origin: i,
+                _selected: false,
+              }
+            })
+          }
+        })
+        Alpine.bind(this.$el, {
+          ["x-modelable"]: "_model",
+        });
+      },
+      getItems() {
+        return this._items
       },
       open() {
         this.floating.startAutoUpdate()
@@ -22,13 +57,24 @@ document.addEventListener('alpine:init', () => {
         this.floating.destroy()
         this.isOpen = false
       },
-      select(value) {
-        this.selected[0] = value
+      getSelected() {
+        return this.selected[0]?.text
+      },
+      select() {
+        if (!props.multiple) {
+          if (this.selected.length) {
+            this.selected[0]._selected = false
+          }
+          this.selected[0] = this.item
+          this.item._selected = true
+          this._model = this.selected
+          return
+        }
       },
       trigger: {
         'x-ref': 'trigger',
-        ['@focusin']() {
-          this.open()
+        ['@mousedown']() {
+          this.isOpen ? this.close() : this.open()
         },
         ['@focusout']() {
           if (this.$refs.menu.contains(this.$event.relatedTarget)) {
@@ -46,7 +92,8 @@ document.addEventListener('alpine:init', () => {
       },
       option: {
         '@click'() {
-          this.select(this.menuItem)
+          this.select()
+          this.close()
         }
       }
     }

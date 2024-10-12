@@ -239,6 +239,10 @@ document.addEventListener("alpine:init", () => {
         }
         this.selectedSingle = this.d;
         this._model = this.dateToModel(this.selectedSingle);
+
+        if (!this.range || this.rangeState === rangeSelectionStates.TO_SELECTED) {
+          this.$dispatch("datepicker-selection-complete")
+        }
       },
       prevMonthButton: {
         ["@click"]() {

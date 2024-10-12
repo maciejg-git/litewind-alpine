@@ -16,6 +16,9 @@ document.addEventListener("alpine:init", () => {
         });
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_value",
+          ["@mousedown.prevent"]() {
+            this.$refs.input.focus()
+          }
         });
       },
       clear() {
@@ -23,6 +26,7 @@ document.addEventListener("alpine:init", () => {
       },
       input: {
         ["x-model"]: "_value",
+        ["x-ref"]: "input",
         [":placeholder"]() {
           return this.placeholder;
         },
