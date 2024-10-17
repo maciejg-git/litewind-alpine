@@ -6,7 +6,7 @@ document.addEventListener("alpine:init", () => {
       isShow: false,
       floating: null,
       contextData: {},
-      autoClose: props.autoClose ?? false,
+      autoClose: props.autoClose ?? true,
 
       init() {
         this.$nextTick(() => {

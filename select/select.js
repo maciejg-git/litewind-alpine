@@ -7,44 +7,50 @@ document.addEventListener('alpine:init', () => {
       floating: null,
       items: [],
       _value: '',
-      selected: [],
+      selected: new Map(),
       _items: [],
       multiple: props.multiple ?? false,
       _model: null,
+      itemText: props.itemText ?? "text",
+      itemValue: props.itemValue ?? "value",
+      inputDataProps: ["clearable", "placeholder", "useLoader", "isLoading"],
+      inputData: {},
 
       init() {
         this.$nextTick(() => {
           this.floating = useFloating(this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"), this.$refs.menu, { ...opts, resize: true })
         })
-        Alpine.effect(() => {
-          if (!this.items.length) {
-            this._items = []
-            return
-          }
-          if (typeof this.items[0] === "string") {
-            this._items = this.items.map((i) => {
-              return {
-                text: i,
-                value: i,
-                origin: null,
-                _selected: false,
-              }
-            })
-          }
-          if (typeof this.items[0] === "object") {
-            this._items = this.items.map((i) => {
-              return {
-                text: i.text,
-                value: i.value,
-                origin: i,
-                _selected: false,
-              }
-            })
-          }
+        Alpine.effect(() => this.transformItems())
+        this.inputDataProps.forEach((name) => {
+          if (props[name]) this.inputData[name] = props[name] 
         })
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
         });
+      },
+      transformItems() {
+        if (!this.items.length) {
+          this._items = []
+          return
+        }
+        if (typeof this.items[0] === "string") {
+          this._items = this.items.map((i) => {
+            return {
+              text: i,
+              value: i,
+              origin: null,
+            }
+          })
+        }
+        if (typeof this.items[0] === "object") {
+          this._items = this.items.map((i) => {
+            return {
+              text: i[this.itemText],
+              value: i[this.itemValue],
+              origin: i,
+            }
+          })
+        }
       },
       getItems() {
         return this._items
@@ -52,23 +58,40 @@ document.addEventListener('alpine:init', () => {
       open() {
         this.floating.startAutoUpdate()
         this.isOpen = true
+        this.scrollToFirstSelected()
+      },
+      scrollToFirstSelected() {
+        let selectedElement = this.$refs.menu.querySelector("[data-selected]")
+        if (selectedElement) {
+          this.$nextTick(() => selectedElement.scrollIntoView())
+        }
       },
       close() {
         this.floating.destroy()
         this.isOpen = false
       },
       getSelected() {
-        return this.selected[0]?.text
+        return [...this.selected].map(([k ,v]) => v)
+      },
+      getSelectedText() {
+        return [...this.selected].map(([k ,v]) => v.text)
       },
       select() {
-        if (!props.multiple) {
-          if (this.selected.length) {
-            this.selected[0]._selected = false
+        if (!this.multiple) {
+          let item = this.selected.size && this.selected.values().next().value
+          if (item.value === this.item.value) {
+            return
           }
-          this.selected[0] = this.item
-          this.item._selected = true
-          this._model = this.selected
+          this.selected.set(this.item.value, this.item)
+          if (item) {
+            this.selected.delete(item.value)
+          }
           return
+        }
+        if (this.selected.has(this.item.value)) {
+          this.selected.delete(this.item.value)
+        } else {
+          this.selected.set(this.item.value, this.item)
         }
       },
       trigger: {
@@ -93,7 +116,19 @@ document.addEventListener('alpine:init', () => {
       option: {
         '@click'() {
           this.select()
-          this.close()
+          if (!this.multiple) this.close()
+        },
+        [":class"]() {
+          let classes = this.$el.attributes;
+          let c = "";
+          if (this.selected.has(this.item.value)) {
+            c = classes["class:selected"]?.textContent || "";
+          }
+
+          return c;
+        },
+        [":data-selected"]() {
+          return this.selected.has(this.item.value)
         }
       }
     }

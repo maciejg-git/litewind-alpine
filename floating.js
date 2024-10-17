@@ -13,7 +13,7 @@ export let useFloating = (reference, floating, opts) => {
 
   let defaultStyle = {
     position: "absolute",
-    width: "min-content",
+    // width: "min-content",
     top: 0,
     left: 0,
   };

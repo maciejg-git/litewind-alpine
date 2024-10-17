@@ -16,65 +16,66 @@
   <body>
     <div x-data="{model: []}">
       <span x-text="model"></span>
-      <div x-data="select" x-model="model" x-init="items = [
+      <div x-data="select({multiple: true})" x-model="model" x-init="items = [
             { text: 'spanish', value: 'spanish' },
             { text: 'french', value: 'french' },
             { text: 'portuguese', value: 'portuguese' },
             { text: 'german', value: 'german' },
             { text: 'japanese', value: 'japanese' },
             { text: 'korean', value: 'korean' },
-            { text: 'italian', value: 'korean' },
+            { text: 'italian', value: 'italian' },
             { text: 'polish', value: 'polish' },
             { text: 'greek', value: 'greek'},
             { text: 'swedish', value: 'swedish' },
         ]" class="w-[340px]">
-          <div
-            x-bind="trigger"
-            x-data="input"
-            class="flex flex-1 items-center rounded border border-gray-300 bg-white px-3 py-2 outline-none transition-shadow duration-200 focus-within:border-gray-400 focus-within:ring focus-within:ring-violet-200 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-gray-300 dark:focus-within:ring-violet-300"
-            >
-            <div class="mr-2"></div>
-            <div x-text="getSelected()" class="mr-2" @mousedown.prevent></div>
-            <div class="flex flex-1 flex-wrap">
-              <input
-              x-bind="input"
-              type="text"
-              class="min-w-0 flex-1 border-0 bg-transparent p-0 outline-none focus:min-w-[64px] focus:outline-none"
-              readonly
+      <div
+        x-bind="trigger"
+        x-data="input(inputData)"
+        class="flex flex-1 items-center rounded border border-gray-300 bg-white py-2 outline-none transition-shadow duration-200 focus-within:border-gray-400 focus-within:ring focus-within:ring-violet-200 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-gray-300 dark:focus-within:ring-violet-300 gap-x-2"
+      >
+        <div></div>
+        <div></div>
+        <div class="flex flex-1 flex-wrap">
+          <template x-for="selected in getSelected()">
+            <span x-text="selected.text" class="mr-1 after:content-[','] last-of-type:mr-2 last-of-type:after:content-none"></span>
+          </template>
+          <input
+            x-bind="input"
+            type="text"
+            class="min-w-0 flex-1 border-0 bg-transparent p-0 outline-none focus:min-w-[64px] focus:outline-none"
+            readonly
+          />
+        </div>
+        <div></div>
+        <div class="flex items-center gap-x-2 mr-2">
+          <div x-bind="loader">
+            <svg viewBox="25 25 50 50" fill="none" class="spinner-svg h-5 w-5">
+              <circle
+                cx="50"
+                cy="50"
+                r="20"
+                stroke-width="4"
+                stroke-miterlimit="10"
               />
-            </div>
-            <div class="ml-2"></div>
-            <div class="flex items-center">
-              <div class="mr-2">
-                <svg viewBox="25 25 50 50" fill="none" class="spinner-svg h-5 w-5">
-                  <circle
-                  cx="50"
-                  cy="50"
-                  r="20"
-                  stroke-width="4"
-                  stroke-miterlimit="10"
-                  />
-                </svg>
-              </div>
-              <div>
-                <button @click="clear()" class="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="h-5 w-5 opacity-70"
-                    viewBox="0 0 16 16"
-                    >
-                    <path
-                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
+            </svg>
           </div>
-        <div x-bind="menu" class="rounded-md border border-neutral-300 shadow-md max-h-[400px] oveflow-y-auto overflow-x-hidden" x-alt-transition="{
+            <button x-bind="clearButton" @click="clear()" class="flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="h-5 w-5 opacity-70"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"
+                />
+              </svg>
+            </button>
+        </div>
+      </div>
+        <div x-bind="menu" class="rounded-b-md shadow-md max-h-[400px] oveflow-y-auto overflow-x-hidden z-20" x-alt-transition="{
                 enter: ['opacity-0 scale-y-[0.5]', 'transition ease-out duration-100 origin-top', 'opacity-100'],
                 leave: ['opacity-100', 'transition ease-in duration-100 origin-top', 'opacity-0 scale-y-[0.5]'],
               }">
@@ -91,7 +92,7 @@
           text-gray-800
           dark:text-gray-300
           hover:bg-gray-100
-          dark:hover:bg-neutral-600" :class="item._selected ? 'bg-gray-50' : ''">
+          dark:hover:bg-neutral-600 scroll-mt-1" class:selected="bg-gray-200">
       
                 </button>
               </li>

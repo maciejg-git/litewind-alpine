@@ -8,7 +8,7 @@ document.addEventListener("alpine:init", () => {
       isShow: false,
       floating: null,
       triggerEv: props.triggerEv ?? "click",
-      autoClose: props.autoClose ?? false,
+      autoClose: props.autoClose ?? true,
       hideTimeout: null,
 
       init() {

@@ -4,9 +4,10 @@ document.addEventListener("alpine:init", () => {
 
     return {
       _value: "",
-      isLoaderVisible: false,
+      useLoader: false,
       isLoading: false,
       placeholder: "",
+      clearable: false,
 
       init() {
         Alpine.effect(() => {
@@ -14,6 +15,15 @@ document.addEventListener("alpine:init", () => {
             ? props.placeholder()
             : props.placeholder ?? this.placeholder;
         });
+        Alpine.effect(() => {
+          this.useLoader = isFunction(props.useLoader) ? props.useLoader() : props.useLoader ?? this.useLoader
+        })
+        Alpine.effect(() => {
+          this.isLoading = isFunction(props.isLoading) ? props.isLoading() : props.isLoading ?? this.isLoading
+        })
+        Alpine.effect(() => {
+          this.clearable = isFunction(props.clearable) ? props.clearable() : props.clearable ?? this.clearable
+        })
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_value",
           ["@mousedown.prevent"]() {
@@ -31,6 +41,16 @@ document.addEventListener("alpine:init", () => {
           return this.placeholder;
         },
       },
+      loader: {
+        ["x-show"]() {
+          return this.useLoader && this.isLoading
+        }
+      },
+      clearButton: {
+        ["x-show"]() {
+          return this.clearable
+        }
+      }
     };
   });
 });
