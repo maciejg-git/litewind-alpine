@@ -14,9 +14,7 @@
     ></script>
   </head>
   <body>
-    <div x-data="{model: []}">
-      <span x-text="model"></span>
-      <div x-data="select({multiple: true})" x-model="model" x-init="items = [
+    <div x-data="{model: [], items: [
             { text: 'spanish', value: 'spanish' },
             { text: 'french', value: 'french' },
             { text: 'portuguese', value: 'portuguese' },
@@ -27,7 +25,9 @@
             { text: 'polish', value: 'polish' },
             { text: 'greek', value: 'greek'},
             { text: 'swedish', value: 'swedish' },
-        ]" class="w-[340px]">
+        ]}">
+      <span x-text="model"></span>
+      <div x-data="select({multiple: true, items: () => items})" x-model="model" class="w-[340px]">
       <div
         x-bind="trigger"
         x-data="input(inputData)"

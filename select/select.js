@@ -2,6 +2,8 @@ import { useFloating } from "../floating.js"
 
 document.addEventListener('alpine:init', () => {
   Alpine.data('select', (props = {}, opts = {}) => {
+    let isFunction = (f) => typeof f === "function";
+
     return {
       isOpen: false, 
       floating: null,
@@ -20,13 +22,23 @@ document.addEventListener('alpine:init', () => {
         this.$nextTick(() => {
           this.floating = useFloating(this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"), this.$refs.menu, { ...opts, resize: true })
         })
-        Alpine.effect(() => this.transformItems())
+        Alpine.effect(() => {
+          this.items = isFunction(props.items) ? props.items() : props.items
+          this.transformItems()
+        })
         this.inputDataProps.forEach((name) => {
           if (props[name]) this.inputData[name] = props[name] 
         })
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
         });
+        this.$watch("_model", () => {
+          this.selected.clear()
+          this._model.forEach((value) => {
+            let item = this._items.find((i) => i.value === value)
+            if (item) this.selected.set(item.value, item)
+          })
+        })
       },
       transformItems() {
         if (!this.items.length) {
@@ -58,7 +70,8 @@ document.addEventListener('alpine:init', () => {
       open() {
         this.floating.startAutoUpdate()
         this.isOpen = true
-        this.scrollToFirstSelected()
+        if (this.selected.size) this.scrollToFirstSelected()
+        else this.$refs.menu.scrollTo(0, 0)
       },
       scrollToFirstSelected() {
         let selectedElement = this.$refs.menu.querySelector("[data-selected]")
@@ -73,8 +86,8 @@ document.addEventListener('alpine:init', () => {
       getSelected() {
         return [...this.selected].map(([k ,v]) => v)
       },
-      getSelectedText() {
-        return [...this.selected].map(([k ,v]) => v.text)
+      getSelectedValues() {
+        return [...this.selected].map(([k ,v]) => v.value)
       },
       select() {
         if (!this.multiple) {
@@ -86,13 +99,17 @@ document.addEventListener('alpine:init', () => {
           if (item) {
             this.selected.delete(item.value)
           }
-          return
-        }
-        if (this.selected.has(this.item.value)) {
-          this.selected.delete(this.item.value)
         } else {
-          this.selected.set(this.item.value, this.item)
+          if (this.selected.has(this.item.value)) {
+            this.selected.delete(this.item.value)
+          } else {
+            this.selected.set(this.item.value, this.item)
+          }
         }
+        this.updateModel()
+      },
+      updateModel() {
+        this._model = this.getSelectedValues()
       },
       trigger: {
         'x-ref': 'trigger',
