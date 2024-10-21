@@ -17,6 +17,7 @@ document.addEventListener('alpine:init', () => {
       itemValue: props.itemValue ?? "value",
       inputDataProps: ["clearable", "placeholder", "useLoader", "isLoading"],
       inputData: {},
+      highlightedIndex: -1,
 
       init() {
         this.$nextTick(() => {
@@ -31,6 +32,11 @@ document.addEventListener('alpine:init', () => {
         })
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
+          ["@keyup.down"]() {
+            this.highlightedIndex++
+            let el = this.$refs.menu.querySelector(`[data-index="${this.highlightedIndex}"]`)
+            el.scrollIntoView({block: "nearest"})
+          }
         });
         this.$watch("_model", () => {
           this.selected.clear()
@@ -139,13 +145,19 @@ document.addEventListener('alpine:init', () => {
           let classes = this.$el.attributes;
           let c = "";
           if (this.selected.has(this.item.value)) {
-            c = classes["class:selected"]?.textContent || "";
+            c += classes["class:selected"]?.textContent || "";
+          }
+          if (+this.$el.dataset.index === this.highlightedIndex) {
+            c += classes["class:highlight"]?.textContent || ""
           }
 
           return c;
         },
         [":data-selected"]() {
           return this.selected.has(this.item.value)
+        },
+        [":data-index"]() {
+          return this.index
         }
       }
     }

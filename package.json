@@ -1,0 +1,12 @@
+{
+  "name": "alpine-components",
+  "version": "0.0.0",
+  "description": "",
+  "main": "floating.js",
+  "scripts": {
+    "tailwind": "npx tailwindcss -i ./input.css -o ./output.css --watch",
+    "dev": "npx http-server .\\ -c-1"
+  },
+  "author": "",
+  "license": "ISC"
+}

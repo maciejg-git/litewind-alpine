@@ -79,9 +79,7 @@
                 enter: ['opacity-0 scale-y-[0.5]', 'transition ease-out duration-100 origin-top', 'opacity-100'],
                 leave: ['opacity-100', 'transition ease-in duration-100 origin-top', 'opacity-0 scale-y-[0.5]'],
               }">
-          <ul>
-            <template x-for="item in getItems()">
-              <li>
+            <template x-for="(item, index) in getItems()">
                 <button x-bind="option" x-text="item.text" class="w-full
         text-left
         focus:outline-none
@@ -92,12 +90,10 @@
           text-gray-800
           dark:text-gray-300
           hover:bg-gray-100
-          dark:hover:bg-neutral-600 scroll-mt-1" class:selected="bg-gray-200">
+          dark:hover:bg-neutral-600 scroll-mt-1" class:selected="bg-gray-200" class:highlight="bg-gray-100">
       
                 </button>
-              </li>
             </template>
-          </ul>
         </div>
       </div>
     </div>
