@@ -4,6 +4,18 @@ document.addEventListener('alpine:init', () => {
   Alpine.data('select', (props = {}, opts = {}) => {
     let isFunction = (f) => typeof f === "function";
 
+    let isElementOverflowingBottom = (el) => {
+      return el.offsetTop + el.clientHeight > el.parentElement.scrollTop + el.parentElement.clientHeight
+    }
+
+    let isElementOveflowingTop = (el) => {
+      return el.offsetTop < el.parentElement.scrollTop
+    }
+
+    let scrollToElement = (el) => {
+      el.parentElement.scrollTo(0, el.offsetTop - el.parentElement.clientHeight / 2 + el.clientHeight / 2)
+    }
+
     return {
       isOpen: false, 
       floating: null,
@@ -32,10 +44,35 @@ document.addEventListener('alpine:init', () => {
         })
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
-          ["@keyup.down"]() {
+          ["@keydown.prevent.down"]() {
+            if (!this.isOpen) {
+              this.open()
+            }
+            if (this.highlightedIndex >= this._items.length - 1) {
+              return
+            }
             this.highlightedIndex++
             let el = this.$refs.menu.querySelector(`[data-index="${this.highlightedIndex}"]`)
-            el.scrollIntoView({block: "nearest"})
+            el.focus({ preventScroll: true })
+            if (isElementOverflowingBottom(el) || isElementOveflowingTop(el)) { 
+              scrollToElement(el)
+            }
+          },
+          ["@keydown.prevent.up"]() {
+            if (this.highlightedIndex <= 0) {
+              return
+            }
+            this.highlightedIndex--
+            let el = this.$refs.menu.querySelector(`[data-index="${this.highlightedIndex}"]`)
+            el.focus({ preventScroll: true })
+            if (isElementOveflowingTop(el) || isElementOverflowingBottom(el)) { 
+              scrollToElement(el)
+            }
+          },
+          ["@keydown.prevent.escape"]() {
+            if (this.isOpen) {
+              this.close()
+            }
           }
         });
         this.$watch("_model", () => {
@@ -78,6 +115,7 @@ document.addEventListener('alpine:init', () => {
         this.isOpen = true
         if (this.selected.size) this.scrollToFirstSelected()
         else this.$refs.menu.scrollTo(0, 0)
+        this.highlightedIndex = -1
       },
       scrollToFirstSelected() {
         let selectedElement = this.$refs.menu.querySelector("[data-selected]")
@@ -135,6 +173,13 @@ document.addEventListener('alpine:init', () => {
           return this.isOpen
         },
         '@mousedown.prevent'() {},
+        "@focusout"() {
+          if (this.$refs.menu.contains(this.$event.relatedTarget)) {
+            return
+          }
+          this.close()
+          this.$root.querySelector("[x-bind='input']").focus()
+        }
       },
       option: {
         '@click'() {
@@ -145,10 +190,10 @@ document.addEventListener('alpine:init', () => {
           let classes = this.$el.attributes;
           let c = "";
           if (this.selected.has(this.item.value)) {
-            c += classes["class:selected"]?.textContent || "";
+            c += (classes["class:selected"]?.textContent || "") + " ";
           }
           if (+this.$el.dataset.index === this.highlightedIndex) {
-            c += classes["class:highlight"]?.textContent || ""
+            c += (classes["class:highlight"]?.textContent || "") + " "
           }
 
           return c;
@@ -158,6 +203,9 @@ document.addEventListener('alpine:init', () => {
         },
         [":data-index"]() {
           return this.index
+        },
+        "@focusout"() {
+          this
         }
       }
     }
