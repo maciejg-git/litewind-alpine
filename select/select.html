@@ -85,7 +85,7 @@
             </button>
         </div>
       </div>
-        <div x-bind="menu" class="rounded-b-md shadow-md max-h-[400px] oveflow-y-auto overflow-x-hidden z-20" x-alt-transition="{
+        <div x-bind="menu" class="rounded-b-md shadow-md max-h-[400px] bg-white dark:bg-dark-800 oveflow-y-auto overflow-x-hidden z-20" x-alt-transition="{
                 enter: ['opacity-0 scale-y-[0.5]', 'transition ease-out duration-100 origin-top', 'opacity-100'],
                 leave: ['opacity-100', 'transition ease-in duration-100 origin-top', 'opacity-0 scale-y-[0.5]'],
               }">
@@ -100,7 +100,7 @@
           text-gray-800
           dark:text-gray-300
           hover:bg-gray-100
-          dark:hover:bg-neutral-600 scroll-mt-1" class:selected="bg-gray-200" class:highlight="bg-gray-100">
+          dark:hover:bg-neutral-600 scroll-mt-1" class-selected="bg-gray-200 dark:bg-dark-700" class-highlight="bg-gray-100 dark:bg-dark-600">
       
                 </button>
             </template>

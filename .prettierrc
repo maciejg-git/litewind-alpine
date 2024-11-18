@@ -1,0 +1,11 @@
+{
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "tailwindAttributes": [
+    "class-selected",
+    "class-highlight",
+    "class-today",
+    "class-adjacent",
+    "class-selected-range",
+    "class-partially-selected"
+  ]
+}

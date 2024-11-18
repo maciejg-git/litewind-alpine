@@ -41,7 +41,9 @@ document.addEventListener("alpine:init", () => {
           let classes = this.$el.attributes;
           let c = "";
           if (this.isSelected()) {
-            c = classes["class:selected"]?.textContent || "";
+            c = classes["class-selected"]?.textContent || "";
+          } else {
+            c = classes["class-default"]?.textContent || "";
           }
 
           return c;

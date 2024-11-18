@@ -173,7 +173,7 @@ document.addEventListener('alpine:init', () => {
           return this.isOpen
         },
         '@mousedown.prevent'() {},
-        "@focusout"() {
+        '@focusout'() {
           if (this.$refs.menu.contains(this.$event.relatedTarget)) {
             return
           }
@@ -190,10 +190,10 @@ document.addEventListener('alpine:init', () => {
           let classes = this.$el.attributes;
           let c = "";
           if (this.selected.has(this.item.value)) {
-            c += (classes["class:selected"]?.textContent || "") + " ";
+            c += (classes["class-selected"]?.textContent || "") + " ";
           }
           if (+this.$el.dataset.index === this.highlightedIndex) {
-            c += (classes["class:highlight"]?.textContent || "") + " "
+            c += (classes["class-highlight"]?.textContent || "") + " "
           }
 
           return c;
@@ -203,9 +203,6 @@ document.addEventListener('alpine:init', () => {
         },
         [":data-index"]() {
           return this.index
-        },
-        "@focusout"() {
-          this
         }
       }
     }

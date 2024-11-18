@@ -82,6 +82,10 @@ document.addEventListener("alpine:init", () => {
               this.selectedRange = this._model.map((d) => new Date(d));
               this.rangeState = rangeSelectionStates.TO_SELECTED
             }
+            return
+          }
+          if (dateRegexp.test(this._model)) {
+            this.selectedSingle = new Date(this._model)
           }
         });
 
@@ -269,19 +273,21 @@ document.addEventListener("alpine:init", () => {
           let classes = this.$el.attributes;
           let c = "";
           if (this.isAdjacent()) {
-            return classes["class:adjacent"]?.textContent || "";
+            return classes["class-adjacent"]?.textContent || "";
           }
 
           if (this.isSelected()) {
-            c += (classes["class:selected"]?.textContent || "") + " ";
+            c += (classes["class-selected"]?.textContent || "") + " ";
           } else if (this.isSelectedRange()) {
-            c += (classes["class:selected-range"]?.textContent || "") + " ";
+            c += (classes["class-selected-range"]?.textContent || "") + " ";
           } else if (this.isPartiallySelected()) {
-            c += (classes["class:partially-selected"]?.textContent || "") + " ";
+            c += (classes["class-partially-selected"]?.textContent || "") + " ";
+          } else {
+            c += (classes["class-default"]?.textContent || "") + " ";
           }
 
           if (this.isToday()) {
-            c += (classes["class:today"]?.textContent || "") + " ";
+            c += (classes["class-today"]?.textContent || "") + " ";
           }
 
           return c;

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -16,14 +16,14 @@
     <input x-data x-model="$store.table.filter" type="text" />
     <table
       x-data="table($store.table)"
-      class="table-fixed border-collapse text-left"
+      class="w-full table-auto border-collapse text-left text-[0.9rem]"
     >
       <thead>
         <tr>
           <template x-for="col in definition">
             <td
               x-bind="header"
-              class="border-b border-gray-300 px-2 py-2 font-semibold dark:border-neutral-700 dark:text-gray-200"
+              class="border-b border-secondary-300 px-2 py-2 font-semibold text-text-800 dark:border-dark-600 dark:text-text-300"
             >
               <div class="flex items-center">
                 <span x-text="col.label"></span>
@@ -31,6 +31,7 @@
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 320 512"
+                    fill="currentColor"
                     class="ml-3 h-4 w-4 opacity-30"
                   >
                     <path
@@ -42,6 +43,7 @@
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 320 512"
+                    fill="currentColor"
                     class="ml-3 h-4 w-4 opacity-70"
                   >
                     <path
@@ -53,6 +55,7 @@
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 320 512"
+                    fill="currentColor"
                     class="ml-3 h-4 w-4 opacity-70"
                   >
                     <path
@@ -71,7 +74,7 @@
             <template x-for="col in definition">
               <td
                 x-text="row[col.key]"
-                class="border-t border-t border-gray-300 px-2 py-2 transition-colors duration-200 dark:border-neutral-700"
+                class="border-t border-secondary-300 px-2 py-2 text-text-800 transition-colors duration-200 dark:border-dark-600 dark:text-text-300"
               ></td>
             </template>
           </tr>

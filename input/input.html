@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -17,7 +17,7 @@
       <div
         x-data="input"
         x-model="model"
-        class="flex flex-1 items-center rounded border border-gray-300 bg-white py-2 outline-none transition-shadow duration-200 focus-within:border-gray-400 focus-within:ring focus-within:ring-violet-200 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-gray-300 dark:focus-within:ring-violet-300 gap-x-2"
+        class="flex flex-1 items-center gap-x-2 rounded border border-gray-300 bg-white py-2 outline-none transition-shadow duration-200 focus-within:border-gray-400 focus-within:ring focus-within:ring-violet-200 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-gray-300 dark:focus-within:ring-violet-300"
       >
         <div></div>
         <div></div>
@@ -29,7 +29,7 @@
           />
         </div>
         <div></div>
-        <div class="flex items-center gap-x-2 mr-2">
+        <div class="mr-2 flex items-center gap-x-2">
           <div x-bind="loader">
             <svg viewBox="25 25 50 50" fill="none" class="spinner-svg h-5 w-5">
               <circle
@@ -41,20 +41,24 @@
               />
             </svg>
           </div>
-            <button x-bind="clearButton" @click="clear()" class="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="h-5 w-5 opacity-70"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"
-                />
-              </svg>
-            </button>
+          <button
+            x-bind="clearButton"
+            @click="clear()"
+            class="flex items-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="h-5 w-5 opacity-70"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"
+              />
+            </svg>
+          </button>
         </div>
       </div>
     </div>
