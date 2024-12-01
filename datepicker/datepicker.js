@@ -77,12 +77,22 @@ document.addEventListener("alpine:init", () => {
         Alpine.effect(() => {
           let dateRegexp = /^\d{4}-\d{2}-\d{2}$/;
 
-          if (this.range && this._model?.length === 2) {
-            if (this._model.every((d) => dateRegexp.test(d))) {
-              this.selectedRange = this._model.map((d) => new Date(d));
-              this.rangeState = rangeSelectionStates.TO_SELECTED
+          if (this.range) {
+            if (this._model?.length === 2) {
+              if (this._model.every((d) => dateRegexp.test(d))) {
+                this.selectedRange = this._model.map((d) => new Date(d));
+                this.rangeState = rangeSelectionStates.TO_SELECTED
+              }
+              return
+            }
+            if (this._model?.length === 0) {
+              this.selectedRange = []
+              this.rangeState = rangeSelectionStates.UNSELECTED
             }
             return
+          }
+          if (this._model === "" || this._model === null) {
+            this.selectedSingle = null
           }
           if (dateRegexp.test(this._model)) {
             this.selectedSingle = new Date(this._model)
