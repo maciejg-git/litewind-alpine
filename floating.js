@@ -1,5 +1,3 @@
-import {computePosition, offset, inline, flip, autoPlacement, size, autoUpdate} from 'https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.10/+esm';
-
 export let useFloating = (reference, floating, opts) => {
   let options = {
     placement: opts.placement ?? "bottom-start",
@@ -44,21 +42,21 @@ export let useFloating = (reference, floating, opts) => {
   let stopUpdate = null;
 
   let update = async () => {
-    let { x, y, placement } = await computePosition(
+    let { x, y, placement } = await FloatingUIDOM.computePosition(
       localReference,
       floating,
       {
         placement: options.placement,
         middleware: [
-          offset({
+          FloatingUIDOM.offset({
             mainAxis: options.offsetY,
             crossAxis: options.offsetX,
           }),
-          options.inline && inline(),
-          options.flip && flip(),
-          options.autoPlacement && autoPlacement(),
+          options.inline && FloatingUIDOM.inline(),
+          options.flip && FloatingUIDOM.flip(),
+          options.autoPlacement && FloatingUIDOM.autoPlacement(),
           options.resize &&
-            size({
+            FloatingUIDOM.size({
               apply({ rects }) {
                 Object.assign(floating.style, {
                   width: `${rects.reference.width}px`,
@@ -82,7 +80,7 @@ export let useFloating = (reference, floating, opts) => {
   };
 
   let startAutoUpdate = () => {
-    stopUpdate = autoUpdate(localReference, floating, () => update());
+    stopUpdate = FloatingUIDOM.autoUpdate(localReference, floating, () => update());
   };
   
   return {
