@@ -5,14 +5,14 @@
   "main": "floating.js",
   "scripts": {
     "tailwind": "npx tailwindcss -i ./input.css -o ./output.css --watch",
-    "dev": "npx http-server .\\ -c-1"
+    "dev": "npx http-server .\\ -c-1",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.8",
-    "tailwindcss": "^3.4.14"
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.4.1",
     "prettier-plugin-tailwindcss": "^0.6.9",
     "tailwindcss": "^3.4.15"
