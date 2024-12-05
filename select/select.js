@@ -1,4 +1,4 @@
-import { useFloating } from "../floating.js"
+import { useFloating } from "/use-floating.js"
 
 document.addEventListener('alpine:init', () => {
   Alpine.data('select', (props = {}, opts = {}) => {
@@ -157,10 +157,10 @@ document.addEventListener('alpine:init', () => {
       },
       trigger: {
         'x-ref': 'trigger',
-        ['@mousedown']() {
+        '@mousedown'() {
           this.isOpen ? this.close() : this.open()
         },
-        ['@focusout']() {
+        '@focusout'() {
           if (this.$refs.menu.contains(this.$event.relatedTarget)) {
             return
           }
@@ -169,7 +169,7 @@ document.addEventListener('alpine:init', () => {
       },
       menu: {
         'x-ref': 'menu',
-        ['x-show']() {
+        'x-show'() {
           return this.isOpen
         },
         '@mousedown.prevent'() {},
@@ -186,7 +186,7 @@ document.addEventListener('alpine:init', () => {
           this.select()
           if (!this.multiple) this.close()
         },
-        [":class"]() {
+        ":class"() {
           let classes = this.$el.attributes;
           let c = "";
           if (this.selected.has(this.item.value)) {
@@ -198,10 +198,10 @@ document.addEventListener('alpine:init', () => {
 
           return c;
         },
-        [":data-selected"]() {
+        ":data-selected"() {
           return this.selected.has(this.item.value)
         },
-        [":data-index"]() {
+        ":data-index"() {
           return this.index
         }
       }

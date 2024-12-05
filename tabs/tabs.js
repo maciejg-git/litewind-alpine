@@ -31,13 +31,13 @@ document.addEventListener("alpine:init", () => {
         ...aria.tabBar,
       },
       label: {
-        ["@click"]() {
+        "@click"() {
           this.selectTab();
         },
-        ["x-effect"]() {
+        "x-effect"() {
           this.$el.dataset.selected = this.isSelected();
         },
-        [":class"]() {
+        ":class"() {
           let classes = this.$el.attributes;
           let c = "";
           if (this.isSelected()) {
@@ -52,7 +52,7 @@ document.addEventListener("alpine:init", () => {
         ...label,
       },
       content: {
-        ["x-show"]() {
+        "x-show"() {
           return this.isSelected();
         },
         ...aria.content,

@@ -5,11 +5,11 @@ document.addEventListener("alpine:init", () => {
 
       init() {
         Alpine.bind(this.$el, {
-          ["x-modelable"]: "value",
+          "x-modelable": "value",
         });
       },
       progressBar: {
-        [":style"]() {
+        ":style"() {
           return `width: ${this.value}%`;
         },
       },

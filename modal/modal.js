@@ -29,28 +29,28 @@ document.addEventListener("alpine:init", () => {
         this.isOpen = false;
       },
       container: {
-        ["x-show"]() {
+        "x-show"() {
           return this.isOpen;
         },
-        ["@open-modal.window"]() {
+        "@open-modal.window"() {
           let id = this.$event.detail.id || this.$event.detail;
           if (id === this.$root.id) {
             this.open();
           }
         },
-        ["@click"]() {
+        "@click"() {
           if (this.isStatic) return;
           this.close();
         },
       },
       content: {
-        ["x-show"]() {
+        "x-show"() {
           return this.isOpen;
         },
-        ["@click.stop"]() {},
+        "@click.stop"() {},
       },
       backdrop: {
-        ["x-show"]() {
+        "x-show"() {
           return this.isOpen;
         },
       },

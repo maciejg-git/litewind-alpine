@@ -76,20 +76,20 @@ document.addEventListener("alpine:init", () => {
         this.currentPage = this.page;
       },
       prevButton: {
-        ["@click"]() {
+        "@click"() {
           this.handleClickPrev();
         },
       },
       nextButton: {
-        ["@click"]() {
+        "@click"() {
           this.handleClickNext();
         },
       },
       pageButton: {
-        ["@click"]() {
+        "@click"() {
           this.handleClickPage();
         },
-        [":class"]() {
+        ":class"() {
           let classes = this.$el.attributes;
           let c = "";
           if (this.isSelected()) {

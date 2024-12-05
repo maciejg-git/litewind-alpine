@@ -1,4 +1,4 @@
-import { useFloating } from "../floating.js";
+import { useFloating } from "/use-floating.js";
 
 document.addEventListener("alpine:init", () => {
   Alpine.data("dropdown", (props = {}, opts = {}) => {
@@ -78,21 +78,21 @@ document.addEventListener("alpine:init", () => {
         }
         return {
           ...t,
-          ["x-ref"]: "trigger",
+          "x-ref": "trigger",
         };
       },
       menu: {
-        ["x-show"]() {
+        "x-show"() {
           return this.isShow;
         },
-        ["x-ref"]: "menu",
-        ["@mouseenter"]() {
+        "x-ref": "menu",
+        "@mouseenter"() {
           this.preventHiding();
         },
-        ["@mouseleave"]() {
+        "@mouseleave"() {
           this.allowHiding();
         },
-        ["@click.outside"]() {
+        "@click.outside"() {
           this.close();
         },
         "@click"() {

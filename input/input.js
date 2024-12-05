@@ -8,6 +8,8 @@ document.addEventListener("alpine:init", () => {
       isLoading: false,
       placeholder: "",
       clearable: false,
+      isDirty: false,
+      isTouched: false,
 
       init() {
         Alpine.effect(() => {
@@ -30,24 +32,30 @@ document.addEventListener("alpine:init", () => {
             this.$refs.input.focus()
           }
         });
+        Alpine.effect(() => {
+          if (this._value.length) this.isDirty = true
+        })
       },
       clear() {
         this._value = "";
       },
       input: {
-        ["x-model"]: "_value",
-        ["x-ref"]: "input",
-        [":placeholder"]() {
+        "x-model": "_value",
+        "x-ref": "input",
+        ":placeholder"() {
           return this.placeholder;
         },
+        "@focus"() {
+          this.isTouched = true
+        }
       },
       loader: {
-        ["x-show"]() {
+        "x-show"() {
           return this.useLoader && this.isLoading
         }
       },
       clearButton: {
-        ["x-show"]() {
+        "x-show"() {
           return this.clearable
         }
       }

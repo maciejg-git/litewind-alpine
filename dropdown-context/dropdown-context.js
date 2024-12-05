@@ -1,4 +1,4 @@
-import { useFloating } from "../floating.js";
+import { useFloating } from "/use-floating.js";
 
 document.addEventListener("alpine:init", () => {
   Alpine.data("dropdownContext", (props = {}, opts = {}) => {
@@ -27,10 +27,10 @@ document.addEventListener("alpine:init", () => {
         this.isShow = false;
       },
       menu: {
-        ["x-show"]() {
+        "x-show"() {
           return this.isShow;
         },
-        ["@open-contextmenu.window"]() {
+        "@open-contextmenu.window"() {
           if (this.$event.detail.id !== this.$root.id) {
             return;
           }
@@ -39,8 +39,8 @@ document.addEventListener("alpine:init", () => {
           this.contextData = this.$event.detail.data;
           this.open();
         },
-        ["x-ref"]: "menu",
-        ["@click.outside"]() {
+        "x-ref": "menu",
+        "@click.outside"() {
           this.close();
         },
         "@click"() {

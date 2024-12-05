@@ -174,12 +174,12 @@ document.addEventListener("alpine:init", () => {
         );
       },
       header: {
-        ["@click"]() {
+        "@click"() {
           if (!this.isSortable()) return;
           this.sortAsc = this.sortKey === this.col.key ? -this.sortAsc : 1;
           this.sortKey = this.col.key;
         },
-        [":class"]() {
+        ":class"() {
           return this.isSortable() ? "cursor-pointer" : "";
         },
       },

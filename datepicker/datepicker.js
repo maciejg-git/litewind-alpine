@@ -259,27 +259,27 @@ document.addEventListener("alpine:init", () => {
         }
       },
       prevMonthButton: {
-        ["@click"]() {
+        "@click"() {
           this.setPrevMonth();
         },
       },
       nextMonthButton: {
-        ["@click"]() {
+        "@click"() {
           this.setNextMonth();
         },
       },
       prevYearButton: {
-        ["@click"]() {
+        "@click"() {
           this.setPrevYear();
         },
       },
       nextYearButton: {
-        ["@click"]() {
+        "@click"() {
           this.setNextYear();
         },
       },
       day: {
-        [":class"]() {
+        ":class"() {
           let classes = this.$el.attributes;
           let c = "";
           if (this.isAdjacent()) {
@@ -302,10 +302,10 @@ document.addEventListener("alpine:init", () => {
 
           return c;
         },
-        ["@click"]() {
+        "@click"() {
           this.handleDayClick();
         },
-        ["@mouseenter"]() {
+        "@mouseenter"() {
           this.mouseOverDate = this.d;
         },
       },
