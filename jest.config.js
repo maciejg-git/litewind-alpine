@@ -1,5 +1,9 @@
 const config = {
-  testEnvironment: "jsdom"
+  testEnvironment: "jsdom",
+  testEnvironmentOptions: {
+    runScripts: "dangerously",
+    resources: "usable",
+  }
 }
 
 module.exports = config
