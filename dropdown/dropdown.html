@@ -7,7 +7,8 @@
     <link href="/output.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.8"></script>
     <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.12"></script>
-    <script defer src="/transition-plugin.js"></script>
+    <script defer type="module" src="/scripts/use-floating.js"></script>
+    <script defer src="/scripts/transition-plugin.js"></script>
     <script defer type="module" src="./dropdown.js"></script>
     <script
       defer
@@ -15,7 +16,7 @@
     ></script>
   </head>
   <body>
-    <div x-data="dropdown">
+    <div x-data="dropdown()">
       <button x-bind="trigger">dropdown</button>
       <div
         x-bind="menu"

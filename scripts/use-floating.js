@@ -90,3 +90,5 @@ export let useFloating = (reference, floating, opts) => {
     updateVirtualElement,
   };
 };
+
+window.useFloating = useFloating
