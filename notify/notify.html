@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="/output.css" rel="stylesheet" />
+    <script defer type="module" src="./notify.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    <button x-data @click="$dispatch('add-notify', {text: 'notify', delay: 2000})">add notify</button>
+    <ul x-data="notify" class="fixed block bottom-4 md:right-10 w-full md:w-[350px] space-y-4">
+      <template x-for="notify in getNotifications">
+        <li>
+          <div class="p-4 rounded-md shadow-lg text-sm bg-secondary-100 dark:shadow-black/30 dark:text-secondary-300 dark:bg-dark-800 w-full">
+            <header x-text="notify.header" class="mb-2 px-4 font-semibold"></header>
+            <div x-text="notify.text" class="px-4 dark:text-secondary-300"></div>
+          </div>
+        </li>
+      </template>
+    </ul>
+  </body>
+</html>
