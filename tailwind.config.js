@@ -15,6 +15,8 @@ module.exports = {
     "./tooltip/**/*.{html, js}",
     "./select/**/*.{html, js}",
     "./datepicker/**/*.{html, js}",
+    "./chevron/**/*.{html, js}",
+    "./notify/**/*.{html, js}",
     "./*.js"
   ],
   darkMode: 'class',
