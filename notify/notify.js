@@ -35,6 +35,9 @@ document.addEventListener("alpine:init", () => {
         let index = this.notifications.findIndex((i) => id === i.notifyId)
         this.notifications.splice(index, 1)
       },
+      close() {
+        this.removeById(this.notify.notifyId)
+      },
       push(notify) {
         let container = this
 
@@ -45,6 +48,7 @@ document.addEventListener("alpine:init", () => {
           dismissable: notify?.dismissable ?? props.dismissable ?? defaultOptions.dismissable,
           static: notify?.static ?? props.static ?? defaultOptions.static,
           variant: notify?.variant ?? props.variant ?? defaultOptions.variant,
+          options: notify?.options ?? props.options ?? null,
           notifyId: this.notifyId,
           timer: null,
         }
