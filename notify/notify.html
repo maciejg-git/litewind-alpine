@@ -14,12 +14,18 @@
   <body>
     <button
       x-data
-      @click="$dispatch('add-notify', {text: 'notify', delay: 2000, header: 'notify header'})"
+      @click="$dispatch('show-notify', {text: 'notify', delay: 2000, header: 'notify header'})"
     >
       add notify
     </button>
+    <button
+      x-data
+      @click="$dispatch('show-notify', {text: 'notify', delay: 2000, header: 'notify header', sticky: true})"
+    >
+      add notify sticky
+    </button>
     <ul
-      x-data="notify()"
+      x-data="notify({max: 3})"
       class="fixed bottom-4 w-full space-y-4 md:right-10 md:w-[350px]"
     >
       <template x-for="notify in getNotifications">
@@ -34,7 +40,7 @@
                 class="mb-2 px-4 font-semibold"
               ></header>
               <div
-                x-text="notify.text"
+                x-text="notify.text + notify.sticky"
                 class="px-4 dark:text-secondary-300"
               ></div>
             </div>
