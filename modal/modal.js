@@ -11,13 +11,20 @@ document.addEventListener("alpine:init", () => {
 
     return {
       isOpen: false,
-      isStatic: false,
+      static: false,
+      closable: true,
+      options: {},
 
       init() {
         Alpine.effect(() => {
-          this.isStatic = isFunction(props.isStatic)
-            ? props.isStatic()
-            : props.isStatic ?? this.isStatic;
+          this.static = isFunction(props.static)
+            ? props.static()
+            : props.static ?? this.static;
+        });
+        Alpine.effect(() => {
+          this.closable = isFunction(props.closable)
+            ? props.closable()
+            : props.closable ?? this.closable;
         });
       },
       open() {
@@ -35,11 +42,12 @@ document.addEventListener("alpine:init", () => {
         "@open-modal.window"() {
           let id = this.$event.detail.id || this.$event.detail;
           if (id === this.$root.id) {
+            this.options = this.$event.detail.options || {}
             this.open();
           }
         },
         "@click"() {
-          if (this.isStatic) return;
+          if (this.static) return;
           this.close();
         },
       },

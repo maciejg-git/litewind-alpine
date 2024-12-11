@@ -17,7 +17,7 @@
     ></script>
   </head>
   <body>
-    <button x-data @click="$dispatch('open-modal', { id: 'modal' })">
+    <button x-data @click="$dispatch('open-modal', { id: 'modal', options: { text: 'text', classes: ''} })">
       open modal
     </button>
 
@@ -47,19 +47,21 @@
               class="flex items-center justify-between bg-secondary-50 px-6 py-6 text-lg font-medium leading-6 text-text-800 dark:bg-dark-800 dark:text-text-300"
             >
               Lorem Ipsum is simply dummy text
-              <button @click="close()">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"
-                  />
-                </svg>
-              </button>
+              <template x-if="closable">
+                <button @click="close()">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"
+                    />
+                  </svg>
+                </button>
+              </template>
             </header>
             <main class="px-6 py-5">
               Lorem Ipsum is simply dummy text of the printing and typesetting
