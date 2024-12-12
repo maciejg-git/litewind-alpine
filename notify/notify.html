@@ -25,13 +25,13 @@
       add notify sticky
     </button>
     <ul
-      x-data="notify({max: 3})"
+      x-data="notify({order: 'default'})"
       class="fixed bottom-4 w-full space-y-4 md:right-10 md:w-[350px]"
     >
       <template x-for="notify in getNotifications">
         <li>
           <div
-            class="flex w-full items-center rounded-md bg-secondary-100 p-4 text-sm shadow-lg dark:bg-dark-800 dark:text-secondary-300 dark:shadow-black/30"
+            class="flex w-full items-center rounded-xl bg-secondary-100 p-4 text-sm shadow-lg dark:bg-dark-800 dark:text-secondary-300 dark:shadow-black/30"
           >
             <div>
               <header
@@ -40,7 +40,7 @@
                 class="mb-2 px-4 font-semibold"
               ></header>
               <div
-                x-text="notify.text + notify.sticky"
+                x-text="notify.text + ' ' + notify.sticky + ' ' + notify.notifyId"
                 class="px-4 dark:text-secondary-300"
               ></div>
             </div>
