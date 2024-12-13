@@ -50,7 +50,12 @@ document.addEventListener("alpine:init", () => {
           if (this.static) return;
           this.close();
         },
+        "@keydown.escape"() {
+          if (this.static) return
+          this.close()
+        }
       },
+      positioner: {},
       content: {
         "x-show"() {
           return this.isOpen;
