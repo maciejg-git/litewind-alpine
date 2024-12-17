@@ -88,19 +88,19 @@
       </div>
     </div>
     <div x-data="{images: ['mononoke033.jpg', 'mononoke035.jpg', 'IMG_2648.jpg', 'IMG_2657.jpg'], currentImage: 0}">
-      <div x-data="modal({ static: true })" id="modalImage" x-cloak>
+      <div x-data="modal()" id="modalImage" x-cloak>
         <div
           x-bind="backdrop"
           x-alt-transition="{
             enter: ['opacity-0', 'transition ease-out duration-200', 'opacity-100'],
             leave: ['opacity-100', 'transition ease-in duration-200', 'opacity-0'],
           }"
-          class="fixed inset-0 z-20 overflow-y-auto bg-black/50"
+          class="fixed inset-0 z-20 overflow-y-auto bg-black/70 dark:bg-black/70"
         ></div>
         <div x-bind="container" class="fixed inset-0 z-20 overflow-y-auto">
           <div
             v-bind="positioner"
-            class="relative mx-auto flex min-h-full items-center px-6 py-6 md:w-max md:max-w-[80%] md:px-0"
+            class="relative mx-auto flex min-h-full items-center w-max md:px-0"
           >
             <div
               x-bind="content"
@@ -112,7 +112,9 @@
               class="flex-1 overflow-auto rounded-md bg-white text-text-800 shadow-lg dark:bg-dark-800 dark:text-text-300"
             >
               <main class="group relative">
-                <img :src="'./' + images[currentImage]" alt="" class="max-h-[90vh]">
+                <img :src="'./' + images[currentImage]" alt="" class="max-w-[90vw] max-h-[92vh]">
+                <div x-text="`${currentImage + 1}/${images.length}`" class="absolute left-1/2 top-4 bg-black/60 text-text-300 px-4 py-2 rounded-lg text-xl font-sembold opacity-0 group-hover:opacity-100 transition-opacity -translate-x-1/2">
+                </div>
                 <button @click="close()" class="absolute top-6 right-6 text-white/80 w-6 h-6">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

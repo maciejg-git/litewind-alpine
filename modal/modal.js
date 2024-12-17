@@ -27,12 +27,27 @@ document.addEventListener("alpine:init", () => {
             : props.closable ?? this.closable;
         });
       },
+      getScrollBarWidth() {
+        return window.innerWidth - document.documentElement.clientWidth;
+      },
+      removeScrollbar() {
+        let scrollbarWidth = this.getScrollBarWidth();
+
+        if (scrollbarWidth > 0) {
+          document.body.style.overflowY = "hidden";
+          document.body.style.paddingRight = scrollbarWidth + "px";
+        }
+      },
+      resetScrollbar() {
+        document.body.style.overflowY = null;
+        document.body.style.paddingRight = null;
+      },
       open() {
-        document.body.style.overflow = "hidden";
+        this.removeScrollbar()
         this.isOpen = true;
       },
       close() {
-        document.body.style.overflow = "";
+        this.resetScrollbar()
         this.isOpen = false;
       },
       container: {

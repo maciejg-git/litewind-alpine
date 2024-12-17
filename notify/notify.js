@@ -26,6 +26,14 @@ document.addEventListener("alpine:init", () => {
             }
           }
         })
+        Alpine.bind(this.$el, {
+          "@mouseenter"() {
+            this.handleContainerMouseEnter()
+          },
+          "@mouseleave"() {
+            this.handleContainerMouseLeave()
+          }
+        })
       },
       getNotifications() {
         if (this.order === "default" && this.stickyAt === "end") {
@@ -40,6 +48,16 @@ document.addEventListener("alpine:init", () => {
         if (this.order === "reversed" && this.stickyAt === "start") {
           return [...this.notificationsSticky.toReversed(), ...this.notifications.toReversed()]
         }
+      },
+      handleContainerMouseEnter() {
+        this.notifications.forEach((notification) => {
+          notification.pauseTimer()
+        })
+      },
+      handleContainerMouseLeave() {
+        this.notifications.forEach((notification) => {
+          notification.restartTimer()
+        })
       },
       removeById(id) {
         let index = this.notifications.findIndex((i) => id === i.notifyId)
@@ -79,6 +97,12 @@ document.addEventListener("alpine:init", () => {
             this.timer = setTimeout(() => container.removeStickyById(this.notifyId), this.delay)
           } else {
             this.timer = setTimeout(() => container.removeById(this.notifyId), this.delay)
+          }
+        }
+
+        newNotify.pauseTimer = function() {
+          if (this.timer) {
+            clearTimeout(this.timer)
           }
         }
 

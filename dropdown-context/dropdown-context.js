@@ -1,5 +1,7 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("dropdownContext", (props = {}, opts = {}) => {
+  Alpine.data("dropdownContext", (props = {}) => {
+    let floatingUIoptions = ["placement", "offsetX", "offsetY", "flip", "autoPlacement", "inline"]
+
     return {
       isShow: false,
       floating: null,
@@ -7,6 +9,15 @@ document.addEventListener("alpine:init", () => {
       autoClose: props.autoClose ?? true,
 
       init() {
+        let opts = floatingUIoptions.reduce((acc, i) => {
+          if (props[i]) {
+            return {
+              ...acc,
+              [i]: props[i],
+            }
+          }
+          return acc
+        }, {})
         this.$nextTick(() => {
           this.floating = useFloating(null, this.$refs.menu, opts);
         });

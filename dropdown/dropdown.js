@@ -1,6 +1,7 @@
 document.addEventListener("alpine:init", () => {
   Alpine.data("dropdown", (props = {}, opts = {}) => {
     let isFunction = (f) => typeof f === "function";
+    let floatingUIoptions = ["placement", "offsetX", "offsetY", "flip", "autoPlacement", "inline"]
 
     return {
       isShow: false,
@@ -10,6 +11,15 @@ document.addEventListener("alpine:init", () => {
       hideTimeout: null,
 
       init() {
+        let opts = floatingUIoptions.reduce((acc, i) => {
+          if (props[i]) {
+            return {
+              ...acc,
+              [i]: props[i],
+            }
+          }
+          return acc
+        }, {})
         this.$nextTick(() => {
           this.floating = useFloating(
             this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"),
