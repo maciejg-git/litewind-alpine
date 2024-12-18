@@ -73,7 +73,8 @@ document.addEventListener("alpine:init", () => {
         this.notificationsSticky.splice(index, 1)
       },
       close() {
-        this.removeById(this.notify.notifyId)
+        this.notify.isVisible.value = false
+        // this.removeById(this.notify.notifyId)
       },
       push(notify) {
         let container = this
@@ -88,15 +89,17 @@ document.addEventListener("alpine:init", () => {
           variant: notify?.variant ?? props.variant ?? defaultOptions.variant,
           options: notify?.options ?? props.options ?? null,
           notifyId: this.notifyId,
+          isVisible: Alpine.reactive({ value: false }),
+          transitioned: 99999,
           timer: null,
         }
 
         newNotify.restartTimer = function() {
           if (this.static) return null
           if (newNotify.sticky) {
-            this.timer = setTimeout(() => container.removeStickyById(this.notifyId), this.delay)
+            this.timer = setTimeout(() => this.isVisible.value = false, this.delay)
           } else {
-            this.timer = setTimeout(() => container.removeById(this.notifyId), this.delay)
+            this.timer = setTimeout(() => this.isVisible.value = false, this.delay)
           }
         }
 
@@ -122,6 +125,36 @@ document.addEventListener("alpine:init", () => {
         newNotify.restartTimer()
 
         this.notifications.push(newNotify)
+      },
+      notification: {
+        "x-show"() {
+          return this.notify.isVisible.value
+        },
+        "x-init"() {
+          this.$nextTick(() => this.notify.isVisible.value = true)
+        },
+        "@transitionend"() {
+          if (this.notify.transitioned + 50 > this.$event.timeStamp) {
+            this.notify.transitioned = this.$event.timeStamp
+          } else {
+            if (this.notify.sticky) {
+              this.removeStickyById(this.notify.notifyId)
+            } else {
+              this.removeById(this.notify.notifyId)
+            }
+          }
+        },
+        "@transitioncancel"() {
+          if (this.notify.transitioned + 50 > this.$event.timeStamp) {
+            this.notify.transitioned = this.$event.timeStamp
+          } else {
+            if (this.notify.sticky) {
+              this.removeStickyById(this.notify.notifyId)
+            } else {
+              this.removeById(this.notify.notifyId)
+            }
+          }
+        }
       }
     }
   })
