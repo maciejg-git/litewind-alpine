@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("modal", (props = {}) => {
+  Alpine.data("modal", (props = {}, dataExtend = {} ) => {
     let isFunction = (f) => typeof f === "function";
 
     let aria = {
@@ -8,6 +8,14 @@ document.addEventListener("alpine:init", () => {
         ["aria-modal"]: "true",
       },
     };
+
+    let bind = {};
+    ["container", "positioner", "content", "backdrop"].forEach((i) => {
+      if (dataExtend[i]) {
+        bind[i] = dataExtend[i]
+        delete dataExtend[i]
+      }
+    })
 
     return {
       isOpen: false,
@@ -68,20 +76,26 @@ document.addEventListener("alpine:init", () => {
         "@keydown.escape"() {
           if (this.static) return
           this.close()
-        }
+        },
+        ...bind.container,
       },
-      positioner: {},
+      positioner: {
+        ...bind.positioner,
+      },
       content: {
         "x-show"() {
           return this.isOpen;
         },
         "@click.stop"() {},
+        ...bind.content,
       },
       backdrop: {
         "x-show"() {
           return this.isOpen;
         },
+        ...bind.backdrop,
       },
+      ...dataExtend,
     };
   });
 });

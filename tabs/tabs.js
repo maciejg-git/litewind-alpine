@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("tabs", (tab, { label = {}, content = {} } = {}) => {
+  Alpine.data("tabs", (tab, dataExtend = {} ) => {
     let aria = {
       tabBar: {
         role: "tablist",
@@ -14,6 +14,14 @@ document.addEventListener("alpine:init", () => {
         role: "tabpanel",
       },
     };
+
+    let bind = {};
+    ["label", "content"].forEach((i) => {
+      if (dataExtend[i]) {
+        bind[i] = dataExtend[i]
+        delete dataExtend[i]
+      }
+    })
 
     return {
       selectedTab: tab,
@@ -49,15 +57,16 @@ document.addEventListener("alpine:init", () => {
           return c;
         },
         ...aria.label,
-        ...label,
+        ...bind.label,
       },
       content: {
         "x-show"() {
           return this.isSelected();
         },
         ...aria.content,
-        ...content,
+        ...bind.content,
       },
+      ...dataExtend,
     };
   });
 });

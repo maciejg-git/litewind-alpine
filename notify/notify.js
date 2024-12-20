@@ -90,7 +90,6 @@ document.addEventListener("alpine:init", () => {
           options: notify?.options ?? props.options ?? null,
           notifyId: this.notifyId,
           isVisible: Alpine.reactive({ value: false }),
-          transitioned: 99999,
           timer: null,
         }
 
@@ -132,29 +131,26 @@ document.addEventListener("alpine:init", () => {
         },
         "x-init"() {
           this.$nextTick(() => this.notify.isVisible.value = true)
+          this.$watch('notify.isVisible.value', (value) => {
+            if (value) return
+            Alpine.bind(this.$el, {
+              "@transitionend"() {
+                if (this.notify.sticky) {
+                  this.removeStickyById(this.notify.notifyId)
+                } else {
+                  this.removeById(this.notify.notifyId)
+                }
+              },
+              "@transitioncancel"() {
+                if (this.notify.sticky) {
+                  this.removeStickyById(this.notify.notifyId)
+                } else {
+                  this.removeById(this.notify.notifyId)
+                }
+              }
+            })
+          })
         },
-        "@transitionend"() {
-          if (this.notify.transitioned + 50 > this.$event.timeStamp) {
-            this.notify.transitioned = this.$event.timeStamp
-          } else {
-            if (this.notify.sticky) {
-              this.removeStickyById(this.notify.notifyId)
-            } else {
-              this.removeById(this.notify.notifyId)
-            }
-          }
-        },
-        "@transitioncancel"() {
-          if (this.notify.transitioned + 50 > this.$event.timeStamp) {
-            this.notify.transitioned = this.$event.timeStamp
-          } else {
-            if (this.notify.sticky) {
-              this.removeStickyById(this.notify.notifyId)
-            } else {
-              this.removeById(this.notify.notifyId)
-            }
-          }
-        }
       }
     }
   })

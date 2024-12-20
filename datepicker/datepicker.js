@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("datepicker", (props = {}) => {
+  Alpine.data("datepicker", (props = {}, dataExtend = {} ) => {
     let getNumberRange = (from, count) => {
       return Array.from({ length: count }, (_, i) => i + from);
     };
@@ -27,6 +27,14 @@ document.addEventListener("alpine:init", () => {
       TO_SELECTED: 2,
     };
 
+    let bind = {};
+    ["prevYearButton", "prevMonthButton", "nextMonthButton", "nextYearButton", "day"].forEach((i) => {
+      if (dataExtend[i]) {
+        bind[i] = dataExtend[i]
+        delete dataExtend[i]
+      }
+    })
+
     return {
       today: new Date(),
       month: null,
@@ -44,7 +52,6 @@ document.addEventListener("alpine:init", () => {
       selectedRange: [],
       rangeState: 0,
       mouseOverDate: null,
-      modelSeparator: "-",
 
       init() {
         this.month = this.today.getMonth();
@@ -159,7 +166,7 @@ document.addEventListener("alpine:init", () => {
 
         let prevMonthDays = getNumberRange(daysCountPrev - day + 1, day);
         if (!this.adjacentMonthsDays) {
-          prevMonthDays = prevMonthDays.map((i) => "");
+          prevMonthDays = prevMonthDays.map((i) => new Date(y, m, i));
         } else {
           prevMonthDays = prevMonthDays.map((i) => new Date(y, m, i));
         }
@@ -182,6 +189,7 @@ document.addEventListener("alpine:init", () => {
       currentDate() {
         return `${this.names.months[this.month]} ${this.year}`;
       },
+      
       reset() {
         this.selectedSingle = "";
         this.selectedRange = [];
@@ -262,27 +270,35 @@ document.addEventListener("alpine:init", () => {
         "@click"() {
           this.setPrevMonth();
         },
+        ...bind.prevMonthButton,
       },
       nextMonthButton: {
         "@click"() {
           this.setNextMonth();
         },
+        ...bind.nextMonthButton,
       },
       prevYearButton: {
         "@click"() {
           this.setPrevYear();
         },
+        ...bind.prevYearButton,
       },
       nextYearButton: {
         "@click"() {
           this.setNextYear();
         },
+        ...bind.nextYearButton,
       },
       day: {
         ":class"() {
           let classes = this.$el.attributes;
           let c = "";
           if (this.isAdjacent()) {
+            if (!this.adjacentMonthsDays) {
+              this.$el.style.visibility = "hidden"
+              return
+            }
             return classes["class-adjacent"]?.textContent || "";
           }
 
@@ -292,6 +308,8 @@ document.addEventListener("alpine:init", () => {
             c += (classes["class-selected-range"]?.textContent || "") + " ";
           } else if (this.isPartiallySelected()) {
             c += (classes["class-partially-selected"]?.textContent || "") + " ";
+          } else if (this.isDisabled && this.isDisabled(this.d)) {
+            c += (classes["class-disabled"]?.textContent || "") + " "
           } else {
             c += (classes["class-default"]?.textContent || "") + " ";
           }
@@ -308,7 +326,9 @@ document.addEventListener("alpine:init", () => {
         "@mouseenter"() {
           this.mouseOverDate = this.d;
         },
+        ...bind.day,
       },
+      ...dataExtend,
     };
   });
 });
