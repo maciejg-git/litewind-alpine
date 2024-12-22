@@ -118,7 +118,7 @@ document.addEventListener('alpine:init', () => {
       scrollToFirstSelected() {
         let selectedElement = this.$refs.menu.querySelector("[data-selected]")
         if (selectedElement) {
-          this.$nextTick(() => selectedElement.scrollIntoView())
+          this.$nextTick(() => selectedElement.scrollIntoView({ block: "nearest" }))
         }
       },
       close() {

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="/output.css" rel="stylesheet" />
+    <script defer src="/scripts/transition-plugin.js"></script>
+    <script defer type="module" src="./sidepanel.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <button x-data @click="$dispatch('open-sidepanel', 'sidepanel')">open</button>
+  <body>
+    <aside x-data="sidepanel()" class="fixed h-full top-0 right-0 w-[350px] text-left shadow-lg shadow-black/40 dark:text-text-300 bg-secondary-100 dark:bg-dark-700 px-6" id="sidepanel" x-alt-transition="{
+              enter: ['opacity-0 translate-x-40', 'transition ease-out duration-100', 'opacity-100'],
+              leave: ['opacity-100', 'transition ease-in duration-100', 'opacity-0 translate-x-40'],
+            }">
+      <div class="flex w-full justify-between items-center">
+        <div class="my-4 text-lg font-semibold">
+          header
+        </div>
+        <button @click="close()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"
+            />
+          </svg>
+        </button>
+      </div>
+      <div class="h-full overflow-y-auto">
+        sidepanel
+      </div>
+    </aside>
+  </body>
+</html>

@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title></title>
     <link href="/output.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.8"></script>
@@ -17,7 +17,8 @@
     ></script>
   </head>
   <body>
-    <div x-data="{model: [], items: [
+    <div
+      x-data="{model: [], items: [
             { text: 'spanish', value: 'spanish' },
             { text: 'french', value: 'french' },
             { text: 'portuguese', value: 'portuguese' },
@@ -38,81 +39,126 @@
             { text: 'polish', value: 'polisha' },
             { text: 'greek', value: 'greeka'},
             { text: 'swedish', value: 'swedisha' },
-        ]}">
+        ]}"
+    >
       <span x-text="model"></span>
-      <div x-data="select({multiple: true, items: () => items})" x-model="model" class="w-[340px]">
       <div
-        x-bind="trigger"
-        x-data="input(inputData)"
-        class="flex flex-1 items-center gap-x-2 rounded border border-secondary-300 bg-white py-2 outline-none transition-shadow duration-200 focus-within:border-secondary-400 focus-within:ring focus-within:ring-primary-200 focus:outline-none dark:border-dark-600 dark:bg-dark-800 dark:text-text-300 dark:focus-within:ring-primary-300"
+        x-data="select({multiple: true, items: [
+            { text: 'spanish', value: 'spanish' },
+            { text: 'french', value: 'french' },
+            { text: 'portuguese', value: 'portuguese' },
+            { text: 'german', value: 'german' },
+            { text: 'japanese', value: 'japanese' },
+            { text: 'korean', value: 'korean' },
+            { text: 'italian', value: 'italian' },
+            { text: 'polish', value: 'polish' },
+            { text: 'greek', value: 'greek'},
+            { text: 'swedish', value: 'swedish' },
+            { text: 'spanish', value: 'spanisha' },
+            { text: 'french', value: 'frencha' },
+            { text: 'portuguese', value: 'portuguesea' },
+            { text: 'german', value: 'germana' },
+            { text: 'japanese', value: 'japanesea' },
+            { text: 'korean', value: 'koreana' },
+            { text: 'italian', value: 'italiana' },
+            { text: 'polish', value: 'polisha' },
+            { text: 'greek', value: 'greeka'},
+            { text: 'swedish', value: 'swedisha' },
+        ]})"
+        x-model="model"
+        class="w-[340px]"
       >
-        <div data-icon></div>
-        <div data-prepend></div>
-        <div class="flex flex-1 flex-wrap">
-          <template x-for="selected in getSelected()">
-            <span x-text="selected.text" class="mr-1 after:content-[','] last-of-type:mr-2 last-of-type:after:content-none"></span>
-          </template>
-          <input
-            x-bind="input"
-            type="text"
-            class="min-w-0 flex-1 border-0 bg-transparent p-0 outline-none focus:min-w-[64px] focus:outline-none"
-            readonly
-          />
-        </div>
-        <div data-append></div>
-        <div class="mr-2 flex items-center gap-x-2">
-          <div x-bind="loader">
-            <svg viewBox="25 25 50 50" fill="none" class="spinner-svg h-5 w-5">
-              <circle
-                cx="50"
-                cy="50"
-                r="20"
-                stroke-width="4"
-                stroke-miterlimit="10"
-              />
-            </svg>
+        <div
+          x-bind="trigger"
+          x-data="input(inputData)"
+          class="flex flex-1 items-center gap-x-2 rounded border border-secondary-300 bg-white py-2 outline-none transition-shadow duration-200 focus-within:border-secondary-400 focus-within:ring focus-within:ring-primary-200 focus:outline-none dark:border-dark-600 dark:bg-dark-800 dark:text-text-300 dark:focus-within:ring-primary-300"
+        >
+          <div data-icon></div>
+          <div data-prepend></div>
+          <div class="flex flex-1 flex-wrap">
+            <template x-for="selected in getSelected()">
+              <span
+                x-text="selected.text"
+                class="mr-1 after:content-[','] last-of-type:mr-2 last-of-type:after:content-none"
+              ></span>
+            </template>
+            <input
+              x-bind="input"
+              type="text"
+              class="min-w-0 flex-1 border-0 bg-transparent p-0 outline-none focus:min-w-[64px] focus:outline-none"
+              readonly
+            />
           </div>
-          <button
-            x-bind="clearButton"
-            @click="clear()"
-            class="flex items-center"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="h-5 w-5 opacity-70"
-              viewBox="0 0 16 16"
+          <div data-append></div>
+          <div class="mr-2 flex items-center gap-x-2">
+            <div x-bind="loader">
+              <svg
+                viewBox="25 25 50 50"
+                fill="none"
+                class="spinner-svg h-5 w-5"
+              >
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="20"
+                  stroke-width="4"
+                  stroke-miterlimit="10"
+                />
+              </svg>
+            </div>
+            <button
+              x-bind="clearButton"
+              @click="clear()"
+              class="flex items-center"
             >
-              <path
-                d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"
-              />
-            </svg>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="h-5 w-5 opacity-70"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"
+                />
+              </svg>
+            </button>
+            <button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 512 512"
+                class="h-4 w-4 rotate-180 transform duration-200"
+                :class="{ '!rotate-0': isOpen }"
+              >
+                <path
+                  d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
-        <div x-bind="menu" class="rounded-b-md shadow-md max-h-[400px] bg-white dark:bg-dark-800 oveflow-y-auto overflow-x-hidden z-20" x-alt-transition="{
+        <div
+          x-bind="menu"
+          class="oveflow-y-auto z-20 max-h-[400px] overflow-x-hidden rounded-b-md bg-white shadow-md dark:bg-dark-800"
+          x-alt-transition="{
                 enter: ['opacity-0 scale-y-[0.5]', 'transition ease-out duration-100 origin-top', 'opacity-100'],
                 leave: ['opacity-100', 'transition ease-in duration-100 origin-top', 'opacity-0 scale-y-[0.5]'],
-              }">
-            <template x-for="(item, index) in getItems()">
-                <button x-bind="option" x-text="item.text" class="w-full
-        text-left
-        focus:outline-none
-        cursor-pointer
-        px-6
-        transition-colors
-        py-4
-          text-gray-800
-          dark:text-gray-300
-          hover:bg-gray-100
-          dark:hover:bg-neutral-600 scroll-mt-1" class-selected="bg-gray-200 dark:bg-dark-700" class-highlight="bg-gray-100 dark:bg-dark-600">
-      
-                </button>
-            </template>
+              }"
+        >
+          <template x-for="(item, index) in getItems()">
+            <button
+              x-bind="option"
+              x-text="item.text"
+              class="w-full cursor-pointer scroll-mt-1 px-6 py-4 text-left text-gray-800 transition-colors hover:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-neutral-600 scroll-mt-20 scroll-mb-20"
+              class-selected="bg-gray-200 dark:bg-dark-700"
+              class-highlight="bg-gray-100 dark:bg-dark-600"
+            ></button>
+          </template>
         </div>
       </div>
     </div>
+    <div class="h-[1000px]"></div>
   </body>
 </html>

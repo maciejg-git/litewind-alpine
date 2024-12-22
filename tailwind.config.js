@@ -17,6 +17,7 @@ module.exports = {
     "./datepicker/**/*.{html, js}",
     "./chevron/**/*.{html, js}",
     "./notify/**/*.{html, js}",
+    "./sidepanel/**/*.{html, js}",
     "./*.js"
   ],
   darkMode: 'class',

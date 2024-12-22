@@ -166,9 +166,9 @@ document.addEventListener("alpine:init", () => {
 
         let prevMonthDays = getNumberRange(daysCountPrev - day + 1, day);
         if (!this.adjacentMonthsDays) {
-          prevMonthDays = prevMonthDays.map((i) => new Date(y, m, i));
+          prevMonthDays = prevMonthDays.map((i) => new Date(Date.UTC(y, m, i)));
         } else {
-          prevMonthDays = prevMonthDays.map((i) => new Date(y, m, i));
+          prevMonthDays = prevMonthDays.map((i) => new Date(Date.UTC(y, m, i)));
         }
 
         ({ m, y } = nextMonth(this.month, this.year));
@@ -181,7 +181,7 @@ document.addEventListener("alpine:init", () => {
           nextMonthDays = [];
         } else {
           nextMonthDays = getNumberRange(1, daysCountNext);
-          nextMonthDays = nextMonthDays.map((i) => new Date(y, m, i));
+          nextMonthDays = nextMonthDays.map((i) => new Date(Date.UTC(y, m, i)));
         }
 
         return [...prevMonthDays, ...days, ...nextMonthDays];
@@ -189,7 +189,6 @@ document.addEventListener("alpine:init", () => {
       currentDate() {
         return `${this.names.months[this.month]} ${this.year}`;
       },
-      
       reset() {
         this.selectedSingle = "";
         this.selectedRange = [];
@@ -209,6 +208,9 @@ document.addEventListener("alpine:init", () => {
             this.selectedRange.reverse();
           }
         }
+      },
+      getDayKey() {
+        return this.d.toISOString() + this.isAdjacent()
       },
       isToday() {
         return (
@@ -308,7 +310,7 @@ document.addEventListener("alpine:init", () => {
             c += (classes["class-selected-range"]?.textContent || "") + " ";
           } else if (this.isPartiallySelected()) {
             c += (classes["class-partially-selected"]?.textContent || "") + " ";
-          } else if (this.isDisabled && this.isDisabled(this.d)) {
+          } else if (isFunction(this.isDisabled) && this.isDisabled(this.d)) {
             c += (classes["class-disabled"]?.textContent || "") + " "
           } else {
             c += (classes["class-default"]?.textContent || "") + " ";

@@ -11,7 +11,7 @@
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
   </head>
-  <body>
+  <body class="bg-dark-800">
     <div x-data="{ datemodel: '' }">
       <span x-text="datemodel"></span>
       <span x-text="JSON.stringify(datemodel)"></span>
@@ -116,7 +116,7 @@
           </template>
         </div>
         <div class="relative mb-2 grid grid-cols-7">
-          <template x-for="d in days" :key="d.toISOString()">
+          <template x-for="d in days" :key="getDayKey()">
             <button
               x-bind="day"
               x-text="d.getDate()"

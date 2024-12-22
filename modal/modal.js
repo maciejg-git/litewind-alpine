@@ -58,6 +58,10 @@ document.addEventListener("alpine:init", () => {
         this.resetScrollbar()
         this.isOpen = false;
       },
+      closeNotStatic() {
+        if (this.static) return
+        this.close()
+      },
       container: {
         "x-show"() {
           return this.isOpen;
@@ -68,10 +72,6 @@ document.addEventListener("alpine:init", () => {
             this.options = this.$event.detail.options || {}
             this.open();
           }
-        },
-        "@click"() {
-          if (this.static) return;
-          this.close();
         },
         "@keydown.escape"() {
           if (this.static) return
