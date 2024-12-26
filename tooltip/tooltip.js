@@ -1,5 +1,3 @@
-import { useFloating } from "../floating.js"
-
 document.addEventListener("alpine:init", () => {
   const correctPlacement = ["top", "bottom", "right", "left"]
     .map((i) => [i, i + "-start", i + "-end"])
@@ -27,7 +25,9 @@ document.addEventListener("alpine:init", () => {
 
       if (tooltip.isVisible) return;
 
-      // getTooltipFnContent(el);
+      if (typeof el._v_tooltip.text === "function") {
+        el._v_tooltip.tooltip.firstChild.innerText = el._v_tooltip.text()
+      }
 
       tooltip.timer = setTimeout(() => {
         document.body.appendChild(tooltip.wrapper);
@@ -74,8 +74,7 @@ document.addEventListener("alpine:init", () => {
         left: 0,
       });
 
-      el.innerHTML =
-        "<div class='rounded-md z-50 max-w-sm text-gray-100 bg-neutral-700'><div class='font-semibold p-1 px-3'></div></div>";
+      el.innerHTML = "<div class='tooltip'><div></div></div>";
 
       return el;
     }
@@ -109,20 +108,11 @@ document.addEventListener("alpine:init", () => {
           ...validateOptions(value),
         };
       }
-      if (typeof value === "string" || typeof value === "function") {
-        return {
-          ...defaults,
-          text: value,
-        };
-      }
-      return {
-        ...defaults,
-      };
     };
 
     let wrapper = createTooltipElement();
 
-    let exp = modifiers.includes('custom') ? evaluate(expression) : expression
+    let exp = evaluate(expression)
 
     let options = getOptions(exp);
 
@@ -137,7 +127,7 @@ document.addEventListener("alpine:init", () => {
       ...options,
     };
 
-    t.tooltip.firstChild.innerText = expression;
+    t.tooltip.firstChild.innerText = exp.text;
 
     el._v_tooltip = t;
 

@@ -34,7 +34,7 @@ document.addEventListener('alpine:init', () => {
           this.floating = useFloating(this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"), this.$refs.menu, { ...opts, resize: true })
         })
         Alpine.effect(() => {
-          this.items = isFunction(props.items) ? props.items() : props.items
+          this.items = isFunction(props.items) ? props.items() : (props.items || this.items)
           this.transformItems()
         })
         this.inputDataProps.forEach((name) => {

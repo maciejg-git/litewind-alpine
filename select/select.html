@@ -29,42 +29,19 @@
             { text: 'polish', value: 'polish' },
             { text: 'greek', value: 'greek'},
             { text: 'swedish', value: 'swedish' },
-            { text: 'spanish', value: 'spanisha' },
-            { text: 'french', value: 'frencha' },
-            { text: 'portuguese', value: 'portuguesea' },
-            { text: 'german', value: 'germana' },
-            { text: 'japanese', value: 'japanesea' },
-            { text: 'korean', value: 'koreana' },
-            { text: 'italian', value: 'italiana' },
-            { text: 'polish', value: 'polisha' },
-            { text: 'greek', value: 'greeka'},
-            { text: 'swedish', value: 'swedisha' },
+            { text: 'norwegian', value: 'norwegian' },
+            { text: 'danish', value: 'danish' },
+            { text: 'spanish', value: 'spanish' },
+            { text: 'finnish', value: 'finnish' },
+            { text: 'thai', value: 'thai' },
         ]}"
     >
       <span x-text="model"></span>
       <div
-        x-data="select({multiple: true, items: [
-            { text: 'spanish', value: 'spanish' },
-            { text: 'french', value: 'french' },
-            { text: 'portuguese', value: 'portuguese' },
-            { text: 'german', value: 'german' },
-            { text: 'japanese', value: 'japanese' },
-            { text: 'korean', value: 'korean' },
-            { text: 'italian', value: 'italian' },
-            { text: 'polish', value: 'polish' },
-            { text: 'greek', value: 'greek'},
-            { text: 'swedish', value: 'swedish' },
-            { text: 'spanish', value: 'spanisha' },
-            { text: 'french', value: 'frencha' },
-            { text: 'portuguese', value: 'portuguesea' },
-            { text: 'german', value: 'germana' },
-            { text: 'japanese', value: 'japanesea' },
-            { text: 'korean', value: 'koreana' },
-            { text: 'italian', value: 'italiana' },
-            { text: 'polish', value: 'polisha' },
-            { text: 'greek', value: 'greeka'},
-            { text: 'swedish', value: 'swedisha' },
-        ]})"
+        x-data="select({multiple: true, itemText: 'name', itemValue: 'id'})"
+        x-init="fetch('https://jsonplaceholder.typicode.com/users')
+      .then(res => res.json())
+      .then(res => items = res)"
         x-model="model"
         class="w-[340px]"
       >
@@ -141,7 +118,7 @@
         </div>
         <div
           x-bind="menu"
-          class="oveflow-y-auto z-20 max-h-[400px] overflow-x-hidden rounded-b-md bg-white shadow-md dark:bg-dark-800"
+          class="oveflow-y-auto z-50 max-h-[400px] overflow-x-hidden rounded-b-md bg-white shadow-md dark:bg-dark-800"
           x-alt-transition="{
                 enter: ['opacity-0 scale-y-[0.5]', 'transition ease-out duration-100 origin-top', 'opacity-100'],
                 leave: ['opacity-100', 'transition ease-in duration-100 origin-top', 'opacity-0 scale-y-[0.5]'],
@@ -151,7 +128,7 @@
             <button
               x-bind="option"
               x-text="item.text"
-              class="w-full cursor-pointer scroll-mt-1 px-6 py-4 text-left text-gray-800 transition-colors hover:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-neutral-600 scroll-mt-20 scroll-mb-20"
+              class="w-full cursor-pointer scroll-mb-20 scroll-mt-20 px-6 py-4 text-left text-gray-800 transition-colors hover:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-neutral-600"
               class-selected="bg-gray-200 dark:bg-dark-700"
               class-highlight="bg-gray-100 dark:bg-dark-600"
             ></button>
