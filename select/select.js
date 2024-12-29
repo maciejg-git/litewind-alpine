@@ -1,5 +1,5 @@
 document.addEventListener('alpine:init', () => {
-  Alpine.data('select', (props = {}, opts = {}) => {
+  Alpine.data('select', (props = {}, dataExtend = {}) => {
     let isFunction = (f) => typeof f === "function";
 
     let isElementOverflowingBottom = (el) => {
@@ -14,6 +14,14 @@ document.addEventListener('alpine:init', () => {
       el.parentElement.scrollTo(0, el.offsetTop - el.parentElement.clientHeight / 2 + el.clientHeight / 2)
     }
 
+    let bind = {};
+    ["trigger", "menu", "option"].forEach((i) => {
+      if (dataExtend[i]) {
+        bind[i] = dataExtend[i]
+        delete dataExtend[i]
+      }
+    })
+
     return {
       isOpen: false, 
       floating: null,
@@ -25,20 +33,15 @@ document.addEventListener('alpine:init', () => {
       _model: null,
       itemText: props.itemText ?? "text",
       itemValue: props.itemValue ?? "value",
-      inputDataProps: ["clearable", "placeholder", "useLoader", "isLoading"],
-      inputData: {},
       highlightedIndex: -1,
 
       init() {
         this.$nextTick(() => {
-          this.floating = useFloating(this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"), this.$refs.menu, { ...opts, resize: true })
+          this.floating = useFloating(this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"), this.$refs.menu, { resize: true })
         })
         Alpine.effect(() => {
           this.items = isFunction(props.items) ? props.items() : (props.items || this.items)
           this.transformItems()
-        })
-        this.inputDataProps.forEach((name) => {
-          if (props[name]) this.inputData[name] = props[name] 
         })
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
@@ -114,6 +117,7 @@ document.addEventListener('alpine:init', () => {
         if (this.selected.size) this.scrollToFirstSelected()
         else this.$refs.menu.scrollTo(0, 0)
         this.highlightedIndex = -1
+        this.$dispatch("open-selectmenu")
       },
       scrollToFirstSelected() {
         let selectedElement = this.$refs.menu.querySelector("[data-selected]")
@@ -163,7 +167,8 @@ document.addEventListener('alpine:init', () => {
             return
           }
           this.close()
-        }
+        },
+        ...bind.trigger,
       },
       menu: {
         'x-ref': 'menu',
@@ -177,7 +182,13 @@ document.addEventListener('alpine:init', () => {
           }
           this.close()
           this.$root.querySelector("[x-bind='input']").focus()
-        }
+        },
+        "@scroll"() {
+          if (this.$el.offsetHeight + this.$el.scrollTop + 100 >= this.$el.scrollHeight) {
+            this.$dispatch("scrolled-to-bottom")
+          }
+        },
+        ...bind.menu,
       },
       option: {
         '@click'() {
@@ -201,8 +212,10 @@ document.addEventListener('alpine:init', () => {
         },
         ":data-index"() {
           return this.index
-        }
-      }
+        },
+        ...bind.option,
+      },
+      ...dataExtend,
     }
   })
 })

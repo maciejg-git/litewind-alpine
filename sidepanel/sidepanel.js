@@ -1,5 +1,13 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("sidepanel", (props = {}) => {
+  Alpine.data("sidepanel", (props = {}, dataExtend = {}) => {
+    let bind = {};
+    [].forEach((i) => {
+      if (dataExtend[i]) {
+        bind[i] = dataExtend[i]
+        delete dataExtend[i]
+      }
+    })
+
     return {
       isOpen: false,
 

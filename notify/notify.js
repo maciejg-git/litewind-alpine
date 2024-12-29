@@ -1,11 +1,19 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("notify", (props = {}) => {
+  Alpine.data("notify", (props = {}, dataExtend = {} ) => {
     let defaultOptions = {
       delay: 10000,
       static: false,
       dismissable: true,
       variant: "info",
     }
+
+    let bind = {};
+    ["notification"].forEach((i) => {
+      if (dataExtend[i]) {
+        bind[i] = dataExtend[i]
+        delete dataExtend[i]
+      }
+    })
 
     return {
       notifications: [],
@@ -151,7 +159,9 @@ document.addEventListener("alpine:init", () => {
             })
           })
         },
-      }
+        ...bind.notification,
+      },
+      ...dataExtend,
     }
   })
 })

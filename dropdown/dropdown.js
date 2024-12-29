@@ -1,7 +1,15 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("dropdown", (props = {}, opts = {}) => {
+  Alpine.data("dropdown", (props = {}, dataExtend = {} ) => {
     let isFunction = (f) => typeof f === "function";
     let floatingUIoptions = ["placement", "offsetX", "offsetY", "flip", "autoPlacement", "inline"]
+
+    let bind = {};
+    ["trigger", "menu"].forEach((i) => {
+      if (dataExtend[i]) {
+        bind[i] = dataExtend[i]
+        delete dataExtend[i]
+      }
+    })
 
     return {
       isShow: false,
@@ -87,6 +95,7 @@ document.addEventListener("alpine:init", () => {
         return {
           ...t,
           "x-ref": "trigger",
+          ...bind.trigger,
         };
       },
       menu: {
@@ -107,8 +116,10 @@ document.addEventListener("alpine:init", () => {
           if (this.autoClose && this.$el.contains(this.$event.target)) {
             this.close()
           }
-        }
+        },
+        ...bind.menu,
       },
+      ...dataExtend,
     };
   });
 });

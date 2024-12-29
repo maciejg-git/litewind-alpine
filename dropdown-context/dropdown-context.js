@@ -1,6 +1,14 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("dropdownContext", (props = {}) => {
+  Alpine.data("dropdownContext", (props = {}, dataExtend = {}) => {
     let floatingUIoptions = ["placement", "offsetX", "offsetY", "flip", "autoPlacement", "inline"]
+
+    let bind = {};
+    ["menu"].forEach((i) => {
+      if (dataExtend[i]) {
+        bind[i] = dataExtend[i]
+        delete dataExtend[i]
+      }
+    })
 
     return {
       isShow: false,
@@ -56,8 +64,10 @@ document.addEventListener("alpine:init", () => {
           if (this.autoClose && this.$el.contains(this.$event.target)) {
             this.close()
           }
-        }
+        },
+        ...bind.menu,
       },
+      ...dataExtend,
     };
   });
 });

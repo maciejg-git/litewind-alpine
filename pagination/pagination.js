@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("pagination", (props = {}) => {
+  Alpine.data("pagination", (props = {}, dataExtend = {}) => {
     let clamp = (v, f, t) => (v < f ? f : v >= t ? t : v);
 
     let getNumberRange = (from, count) => {
@@ -7,6 +7,14 @@ document.addEventListener("alpine:init", () => {
     };
 
     let isFunction = (f) => typeof f === "function";
+
+    let bind = {};
+    ["prevButton", "nextButton", "pageButton"].forEach((i) => {
+      if (dataExtend[i]) {
+        bind[i] = dataExtend[i]
+        delete dataExtend[i]
+      }
+    })
 
     return {
       currentPage: 1,
@@ -79,11 +87,13 @@ document.addEventListener("alpine:init", () => {
         "@click"() {
           this.handleClickPrev();
         },
+        ...bind.prevButton,
       },
       nextButton: {
         "@click"() {
           this.handleClickNext();
         },
+        ...bind.nextButton,
       },
       pageButton: {
         "@click"() {
@@ -100,7 +110,9 @@ document.addEventListener("alpine:init", () => {
 
           return c;
         },
+        ...bind.pageButton,
       },
+      ...dataExtend,
     };
   });
 });

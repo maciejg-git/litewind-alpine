@@ -1,5 +1,13 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("progress", (props = {}) => {
+  Alpine.data("progress", (props = {}, dataExtend = {} ) => {
+    let bind = {};
+    ["progressBar"].forEach((i) => {
+      if (dataExtend[i]) {
+        bind[i] = dataExtend[i]
+        delete dataExtend[i]
+      }
+    })
+
     return {
       _value: 0,
       interactive: props?.interactive ?? false,
@@ -19,7 +27,9 @@ document.addEventListener("alpine:init", () => {
         ":style"() {
           return `width: ${this._value}%`;
         },
+        ...bind.progressBar,
       },
+      ...dataExtend,
     };
   });
 });

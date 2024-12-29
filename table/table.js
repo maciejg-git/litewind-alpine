@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("table", (props, defaults = {}) => {
+  Alpine.data("table", (props = {}, dataExtend = {} ) => {
     let undefNullToStr = (v) => (v === undefined || v === null ? "" : v);
 
     let isDate = (d) => Object.prototype.toString.call(d) == "[object Date]";
@@ -34,6 +34,14 @@ document.addEventListener("alpine:init", () => {
       filterable: true,
       visible: true,
     };
+
+    let bind = {};
+    ["header"].forEach((i) => {
+      if (dataExtend[i]) {
+        bind[i] = dataExtend[i]
+        delete dataExtend[i]
+      }
+    })
 
     return {
       tableData: [],
@@ -182,7 +190,9 @@ document.addEventListener("alpine:init", () => {
         ":class"() {
           return this.isSortable() ? "cursor-pointer" : "";
         },
+        ...bind.header,
       },
+      ...dataExtend,
     };
   });
 });
