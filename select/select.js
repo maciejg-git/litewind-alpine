@@ -185,7 +185,7 @@ document.addEventListener('alpine:init', () => {
         },
         "@scroll"() {
           if (this.$el.offsetHeight + this.$el.scrollTop + 100 >= this.$el.scrollHeight) {
-            this.$dispatch("scrolled-to-bottom")
+            this.$dispatch("scroll-to-bottom")
           }
         },
         ...bind.menu,
