@@ -1,38 +1,86 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("dropdown", (props = {}, dataExtend = {} ) => {
+  Alpine.data("dropdown", (props = {}, dataExtend = {}) => {
     let isFunction = (f) => typeof f === "function";
-    let floatingUIoptions = ["placement", "offsetX", "offsetY", "flip", "autoPlacement", "inline"]
+    let floatingUIoptions = [
+      "placement",
+      "offsetX",
+      "offsetY",
+      "flip",
+      "autoPlacement",
+      "inline",
+    ];
 
     let bind = {};
     ["trigger", "menu"].forEach((i) => {
       if (dataExtend[i]) {
-        bind[i] = dataExtend[i]
-        delete dataExtend[i]
+        bind[i] = dataExtend[i];
+        delete dataExtend[i];
       }
-    })
+    });
 
     return {
       isShow: false,
       floating: null,
-      triggerEv: props.triggerEv ?? "click",
-      autoClose: props.autoClose ?? true,
+      triggerEv: "click",
+      autoClose: true,
       hideTimeout: null,
+      placement: "bottom-start",
+      offsetX: 0,
+      offsetY: 0,
+      flip: false,
+      autoPlacement: false,
 
       init() {
-        let opts = floatingUIoptions.reduce((acc, i) => {
-          if (props[i]) {
-            return {
-              ...acc,
-              [i]: props[i],
-            }
-          }
-          return acc
-        }, {})
         this.$nextTick(() => {
+          this.triggerEv =
+            Alpine.bound(this.$el, "data-trigger-event") ?? this.triggerEv;
+          this.autoClose = JSON.parse(
+            Alpine.bound(this.$el, "data-auto-close") ?? this.autoClose,
+          );
+          this.placement =
+            Alpine.bound(this.$el, "data-placement") ?? this.placement;
+          this.offsetX = parseInt(
+            Alpine.bound(this.$el, "data-offset-x") ?? this.offsetX,
+          );
+          this.offsetY = parseInt(
+            Alpine.bound(this.$el, "data-offset-y") ?? this.offsetY,
+          );
+          this.flip = JSON.parse(
+            Alpine.bound(this.$el, "data-flip") ?? this.flip,
+          );
+          this.autoPlacement = JSON.parse(
+            Alpine.bound(this.$el, "data-auto-placement") ?? this.autoPlacement,
+          );
+
+          let options = floatingUIoptions.reduce((acc, v) => {
+            return { ...acc, [v]: this[v]}
+          })
+
           this.floating = useFloating(
-            this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"),
+            this.$refs.trigger ||
+              this.$root.querySelector("[x-bind='trigger']"),
             this.$refs.menu,
-            opts
+            options
+          );
+
+          let t = {};
+          if (this.triggerEv === "click") {
+            t["@click"] = function () {
+              this.toggle();
+            };
+          }
+          if (this.triggerEv === "hover") {
+            t["@mouseenter"] = function () {
+              this.open();
+            };
+            t["@mouseleave"] = function () {
+              this.close();
+            };
+          }
+          Alpine.bind(
+            this.$refs.trigger ||
+              this.$root.querySelector("[x-bind='trigger']"),
+            t,
           );
         });
 
@@ -77,26 +125,9 @@ document.addEventListener("alpine:init", () => {
       toggle() {
         this.isShow ? this.close() : this.open();
       },
-      trigger() {
-        let t = {};
-        if (this.triggerEv === "click") {
-          t["@click"] = function () {
-            this.toggle();
-          };
-        }
-        if (this.triggerEv === "hover") {
-          t["@mouseenter"] = function () {
-            this.open();
-          };
-          t["@mouseleave"] = function () {
-            this.close();
-          };
-        }
-        return {
-          ...t,
-          "x-ref": "trigger",
-          ...bind.trigger,
-        };
+      trigger: {
+        "x-ref": "trigger",
+        ...bind.trigger,
       },
       menu: {
         "x-show"() {
@@ -114,7 +145,7 @@ document.addEventListener("alpine:init", () => {
         },
         "@click"() {
           if (this.autoClose && this.$el.contains(this.$event.target)) {
-            this.close()
+            this.close();
           }
         },
         ...bind.menu,

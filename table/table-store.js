@@ -30,13 +30,35 @@
 {"id":28,"first_name":"Rennie","last_name":"Finnan","city":"Tuusula","department":"Human Resources","title":"Paralegal"},
 {"id":29,"first_name":"Merry","last_name":"Wisedale","city":"Renxian","department":"Services","title":"Systems Administrator IV"},
 {"id":30,"first_name":"Melodie","last_name":"Hayzer","city":"Hưng Nguyên","department":"Support","title":"Media Manager I"},],
+          // definition: [
+          //   {
+          //     key: "id",
+          //   },
+          //   {
+          //     key: "first_name",
+          //   },
+          //   {
+          //     key: "department"
+          //   }
+          // ],
           filter: '',
           page: 1,
           itemsPerPage: 10,
           primaryKey: 'id',
           filteredItemsCount: 0,
-          onFilter(filteredData) {
-            this.filteredItemsCount = filteredData.length
+          // onFilter(filteredData) {
+          //   this.filteredItemsCount = filteredData.length
+          // },
+          init() {
+            this.onFilter = () => (filteredData) => {
+              this.filteredItemsCount = filteredData.length
+            }
+            // setTimeout(() => {
+            //   this.data.splice(0, 5)
+            // }, 1000)
+            // setTimeout(() => {
+            //   this.definition.splice(2, 1)
+            // }, 5000)
           }
         })
       })

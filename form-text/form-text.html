@@ -1,0 +1,5 @@
+<div x-data class="flex flex-col">
+  <template x-for="message in $validation('input').messages">
+    <div x-text="message" class="text-sm"></div>
+  </template>
+</div>

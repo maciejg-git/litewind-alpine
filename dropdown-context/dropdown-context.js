@@ -1,34 +1,60 @@
 document.addEventListener("alpine:init", () => {
   Alpine.data("dropdownContext", (props = {}, dataExtend = {}) => {
-    let floatingUIoptions = ["placement", "offsetX", "offsetY", "flip", "autoPlacement", "inline"]
+    let floatingUIoptions = [
+      "placement",
+      "offsetX",
+      "offsetY",
+      "flip",
+      "autoPlacement",
+      "inline",
+    ];
 
     let bind = {};
     ["menu"].forEach((i) => {
       if (dataExtend[i]) {
-        bind[i] = dataExtend[i]
-        delete dataExtend[i]
+        bind[i] = dataExtend[i];
+        delete dataExtend[i];
       }
-    })
+    });
 
     return {
       isShow: false,
       floating: null,
       contextData: {},
-      autoClose: props.autoClose ?? true,
+      autoClose: true,
+      placement: "bottom-start",
+      offsetX: 0,
+      offsetY: 0,
+      flip: false,
+      autoPlacement: false,
 
       init() {
-        let opts = floatingUIoptions.reduce((acc, i) => {
-          if (props[i]) {
-            return {
-              ...acc,
-              [i]: props[i],
-            }
-          }
-          return acc
-        }, {})
         this.$nextTick(() => {
-          this.floating = useFloating(null, this.$refs.menu, opts);
+          this.autoClose = JSON.parse(
+            Alpine.bound(this.$el, "data-auto-close") ?? this.autoClose,
+          );
+          this.placement =
+            Alpine.bound(this.$el, "data-placement") ?? this.placement;
+          this.offsetX = parseInt(
+            Alpine.bound(this.$el, "data-offset-x") ?? this.offsetX,
+          );
+          this.offsetY = parseInt(
+            Alpine.bound(this.$el, "data-offset-y") ?? this.offsetY,
+          );
+          this.flip = JSON.parse(
+            Alpine.bound(this.$el, "data-flip") ?? this.flip,
+          );
+          this.autoPlacement = JSON.parse(
+            Alpine.bound(this.$el, "data-auto-placement") ?? this.autoPlacement,
+          );
+
+          let options = floatingUIoptions.reduce((acc, v) => {
+            return { ...acc, [v]: this[v] };
+          });
+
+          this.floating = useFloating(null, this.$refs.menu, options);
         });
+
         Alpine.bind(this.$el, {
           ["@keydown.escape.window.prevent"]() {
             this.close();
@@ -62,7 +88,7 @@ document.addEventListener("alpine:init", () => {
         },
         "@click"() {
           if (this.autoClose && this.$el.contains(this.$event.target)) {
-            this.close()
+            this.close();
           }
         },
         ...bind.menu,

@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("table", (props = {}, dataExtend = {} ) => {
+  Alpine.data("table", (props = {}, dataExtend = {}) => {
     let undefNullToStr = (v) => (v === undefined || v === null ? "" : v);
 
     let isDate = (d) => Object.prototype.toString.call(d) == "[object Date]";
@@ -24,7 +24,8 @@ document.addEventListener("alpine:init", () => {
     let formatLabelCase = (value) =>
       value.replace(
         /\w\S*/g,
-        (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+        (text) =>
+          text.charAt(0).toUpperCase() + text.substring(1).toLowerCase(),
       );
 
     let isFunction = (f) => typeof f === "function";
@@ -38,10 +39,10 @@ document.addEventListener("alpine:init", () => {
     let bind = {};
     ["header"].forEach((i) => {
       if (dataExtend[i]) {
-        bind[i] = dataExtend[i]
-        delete dataExtend[i]
+        bind[i] = dataExtend[i];
+        delete dataExtend[i];
       }
-    })
+    });
 
     return {
       tableData: [],
@@ -52,42 +53,43 @@ document.addEventListener("alpine:init", () => {
       page: 1,
       itemsPerPage: 0,
       locale: "en-GB",
-      primaryKey: props.primaryKey ?? "",
+      primaryKey: "",
       data: [],
+      onFilter: null,
 
       init() {
-        Alpine.effect(() => {
-          let data = isFunction(props.data) ? props.data() : props.data ?? [];
-          this.tableData = [...data];
-          this.definition = this.getDefinition();
+        this.$nextTick(() => {
+          Alpine.effect(() => {
+            let data = Alpine.bound(this.$el, "data-items") ?? this.data;
+            this.tableData = [...data];
+            this.definition = this.getDefinition();
+          });
+          Alpine.effect(() => {
+            this.filter = Alpine.bound(this.$el, "data-filter") ?? this.filter;
+            this.page = 1;
+          });
+          Alpine.effect(() => {
+            this.page = parseInt(
+              Alpine.bound(this.$el, "data-page") ?? this.page,
+            );
+          });
+          Alpine.effect(() => {
+            this.itemsPerPage = parseInt(
+              Alpine.bound(this.$el, "data-items-per-page") ??
+                this.itemsPerPage,
+            );
+            this.page = 1;
+          });
+          Alpine.effect(() => {
+            this.locale = Alpine.bound(this.$el, "data-locale") ?? this.locale;
+          });
+          Alpine.effect(() => {
+            this.onFilter =
+              Alpine.bound(this.$el, "data-on-filter") ?? this.onFilter;
+          });
+          this.primaryKey =
+            Alpine.bound(this.$el, "data-primary-key") ?? this.primaryKey;
         });
-        Alpine.effect(() => {
-          this.filter = isFunction(props.filter)
-            ? props.filter()
-            : props.filter ?? this.filter;
-          this.page = 1;
-        });
-        Alpine.effect(() => {
-          this.page = isFunction(props.page)
-            ? props.page()
-            : props.page ?? this.page;
-        });
-        Alpine.effect(() => {
-          this.itemsPerPage = isFunction(props.itemsPerPage)
-            ? props.itemsPerPage()
-            : props.itemsPerPage ?? this.itemsPerPage;
-          this.page = 1;
-        });
-        Alpine.effect(() => {
-          this.locale = isFunction(props.locale)
-            ? props.locale()
-            : props.locale ?? this.locale;
-        });
-        Alpine.effect(() => {
-          if (props.data) return
-          this.tableData = [...this.data]
-          this.definition = this.getDefinition();
-        })
       },
       generateDefinitionFromData() {
         if (!this.tableData || !this.tableData.length) return [];
@@ -97,8 +99,9 @@ document.addEventListener("alpine:init", () => {
         });
       },
       getUserDefinition() {
-        if (!Array.isArray(props.definition)) return false;
-        return props.definition.every((i) => i.key) && props.definition;
+        let definition = Alpine.bound(this.$el, "data-definition");
+        if (!Array.isArray(definition)) return false;
+        return definition.every((i) => i.key) && definition;
       },
       getDefinition() {
         let definition =
@@ -118,7 +121,7 @@ document.addEventListener("alpine:init", () => {
         let compare = new Intl.Collator(this.locale).compare;
 
         return this.tableData.sort((a, b) =>
-          itemCompare(a[this.sortKey], b[this.sortKey], this.sortAsc, compare)
+          itemCompare(a[this.sortKey], b[this.sortKey], this.sortAsc, compare),
         );
       },
       getFilterableKeys() {
@@ -131,7 +134,7 @@ document.addEventListener("alpine:init", () => {
 
         let filter = new RegExp(
           this.filter.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&"),
-          "i"
+          "i",
         );
 
         let filterableKeys = this.getFilterableKeys();
@@ -142,20 +145,20 @@ document.addEventListener("alpine:init", () => {
           });
         });
 
-        return filteredData
+        return filteredData;
       },
       getDataPaginated() {
-        let filteredData = this.getDataFiltered()
+        let filteredData = this.getDataFiltered();
 
-        if (isFunction(props.onFilter)) {
-          props.onFilter(filteredData)
+        if (isFunction(this.onFilter)) {
+          this.onFilter(filteredData);
         }
 
         if (!this.itemsPerPage) return filteredData;
 
         return filteredData.slice(
           (this.page - 1) * this.itemsPerPage,
-          this.page * this.itemsPerPage
+          this.page * this.itemsPerPage,
         );
       },
       isSortable() {
@@ -176,9 +179,9 @@ document.addEventListener("alpine:init", () => {
         return (string + "").replace(
           new RegExp(
             `(${match.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&")})`,
-            "i"
+            "i",
           ),
-          `<span class='${classes}'>$1</span>`
+          `<span class='${classes}'>$1</span>`,
         );
       },
       header: {

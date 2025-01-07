@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("modal", (props = {}, dataExtend = {} ) => {
+  Alpine.data("modal", (props = {}, dataExtend = {}) => {
     let isFunction = (f) => typeof f === "function";
 
     let aria = {
@@ -12,10 +12,10 @@ document.addEventListener("alpine:init", () => {
     let bind = {};
     ["container", "positioner", "content", "backdrop"].forEach((i) => {
       if (dataExtend[i]) {
-        bind[i] = dataExtend[i]
-        delete dataExtend[i]
+        bind[i] = dataExtend[i];
+        delete dataExtend[i];
       }
-    })
+    });
 
     return {
       isOpen: false,
@@ -24,15 +24,17 @@ document.addEventListener("alpine:init", () => {
       options: {},
 
       init() {
-        Alpine.effect(() => {
-          this.static = isFunction(props.static)
-            ? props.static()
-            : props.static ?? this.static;
-        });
-        Alpine.effect(() => {
-          this.closable = isFunction(props.closable)
-            ? props.closable()
-            : props.closable ?? this.closable;
+        this.$nextTick(() => {
+          Alpine.effect(() => {
+            this.static = JSON.parse(
+              Alpine.bound(this.$el, "data-static") ?? this.static,
+            );
+          });
+          Alpine.effect(() => {
+            this.closable = JSON.parse(
+              Alpine.bound(this.$el, "data-closable") ?? this.closable,
+            );
+          });
         });
       },
       getScrollBarWidth() {
@@ -51,16 +53,16 @@ document.addEventListener("alpine:init", () => {
         document.body.style.paddingRight = null;
       },
       open() {
-        this.removeScrollbar()
+        this.removeScrollbar();
         this.isOpen = true;
       },
       close() {
-        this.resetScrollbar()
+        this.resetScrollbar();
         this.isOpen = false;
       },
       closeNotStatic() {
-        if (this.static) return
-        this.close()
+        if (this.static) return;
+        this.close();
       },
       container: {
         "x-show"() {
@@ -69,13 +71,13 @@ document.addEventListener("alpine:init", () => {
         "@open-modal.window"() {
           let id = this.$event.detail.id || this.$event.detail;
           if (id === this.$root.id) {
-            this.options = this.$event.detail.options || {}
+            this.options = this.$event.detail.options || {};
             this.open();
           }
         },
         "@keydown.escape"() {
-          if (this.static) return
-          this.close()
+          if (this.static) return;
+          this.close();
         },
         ...bind.container,
       },

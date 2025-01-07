@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("datepicker", (props = {}, dataExtend = {} ) => {
+  Alpine.data("datepicker", (props = {}, dataExtend = {}) => {
     let getNumberRange = (from, count) => {
       return Array.from({ length: count }, (_, i) => i + from);
     };
@@ -28,12 +28,18 @@ document.addEventListener("alpine:init", () => {
     };
 
     let bind = {};
-    ["prevYearButton", "prevMonthButton", "nextMonthButton", "nextYearButton", "day"].forEach((i) => {
+    [
+      "prevYearButton",
+      "prevMonthButton",
+      "nextMonthButton",
+      "nextYearButton",
+      "day",
+    ].forEach((i) => {
       if (dataExtend[i]) {
-        bind[i] = dataExtend[i]
-        delete dataExtend[i]
+        bind[i] = dataExtend[i];
+        delete dataExtend[i];
       }
-    })
+    });
 
     return {
       today: new Date(),
@@ -57,28 +63,30 @@ document.addEventListener("alpine:init", () => {
         this.month = this.today.getMonth();
         this.year = this.today.getFullYear();
 
-        Alpine.effect(() => {
-          this.locale = isFunction(props.locale)
-            ? props.locale()
-            : props.locale ?? this.locale;
-          this.names.months = this.getMonthNames();
-          this.names.weekdays = this.getWeekdayNames();
-        });
-        Alpine.effect(() => {
-          this.mondayFirstWeekday = isFunction(props.mondayFirstWeekday)
-            ? props.mondayFirstWeekday()
-            : props.mondayFirstWeekday ?? this.mondayFirstWeekday;
-        });
-        Alpine.effect(() => {
-          this.adjacentMonthsDays = isFunction(props.adjacentMonthsDays)
-            ? props.adjacentMonthsDays()
-            : props.adjacentMonthsDays ?? this.adjacentMonthsDays;
-        });
-        Alpine.effect(() => {
-          this.range = isFunction(props.range)
-            ? props.range()
-            : props.range ?? this.range;
-          this.reset()
+        this.$nextTick(() => {
+          Alpine.effect(() => {
+            this.locale = Alpine.bound(this.$el, "data-locale") ?? this.locale;
+            this.names.months = this.getMonthNames();
+            this.names.weekdays = this.getWeekdayNames();
+          });
+          Alpine.effect(() => {
+            this.mondayFirstWeekday = JSON.parse(
+              Alpine.bound(this.$el, "data-monday-first-weekday") ??
+                this.mondayFirstWeekday,
+            );
+          });
+          Alpine.effect(() => {
+            this.adjacentMonthsDays = JSON.parse(
+              Alpine.bound(this.$el, "data-adjacent-months-days") ??
+                this.adjacentMonthsDays,
+            );
+          });
+          Alpine.effect(() => {
+            this.range = JSON.parse(
+              Alpine.bound(this.$el, "data-range") ?? this.range,
+            );
+            this.reset();
+          });
         });
 
         Alpine.effect(() => {
@@ -88,21 +96,21 @@ document.addEventListener("alpine:init", () => {
             if (this._model?.length === 2) {
               if (this._model.every((d) => dateRegexp.test(d))) {
                 this.selectedRange = this._model.map((d) => new Date(d));
-                this.rangeState = rangeSelectionStates.TO_SELECTED
+                this.rangeState = rangeSelectionStates.TO_SELECTED;
               }
-              return
+              return;
             }
             if (this._model?.length === 0) {
-              this.selectedRange = []
-              this.rangeState = rangeSelectionStates.UNSELECTED
+              this.selectedRange = [];
+              this.rangeState = rangeSelectionStates.UNSELECTED;
             }
-            return
+            return;
           }
           if (this._model === "" || this._model === null) {
-            this.selectedSingle = null
+            this.selectedSingle = null;
           }
           if (dateRegexp.test(this._model)) {
-            this.selectedSingle = new Date(this._model)
+            this.selectedSingle = new Date(this._model);
           }
         });
 
@@ -114,7 +122,7 @@ document.addEventListener("alpine:init", () => {
         return Array.from({ length: 12 }, (v, i) =>
           new Date(0, i, 1).toLocaleString(this.locale, {
             month: "short",
-          })
+          }),
         );
       },
       getWeekdayNames() {
@@ -123,8 +131,8 @@ document.addEventListener("alpine:init", () => {
             this.locale,
             {
               weekday: "short",
-            }
-          )
+            },
+          ),
         );
       },
       dateToModel(date) {
@@ -187,6 +195,7 @@ document.addEventListener("alpine:init", () => {
         return [...prevMonthDays, ...days, ...nextMonthDays];
       },
       currentDate() {
+        if (!this.names.months) return "";
         return `${this.names.months[this.month]} ${this.year}`;
       },
       reset() {
@@ -210,7 +219,7 @@ document.addEventListener("alpine:init", () => {
         }
       },
       getDayKey() {
-        return this.d.toISOString() + this.isAdjacent()
+        return this.d.toISOString() + this.isAdjacent();
       },
       isToday() {
         return (
@@ -264,8 +273,11 @@ document.addEventListener("alpine:init", () => {
         this.selectedSingle = this.d;
         this._model = this.dateToModel(this.selectedSingle);
 
-        if (!this.range || this.rangeState === rangeSelectionStates.TO_SELECTED) {
-          this.$dispatch("datepicker-selection-complete")
+        if (
+          !this.range ||
+          this.rangeState === rangeSelectionStates.TO_SELECTED
+        ) {
+          this.$dispatch("datepicker-selection-complete");
         }
       },
       prevMonthButton: {
@@ -298,8 +310,8 @@ document.addEventListener("alpine:init", () => {
           let c = "";
           if (this.isAdjacent()) {
             if (!this.adjacentMonthsDays) {
-              this.$el.style.visibility = "hidden"
-              return
+              this.$el.style.visibility = "hidden";
+              return;
             }
             return classes["class-adjacent"]?.textContent || "";
           }
@@ -311,7 +323,7 @@ document.addEventListener("alpine:init", () => {
           } else if (this.isPartiallySelected()) {
             c += (classes["class-partially-selected"]?.textContent || "") + " ";
           } else if (isFunction(this.isDisabled) && this.isDisabled(this.d)) {
-            c += (classes["class-disabled"]?.textContent || "") + " "
+            c += (classes["class-disabled"]?.textContent || "") + " ";
           } else {
             c += (classes["class-default"]?.textContent || "") + " ";
           }

@@ -1,6 +1,11 @@
 document.addEventListener('alpine:init', () => {
   window.Alpine.directive('alt-transition', (el, { value, expression }, { evaluate }) => {
-    let t = typeof expression === 'string' ? evaluate(expression) : expression
+    let t
+    if (typeof expression === "string") {
+      t = JSON.parse(expression)
+    } else if (typeof expression === "object") {
+      t = expression
+    }
     let transition = {}
       if (t.enter[1]) transition['x-transition:enter'] = t.enter[1]
       if (t.enter[0]) transition['x-transition:enter-start'] = t.enter[0]

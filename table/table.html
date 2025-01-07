@@ -14,8 +14,15 @@
   </head>
   <body>
     <input x-data x-model="$store.table.filter" type="text" />
+    <span x-data x-text="$store.table.filteredItemsCount"></span>
     <table
       x-data="table($store.table)"
+      :data-items="$store.table.data"
+      :data-items-per-page="$store.table.itemsPerPage"
+      :data-definition="$store.table.definition"
+      data-primary-key="id"
+      :data-filter="$store.table.filter"
+      :data-on-filter="$store.table.onFilter"
       class="w-full table-auto border-collapse text-left text-[0.9rem]"
     >
       <thead>

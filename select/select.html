@@ -18,7 +18,7 @@
   </head>
   <body>
     <div
-      x-data="{model: [], items: [
+      x-data="{model: [], selectItems: [
             { text: 'spanish', value: 'spanish' },
             { text: 'french', value: 'french' },
             { text: 'portuguese', value: 'portuguese' },
@@ -38,34 +38,20 @@
     >
       <span x-text="model"></span>
       <div
-        x-data="select({multiple: true, items: [
-            { text: 'spanish', value: 'spanish' },
-            { text: 'french', value: 'french' },
-            { text: 'portuguese', value: 'portuguese' },
-            { text: 'german', value: 'german' },
-            { text: 'japanese', value: 'japanese' },
-            { text: 'korean', value: 'korean' },
-            { text: 'italian', value: 'italian' },
-            { text: 'polish', value: 'polish' },
-            { text: 'greek', value: 'greek'},
-            { text: 'swedish', value: 'swedish' },
-            { text: 'norwegian', value: 'norwegian' },
-            { text: 'danish', value: 'danish' },
-            { text: 'spanish', value: 'spanish' },
-            { text: 'finnish', value: 'finnish' },
-            { text: 'thai', value: 'thai' },
-        ]})"
+        x-data="select"
+        :data-items="selectItems"
+        data-multiple="true"
         x-model="model"
         class="w-[340px]"
       >
         <div
           x-bind="trigger"
           x-data="input()"
-          class="flex flex-1 items-center gap-x-2 rounded border border-secondary-300 bg-white py-2 outline-none transition-shadow duration-200 focus-within:border-secondary-400 focus-within:ring focus-within:ring-primary-200 focus:outline-none dark:border-dark-600 dark:bg-dark-800 dark:text-text-300 dark:focus-within:ring-primary-300"
+          class="flex flex-1 items-center rounded border border-secondary-300 bg-white px-3 py-2 outline-none transition-shadow duration-200 focus-within:border-secondary-400 focus-within:ring focus-within:ring-primary-200 focus:outline-none dark:border-dark-600 dark:bg-dark-800 dark:text-text-300 dark:focus-within:ring-primary-300"
         >
-          <div data-icon></div>
-          <div data-prepend></div>
-          <div class="flex flex-1 flex-wrap">
+          <div data-icon class="mr-3 empty:hidden"></div>
+          <div data-prepend class="mr-3 empty:hidden"></div>
+          <div class="mr-3 flex flex-1 flex-wrap">
             <template x-for="selected in getSelected()">
               <span
                 x-text="selected.text"
@@ -79,14 +65,10 @@
               readonly
             />
           </div>
-          <div data-append></div>
-          <div class="mr-2 flex items-center gap-x-2">
+          <div data-append class="mr-3 empty:hidden"></div>
+          <div class="flex items-center gap-x-2">
             <div x-bind="loader">
-              <svg
-                viewBox="25 25 50 50"
-                fill="none"
-                class="spinner-svg h-5 w-5"
-              >
+              <svg viewBox="25 25 50 50" fill="none" class="spinner-svg h-5 w-5">
                 <circle
                   cx="50"
                   cy="50"
@@ -132,10 +114,10 @@
         <div
           x-bind="menu"
           class="oveflow-y-auto z-50 max-h-[400px] overflow-x-hidden rounded-b-md bg-white shadow-md dark:bg-dark-800"
-          x-alt-transition="{
-                enter: ['opacity-0 scale-y-[0.5]', 'transition ease-out duration-100 origin-top', 'opacity-100'],
-                leave: ['opacity-100', 'transition ease-in duration-100 origin-top', 'opacity-0 scale-y-[0.5]'],
-              }"
+          x-alt-transition='{
+                "enter": ["opacity-0 scale-y-[0.5]", "transition ease-out duration-100 origin-top", "opacity-100"],
+                "leave": ["opacity-100", "transition ease-in duration-100 origin-top", "opacity-0 scale-y-[0.5]"]
+              }'
         >
           <template x-if="getItems().length === 0">
             <div class="px-6 py-4 text-left text-text-800 dark:text-text-300">No items available.</div>

@@ -107,17 +107,11 @@ export default function useValidation(inputs, globals) {
       validateMode,
     } = input;
 
-    let opts = {
-      validateOn: validOptions.validateOn.includes(options.validateOn)
-        ? options.validateOn
-        : "blur",
-      validateMode: validOptions.validateMode.includes(options.validateMode)
-        ? options.validateMode
-        : "silent",
-      stateDefaultValue: options.stateDefaultValue ?? "",
-      stateValidValue: options.stateValidValue ?? "valid",
-      stateInvalidValue: options.stateInvalidValue ?? "invalid",
-    };
+    validateOn = validOptions.validateOn.includes(validateOn) ? validateOn : "blur"
+    validateMode = validOptions.validateMode.includes(validateMode) ? validateMode : "silent"
+    let stateDefaultValue = ""
+    let stateValidValue = "valid"
+    let stateInvalidValue = "invalid"
 
     if (!isFunction(onUpdate)) {
       onUpdate = () => {};
@@ -190,7 +184,7 @@ export default function useValidation(inputs, globals) {
       // optional input (not required and empty) cannot be valid or invalid,
       // return defalut state
       if (optional) {
-        return opts.stateDefaultValue;
+        return stateDefaultValue;
       }
 
       // input has not been yet interacted in any way, return current state
@@ -199,12 +193,12 @@ export default function useValidation(inputs, globals) {
       }
 
       // input is validated manually, return current state
-      if (opts.validateOn === "form" && !validated) {
+      if (validateOn === "form" && !validated) {
         return validation.state;
       }
 
       // input is validated on blur, return current state
-      if (opts.validateOn === "blur" && !touched && !validated) {
+      if (validateOn === "blur" && !touched && !validated) {
         return validation.state;
       }
 
@@ -212,16 +206,16 @@ export default function useValidation(inputs, globals) {
       // and can change state
       // for invalid inputs always return invalid state
       if (!valid) {
-        return opts.stateInvalidValue;
+        return stateInvalidValue;
       }
 
       // for valid inputs return valid only in eager mode or when changing
       // from non default state
       if (
-        opts.validateMode === "eager" ||
-        validation.state !== opts.stateDefaultValue
+        validateMode === "eager" ||
+        validation.state !== stateDefaultValue
       ) {
-        return opts.stateValidValue;
+        return stateValidValue;
       }
 
       // return default state
@@ -277,14 +271,13 @@ export default function useValidation(inputs, globals) {
 }
 
 document.addEventListener("alpine:init", () => {
-  Alpine.directive("validation", (el, {value, expression}, {Alpine, effect, evaluate, evaluateLater}) => {
-    if (!Alpine.store("validation")) {
-      Alpine.store("validation", {
-        inputs: {},
-      })
-    }
+  Alpine.store("validation", {
+    inputs: {},
+  })
 
-    let exp = evaluate(expression)
+  Alpine.directive("validation", (el, {value, expression}, {Alpine, effect, evaluate, evaluateLater}) => {
+    // let exp = evaluate(expression)
+    let exp = JSON.parse(expression)
     let getValue = evaluateLater("_value")
 
     Alpine.store("validation").inputs[value] = {
@@ -312,5 +305,32 @@ document.addEventListener("alpine:init", () => {
 
   Alpine.magic("validation", (el, {Alpine}) => input => {
     return Alpine.store("validation").inputs[input]
+  })
+
+  Alpine.data("formText", (inputName, props = {}) => {
+    return {
+      input: inputName,
+      validation: null,
+
+      init() {
+        this.validation = Alpine.store("validation").inputs[this.input]
+      },
+      getMessages() {
+        return this.validation.state === "invalid" ? this.validation.messages : []
+      },
+      message: {
+        ":class"() {
+          let classes = this.$el.attributes
+          let c = ""
+          if (this.validation.state === "valid") {
+            c = classes["class-valid"]?.textContent || ""
+          } else if (this.validation.state === "invalid") {
+            c = classes["class-invalid"]?.textContent || ""
+          }
+
+          return c
+        }
+      }
+    }
   })
 })

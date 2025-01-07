@@ -11,10 +11,10 @@ document.addEventListener("alpine:init", () => {
     let bind = {};
     ["prevButton", "nextButton", "pageButton"].forEach((i) => {
       if (dataExtend[i]) {
-        bind[i] = dataExtend[i]
-        delete dataExtend[i]
+        bind[i] = dataExtend[i];
+        delete dataExtend[i];
       }
-    })
+    });
 
     return {
       currentPage: 1,
@@ -23,21 +23,25 @@ document.addEventListener("alpine:init", () => {
       maxPages: 7,
 
       init() {
-        Alpine.effect(() => {
-          this.itemsCount = isFunction(props.itemsCount)
-            ? props.itemsCount()
-            : props.itemsCount ?? this.itemsCount;
+        this.$nextTick(() => {
+          Alpine.effect(() => {
+            this.itemsCount = parseInt(
+              Alpine.bound(this.$el, "data-items-count") ?? this.itemsCount,
+            );
+          });
+          Alpine.effect(() => {
+            this.itemsPerPage = parseInt(
+              Alpine.bound(this.$el, "data-items-per-page") ??
+                this.itemsPerPage,
+            );
+          });
+          Alpine.effect(() => {
+            this.maxPages = parseInt(
+              Alpine.bound(this.$el, "data-max-pages") ?? this.maxPages,
+            );
+          });
         });
-        Alpine.effect(() => {
-          this.itemsPerPage = isFunction(props.itemsPerPage)
-            ? props.itemsPerPage()
-            : props.itemsPerPage ?? this.itemsPerPage;
-        });
-        Alpine.effect(() => {
-          this.maxPages = isFunction(props.maxPages)
-            ? props.maxPages()
-            : props.maxPages ?? this.maxPages;
-        });
+
         Alpine.bind(this.$el, {
           ["x-modelable"]: "currentPage",
         });
