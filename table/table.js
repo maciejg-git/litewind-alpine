@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("table", (props = {}, dataExtend = {}) => {
+  Alpine.data("table", (dataExtend = {}) => {
     let undefNullToStr = (v) => (v === undefined || v === null ? "" : v);
 
     let isDate = (d) => Object.prototype.toString.call(d) == "[object Date]";
@@ -69,11 +69,6 @@ document.addEventListener("alpine:init", () => {
             this.page = 1;
           });
           Alpine.effect(() => {
-            this.page = parseInt(
-              Alpine.bound(this.$el, "data-page") ?? this.page,
-            );
-          });
-          Alpine.effect(() => {
             this.itemsPerPage = parseInt(
               Alpine.bound(this.$el, "data-items-per-page") ??
                 this.itemsPerPage,
@@ -86,6 +81,11 @@ document.addEventListener("alpine:init", () => {
           Alpine.effect(() => {
             this.onFilter =
               Alpine.bound(this.$el, "data-on-filter") ?? this.onFilter;
+          });
+          Alpine.effect(() => {
+            this.page = parseInt(
+              Alpine.bound(this.$el, "data-page") ?? this.page,
+            );
           });
           this.primaryKey =
             Alpine.bound(this.$el, "data-primary-key") ?? this.primaryKey;

@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("tabs", (tab, dataExtend = {} ) => {
+  Alpine.data("tabs", (dataExtend = {}) => {
     let aria = {
       tabBar: {
         role: "tablist",
@@ -18,14 +18,24 @@ document.addEventListener("alpine:init", () => {
     let bind = {};
     ["label", "content"].forEach((i) => {
       if (dataExtend[i]) {
-        bind[i] = dataExtend[i]
-        delete dataExtend[i]
+        bind[i] = dataExtend[i];
+        delete dataExtend[i];
       }
-    })
+    });
 
     return {
-      selectedTab: tab,
+      selectedTab: "",
 
+      init() {
+        this.selectedTab =
+          Alpine.bound(this.$el, "data-selected-tab") ?? this.selectedTab;
+        this.$nextTick(() => {
+          Alpine.effect(() => {
+            this.selectedTab =
+              Alpine.bound(this.$el, "data-selected-tab") ?? this.selectedTab;
+          });
+        });
+      },
       selectTab() {
         let target = this.$event.target;
         let tab = target.dataset.tab;

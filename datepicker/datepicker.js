@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("datepicker", (props = {}, dataExtend = {}) => {
+  Alpine.data("datepicker", (dataExtend = {}) => {
     let getNumberRange = (from, count) => {
       return Array.from({ length: count }, (_, i) => i + from);
     };
@@ -18,6 +18,15 @@ document.addEventListener("alpine:init", () => {
       let d = new Date(m, y).getDay();
       return mondayFirstWeekday ? (6 + d) % 7 : d;
     };
+
+    let isValidLocale = (locale) => {
+      try {
+        Intl.getCanonicalLocales(locale)
+        return 1
+      } catch(err) {
+        console.warn(err)
+      }
+    }
 
     let isFunction = (f) => typeof f === "function";
 
@@ -65,7 +74,8 @@ document.addEventListener("alpine:init", () => {
 
         this.$nextTick(() => {
           Alpine.effect(() => {
-            this.locale = Alpine.bound(this.$el, "data-locale") ?? this.locale;
+            let locale = Alpine.bound(this.$el, "data-locale") ?? this.locale
+            this.locale = isValidLocale(locale) ? locale : this.locale
             this.names.months = this.getMonthNames();
             this.names.weekdays = this.getWeekdayNames();
           });

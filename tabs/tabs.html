@@ -14,13 +14,8 @@
   </head>
   <body>
     <div
-      x-data="tabs('tab', {
-        content: { 
-          'x-alt-transition': {
-            enter: ['opacity-0', 'transition ease-out duration-100 delay-100', 'opacity-100'],
-            leave: ['opacity-100', 'transition ease-in duration-100 absolute top-0', 'opacity-0'],
-        }
-        }})"
+      x-data="tabs()"
+      data-selected-tab="tab"
     >
       <div
         x-bind="tabBar"
@@ -47,8 +42,14 @@
       </div>
       <div class="p-4">
         <div class="relative">
-          <div data-tab="tab" x-bind="content" x-cloak>tab 2</div>
-          <div data-tab="tab 2" x-bind="content" x-cloak>tab 3</div>
+          <div data-tab="tab" x-bind="content" x-cloak x-alt-transition='{
+            "enter": ["opacity-0", "transition ease-out duration-100 delay-100", "opacity-100"],
+            "leave": ["opacity-100", "transition ease-in duration-100 absolute top-0", "opacity-0"]
+        }'>tab 2</div>
+          <div data-tab="tab 2" x-bind="content" x-cloak x-alt-transition='{
+            "enter": ["opacity-0", "transition ease-out duration-100 delay-100", "opacity-100"],
+            "leave": ["opacity-100", "transition ease-in duration-100 absolute top-0", "opacity-0"]
+        }'>tab 3</div>
         </div>
       </div>
     </div>

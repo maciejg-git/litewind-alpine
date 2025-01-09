@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("sidepanel", (props = {}, dataExtend = {}) => {
+  Alpine.data("sidepanel", (dataExtend = {}) => {
     let bind = {};
     [].forEach((i) => {
       if (dataExtend[i]) {

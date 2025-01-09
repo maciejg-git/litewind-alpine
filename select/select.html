@@ -125,11 +125,12 @@
           <template x-for="(item, index) in getItems()">
             <button
               x-bind="option"
-              x-text="item.text"
               class="w-full cursor-pointer scroll-mb-20 scroll-mt-20 px-6 py-4 text-left text-text-800 transition-colors hover:bg-secondary-100 focus:outline-none dark:text-text-300 dark:hover:bg-dark-600"
               class-selected="bg-secondary-200 dark:bg-dark-700"
               class-highlight="bg-secondary-100 dark:bg-dark-600"
-            ></button>
+            >
+              <span x-text="item.text"></span>
+            </button>
           </template>
         </div>
       </div>

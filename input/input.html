@@ -64,7 +64,8 @@
         </div>
       </div>
     </div>
-    <div x-data="formText('input')" class="flex flex-col">
+
+    <div x-data="formText()" data-input="input" class="flex flex-col">
       <template x-for="m in getMessages()">
         <div x-bind="message" x-text="m" class="text-sm" class-valid="text-success-600 dark:text-success-500" class-invalid="text-danger-600 dark:text-danger-500"></div>
       </template>

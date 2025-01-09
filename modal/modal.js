@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("modal", (props = {}, dataExtend = {}) => {
+  Alpine.data("modal", (dataExtend = {}) => {
     let isFunction = (f) => typeof f === "function";
 
     let aria = {

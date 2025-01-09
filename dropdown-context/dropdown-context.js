@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("dropdownContext", (props = {}, dataExtend = {}) => {
+  Alpine.data("dropdownContext", (dataExtend = {}) => {
     let floatingUIoptions = [
       "placement",
       "offsetX",

@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("progress", (props = {}, dataExtend = {}) => {
+  Alpine.data("progress", (dataExtend = {}) => {
     let bind = {};
     ["progressBar"].forEach((i) => {
       if (dataExtend[i]) {

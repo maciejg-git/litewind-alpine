@@ -276,11 +276,12 @@ document.addEventListener("alpine:init", () => {
   })
 
   Alpine.directive("validation", (el, {value, expression}, {Alpine, effect, evaluate, evaluateLater}) => {
-    // let exp = evaluate(expression)
     let exp = JSON.parse(expression)
-    let getValue = evaluateLater("_value")
+    let validateValue = Alpine.$data(el).validateValue
+    let name = value ?? Alpine.bound(el, "name") ?? ""
+    let getValue = evaluateLater(validateValue)
 
-    Alpine.store("validation").inputs[value] = {
+    Alpine.store("validation").inputs[name] = {
       status: {},
       messages: {},
       state: "",
@@ -295,7 +296,7 @@ document.addEventListener("alpine:init", () => {
       validateOn: exp.validateOn,
       validateMode: exp.validateMode,
       effect,
-      validation: Alpine.store("validation").inputs[value]
+      validation: Alpine.store("validation").inputs[name]
     })
 
     Alpine.addScopeToNode(el, {
@@ -307,16 +308,19 @@ document.addEventListener("alpine:init", () => {
     return Alpine.store("validation").inputs[input]
   })
 
-  Alpine.data("formText", (inputName, props = {}) => {
+  Alpine.data("formText", () => {
     return {
-      input: inputName,
+      input: "",
       validation: null,
 
       init() {
-        this.validation = Alpine.store("validation").inputs[this.input]
+        this.$nextTick(() => {
+          this.input = Alpine.bound(this.$el, "data-input") ?? this.input
+          this.validation = Alpine.store("validation").inputs[this.input]
+        })
       },
       getMessages() {
-        return this.validation.state === "invalid" ? this.validation.messages : []
+        return this.validation?.state === "invalid" ? this.validation.messages : []
       },
       message: {
         ":class"() {

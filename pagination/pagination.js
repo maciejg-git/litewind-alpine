@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("pagination", (props = {}, dataExtend = {}) => {
+  Alpine.data("pagination", (dataExtend = {}) => {
     let clamp = (v, f, t) => (v < f ? f : v >= t ? t : v);
 
     let getNumberRange = (from, count) => {

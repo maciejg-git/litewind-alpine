@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("dropdown", (props = {}, dataExtend = {}) => {
+  Alpine.data("dropdown", (dataExtend = {}) => {
     let isFunction = (f) => typeof f === "function";
     let floatingUIoptions = [
       "placement",

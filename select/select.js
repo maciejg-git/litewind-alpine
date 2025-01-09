@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("select", (props = {}, dataExtend = {}) => {
+  Alpine.data("select", (dataExtend = {}) => {
     let isFunction = (f) => typeof f === "function";
 
     let isElementOverflowingBottom = (el) => {
@@ -40,6 +40,7 @@ document.addEventListener("alpine:init", () => {
       itemText: "text",
       itemValue: "value",
       highlightedIndex: -1,
+      selectEl: null,
 
       init() {
         this.$nextTick(() => {
@@ -62,6 +63,8 @@ document.addEventListener("alpine:init", () => {
             { resize: true },
           );
         });
+
+        this.selectEl = this.$el;
 
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
@@ -196,6 +199,18 @@ document.addEventListener("alpine:init", () => {
             return;
           }
           this.close();
+        },
+        ":data-clearable"() {
+          return Alpine.bound(this.selectEl, "data-clearable");
+        },
+        ":data-use-loader"() {
+          return Alpine.bound(this.selectEl, "data-use-loader");
+        },
+        ":data-is-loading"() {
+          return Alpine.bound(this.selectEl, "data-is-loading");
+        },
+        ":data-placeholder"() {
+          return Alpine.bound(this.selectEl, "data-placeholder");
         },
         ...bind.trigger,
       },

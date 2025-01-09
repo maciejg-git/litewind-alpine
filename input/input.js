@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("input", (props = {}, dataExtend = {}) => {
+  Alpine.data("input", (dataExtend = {}) => {
     let isFunction = (f) => typeof f === "function";
 
     let bind = {};
@@ -18,6 +18,7 @@ document.addEventListener("alpine:init", () => {
       clearable: false,
       isDirty: false,
       isTouched: false,
+      validateValue: "_value",
 
       init() {
         this.$nextTick(() => {
@@ -54,7 +55,12 @@ document.addEventListener("alpine:init", () => {
         this._value = "";
       },
       input: {
-        "x-model": "_value",
+        ":value"() {
+          return this._value
+        },
+        "@input"() {
+          this._value = this.$event.target.value
+        },
         "x-ref": "input",
         ":placeholder"() {
           return this.placeholder;

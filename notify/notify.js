@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("notify", (props = {}, dataExtend = {}) => {
+  Alpine.data("notify", (dataExtend = {}) => {
     let bind = {};
     ["notification"].forEach((i) => {
       if (dataExtend[i]) {
