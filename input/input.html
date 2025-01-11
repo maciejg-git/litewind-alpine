@@ -16,7 +16,7 @@
     <div x-data="{model: ''}">
       <span x-text="model"></span>
       <div
-        x-data="input()"
+        x-data="input"
         x-model="model"
         x-validation:input='{ "rules": [{ "minLength": 3 }, { "maxLength": 5} ]}'
         class="flex flex-1 items-center rounded border border-secondary-300 bg-white px-3 py-2 outline-none transition-shadow duration-200 focus-within:border-secondary-400 focus-within:ring focus-within:ring-primary-200 focus:outline-none dark:border-dark-600 dark:bg-dark-800 dark:text-text-300 dark:focus-within:ring-primary-300"
@@ -65,7 +65,7 @@
       </div>
     </div>
 
-    <div x-data="formText()" data-input="input" class="flex flex-col">
+    <div x-data="formText" data-input="input" class="flex flex-col">
       <template x-for="m in getMessages()">
         <div x-bind="message" x-text="m" class="text-sm" class-valid="text-success-600 dark:text-success-500" class-invalid="text-danger-600 dark:text-danger-500"></div>
       </template>

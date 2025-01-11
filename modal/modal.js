@@ -1,7 +1,5 @@
 document.addEventListener("alpine:init", () => {
   Alpine.data("modal", (dataExtend = {}) => {
-    let isFunction = (f) => typeof f === "function";
-
     let aria = {
       content: {
         role: "dialog",

@@ -40,13 +40,12 @@
       <div
         x-data="select"
         :data-items="selectItems"
-        data-multiple="true"
         x-model="model"
         class="w-[340px]"
       >
         <div
           x-bind="trigger"
-          x-data="input()"
+          x-data="input"
           class="flex flex-1 items-center rounded border border-secondary-300 bg-white px-3 py-2 outline-none transition-shadow duration-200 focus-within:border-secondary-400 focus-within:ring focus-within:ring-primary-200 focus:outline-none dark:border-dark-600 dark:bg-dark-800 dark:text-text-300 dark:focus-within:ring-primary-300"
         >
           <div data-icon class="mr-3 empty:hidden"></div>
@@ -68,7 +67,11 @@
           <div data-append class="mr-3 empty:hidden"></div>
           <div class="flex items-center gap-x-2">
             <div x-bind="loader">
-              <svg viewBox="25 25 50 50" fill="none" class="spinner-svg h-5 w-5">
+              <svg
+                viewBox="25 25 50 50"
+                fill="none"
+                class="spinner-svg h-5 w-5"
+              >
                 <circle
                   cx="50"
                   cy="50"
@@ -120,7 +123,9 @@
               }'
         >
           <template x-if="getItems().length === 0">
-            <div class="px-6 py-4 text-left text-text-800 dark:text-text-300">No items available.</div>
+            <div class="px-6 py-4 text-left text-text-800 dark:text-text-300">
+              No items available.
+            </div>
           </template>
           <template x-for="(item, index) in getItems()">
             <button

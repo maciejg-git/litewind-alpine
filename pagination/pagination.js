@@ -18,7 +18,7 @@ document.addEventListener("alpine:init", () => {
 
     return {
       currentPage: 1,
-      itemsCount: 100,
+      itemsCount: 0,
       itemsPerPage: 10,
       maxPages: 7,
 

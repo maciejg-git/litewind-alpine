@@ -87,19 +87,15 @@ let defaultStatus = {
   validated: false,
 };
 
-export default function useValidation(inputs, globals) {
-  let localInputs = Array.isArray(inputs) ? inputs : [inputs];
-
-  let validation = localInputs.reduce((acc, input) => {
+export default function useValidation(input) {
     let {
-      form = globals?.form || null,
+      form = null,
       name = "input",
       value,
-      rules = globals?.rules || [],
-      options = globals?.options || {},
-      externalState = globals?.externalState,
-      onUpdate = globals?.onUpdate,
-      onReset = globals?.onReset,
+      rules = [],
+      externalState,
+      onUpdate,
+      onReset,
       getValue,
       effect,
       validation,
@@ -245,29 +241,13 @@ export default function useValidation(inputs, globals) {
     };
 
     return {
-      ...acc,
-      [name]: {
         form,
         name,
         value,
         touch: () => on("touch"),
         formValidate: () => on("formValidate"),
         reset,
-      },
     };
-  }, {});
-
-  // add inputs to form
-
-  Object.values(validation).forEach((i) => {
-    isFunction(i.form?.addToForm) && i.form.addToForm(i);
-  });
-
-  // return validation for single input
-
-  let i = Object.keys(validation);
-
-  return (i.length === 1) ? validation[i[0]] : validation
 }
 
 document.addEventListener("alpine:init", () => {

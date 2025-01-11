@@ -13,10 +13,7 @@
     ></script>
   </head>
   <body>
-    <div
-      x-data="tabs()"
-      data-selected-tab="tab"
-    >
+    <div x-data="tabs" data-selected-tab="tab">
       <div
         x-bind="tabBar"
         class="flex flex-auto items-center border-b border-secondary-300 pl-2 dark:border-dark-600"
@@ -42,14 +39,28 @@
       </div>
       <div class="p-4">
         <div class="relative">
-          <div data-tab="tab" x-bind="content" x-cloak x-alt-transition='{
+          <div
+            data-tab="tab"
+            x-bind="content"
+            x-cloak
+            x-alt-transition='{
             "enter": ["opacity-0", "transition ease-out duration-100 delay-100", "opacity-100"],
             "leave": ["opacity-100", "transition ease-in duration-100 absolute top-0", "opacity-0"]
-        }'>tab 2</div>
-          <div data-tab="tab 2" x-bind="content" x-cloak x-alt-transition='{
+        }'
+          >
+            tab 2
+          </div>
+          <div
+            data-tab="tab 2"
+            x-bind="content"
+            x-cloak
+            x-alt-transition='{
             "enter": ["opacity-0", "transition ease-out duration-100 delay-100", "opacity-100"],
             "leave": ["opacity-100", "transition ease-in duration-100 absolute top-0", "opacity-0"]
-        }'>tab 3</div>
+        }'
+          >
+            tab 3
+          </div>
         </div>
       </div>
     </div>

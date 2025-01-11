@@ -20,6 +20,7 @@ document.addEventListener("alpine:init", () => {
       dismissable: true,
       static: false,
       variant: "info",
+      options: {},
 
       init() {
         this.$nextTick(() => {
@@ -40,6 +41,7 @@ document.addEventListener("alpine:init", () => {
             Alpine.bound(this.$el, "data-static") ?? this.static,
           );
           this.variant = Alpine.bound(this.$el, "data-variant") ?? this.variant;
+          this.options = Alpine.bound(this.$el, "data-options") ?? this.options
         });
         Alpine.bind(this.$el, {
           "@show-notify.window"() {

@@ -14,7 +14,7 @@
   <body>
     <div class="w-[400px]">
       <div
-        x-data="progress()"
+        x-data="progress"
         class="flex h-4 overflow-hidden rounded-full bg-secondary-100 dark:bg-dark-800"
       >
         <div
@@ -26,8 +26,7 @@
         class="relative flex h-2 overflow-hidden rounded-full bg-secondary-100 dark:bg-dark-800"
       >
         <div
-          x-bind="progressBar"
-          class="absolute flex h-full w-[50%] origin-left animate-[slide_1.5s_linear_infinite] items-center justify-center rounded-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500"
+          class="absolute flex h-full w-[70%] origin-left animate-[slide_1.5s_linear_infinite] items-center justify-center rounded-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500"
         ></div>
       </div>
     </div>

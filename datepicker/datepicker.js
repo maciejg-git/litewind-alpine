@@ -62,7 +62,7 @@ document.addEventListener("alpine:init", () => {
       mondayFirstWeekday: true,
       adjacentMonthsDays: true,
       range: false,
-      _model: null,
+      _model: "",
       selectedSingle: null,
       selectedRange: [],
       rangeState: 0,
@@ -211,7 +211,7 @@ document.addEventListener("alpine:init", () => {
       reset() {
         this.selectedSingle = "";
         this.selectedRange = [];
-        this._model = null;
+        this._model = "";
         this.rangeState = rangeSelectionStates.UNSELECTED;
         this.mouseOverDate = null;
       },
