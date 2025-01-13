@@ -21,7 +21,7 @@
     </button>
     <ul
       x-data="notify"
-      class="fixed bottom-4 w-full space-y-4 md:right-10 md:w-[350px]"
+      class="fixed bottom-4 w-full space-y-4 md:right-10 md:w-[350px] z-50"
     >
       <template x-for="notify in getNotifications" :key="notify.notifyId">
         <li

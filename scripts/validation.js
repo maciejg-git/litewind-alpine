@@ -265,9 +265,6 @@ document.addEventListener("alpine:init", () => {
       status: {},
       messages: {},
       state: "",
-      getMessages() {
-        return this.state !== "" ? this.messages : {}
-      }
     }
 
     let validation = useValidation({
@@ -281,6 +278,7 @@ document.addEventListener("alpine:init", () => {
 
     Alpine.addScopeToNode(el, {
       touch: validation.touch,
+      validation: Alpine.store("validation").inputs[name]
     })
   })
 
@@ -300,7 +298,12 @@ document.addEventListener("alpine:init", () => {
         })
       },
       getMessages() {
-        return this.validation?.state === "invalid" ? this.validation.messages : []
+        if (this.validation?.state === "invalid") {
+          if (this.validation.messages.required) {
+            return { required: this.validation.messages.required }
+          }
+          return this.validation.messages
+        }
       },
       message: {
         ":class"() {
