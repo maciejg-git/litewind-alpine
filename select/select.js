@@ -41,6 +41,7 @@ document.addEventListener("alpine:init", () => {
       itemValue: "value",
       highlightedIndex: -1,
       selectEl: null,
+      isLoading: false,
 
       init() {
         this.$nextTick(() => {

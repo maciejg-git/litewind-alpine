@@ -96,8 +96,6 @@ export default function useValidation(input) {
       externalState,
       onUpdate,
       onReset,
-      getValue,
-      effect,
       validation,
       validateOn,
       validateMode,
@@ -159,7 +157,8 @@ export default function useValidation(input) {
       return { status: newStatus, messages: newMessages }
     };
 
-    let on = (event) => {
+    let on = (event, updatedValue) => {
+      value = updatedValue !== undefined ? updatedValue : value
       let res = validate(value, event);
 
       validation.status = res.status
@@ -218,18 +217,6 @@ export default function useValidation(input) {
       return validation.state;
     };
 
-    let lastValue = value
-
-    effect(() => {
-      lastValue = value
-      getValue((v) => {
-        value = v
-        if (value !== lastValue) {
-          on("valueUpdate")
-        }
-      })
-    })
-
     // reset
 
     let reset = () => {
@@ -246,6 +233,7 @@ export default function useValidation(input) {
         value,
         touch: () => on("touch"),
         formValidate: () => on("formValidate"),
+        updateValue: (value) => on("valueUpdate", value),
         reset,
     };
 }
@@ -255,7 +243,7 @@ document.addEventListener("alpine:init", () => {
     inputs: {},
   })
 
-  Alpine.directive("validation", (el, {value, expression}, {Alpine, effect, evaluate, evaluateLater}) => {
+  Alpine.directive("validation", (el, {value, expression}, {Alpine, effect, evaluate, evaluateLater, cleanup}) => {
     let exp = JSON.parse(expression)
     let validateValue = Alpine.$data(el).validateValue
     let name = value ?? Alpine.bound(el, "name") ?? ""
@@ -268,56 +256,29 @@ document.addEventListener("alpine:init", () => {
     }
 
     let validation = useValidation({
-      getValue,
-      rules: exp.rules,
-      validateOn: exp.validateOn,
-      validateMode: exp.validateMode,
-      effect,
+      ...exp,
       validation: Alpine.store("validation").inputs[name]
+    })
+
+    let getter = () => {
+      let value
+      getValue((v) => value = v)
+      return value
+    }
+
+    let watchValue = Alpine.watch(getter, (value) => {
+      validation.updateValue(value)
     })
 
     Alpine.addScopeToNode(el, {
       touch: validation.touch,
       validation: Alpine.store("validation").inputs[name]
     })
+
+    cleanup(watchValue)
   })
 
   Alpine.magic("validation", (el, {Alpine}) => input => {
     return Alpine.store("validation").inputs[input]
-  })
-
-  Alpine.data("formText", () => {
-    return {
-      input: "",
-      validation: null,
-
-      init() {
-        this.$nextTick(() => {
-          this.input = Alpine.bound(this.$el, "data-input") ?? this.input
-          this.validation = Alpine.store("validation").inputs[this.input]
-        })
-      },
-      getMessages() {
-        if (this.validation?.state === "invalid") {
-          if (this.validation.messages.required) {
-            return { required: this.validation.messages.required }
-          }
-          return this.validation.messages
-        }
-      },
-      message: {
-        ":class"() {
-          let classes = this.$el.attributes
-          let c = ""
-          if (this.validation.state === "valid") {
-            c = classes["class-valid"]?.textContent || ""
-          } else if (this.validation.state === "invalid") {
-            c = classes["class-invalid"]?.textContent || ""
-          }
-
-          return c
-        }
-      }
-    }
   })
 })

@@ -49,6 +49,8 @@ document.addEventListener("alpine:init", () => {
                 c = classes["class-valid"]?.textContent || ""
               } else if (this.validation?.state === "invalid") {
                 c = classes["class-invalid"]?.textContent || ""
+              } else {
+                c = classes["class-default"]?.textContent || ""
               }
 
               return c

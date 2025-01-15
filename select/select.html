@@ -39,14 +39,29 @@
       <span x-text="model"></span>
       <div
         x-data="select"
-        :data-items="selectItems"
+        data-item-text="name"
+        data-item-value="id"
+        data-use-loader="true"
+        :data-is-loading="isLoading"
+        @open-selectmenu="() => {
+          isLoading = true
+          fetch('https://jsonplaceholder.typicode.com/comments')
+            .then(res => res.json())
+            .then(json => {
+              items = json
+              isLoading = false
+            })
+          }"
         x-model="model"
         class="w-[340px]"
       >
         <div
           x-bind="trigger"
           x-data="input"
-          class="flex flex-1 items-center rounded border border-secondary-300 bg-white px-3 py-2 outline-none transition-shadow duration-200 focus-within:border-secondary-400 focus-within:ring focus-within:ring-primary-200 focus:outline-none dark:border-dark-600 dark:bg-dark-800 dark:text-text-300 dark:focus-within:ring-primary-300"
+          class="flex flex-1 items-center rounded border px-3 py-2 outline-none transition-shadow duration-200 focus-within:ring focus:outline-none"
+          class-default="border-secondary-300 bg-white focus-within:border-secondary-400 focus-within:ring-primary-200 dark:border-dark-600 dark:bg-dark-800 dark:text-text-300 dark:focus-within:ring-primary-300"
+          class-valid="text-success-600 dark:text-success-600 border-success-300 dark:border-success-400 focus-within:ring-success-200 dark:focus-within:ring-success-300"
+          class-invalid="text-danger-600 dark:text-danger-600 border-danger-300 dark:border-danger-400 focus-within:ring-danger-200 dark:focus-within:ring-danger-300"
         >
           <div data-icon class="mr-3 empty:hidden"></div>
           <div data-prepend class="mr-3 empty:hidden"></div>
