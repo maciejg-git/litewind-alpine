@@ -231,6 +231,9 @@ document.addEventListener("alpine:init", () => {
       getDayKey() {
         return this.d.toISOString() + this.isAdjacent();
       },
+      getDayText() {
+        return this.d.getDate()
+      },
       isToday() {
         return (
           this.today.getDate() === this.d.getUTCDate() &&

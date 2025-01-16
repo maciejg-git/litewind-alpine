@@ -93,8 +93,6 @@ export default function useValidation(input) {
       name = "input",
       value,
       rules = [],
-      externalState,
-      onUpdate,
       onReset,
       validation,
       validateOn,
@@ -107,10 +105,6 @@ export default function useValidation(input) {
     let stateValidValue = "valid"
     let stateInvalidValue = "invalid"
 
-    if (!isFunction(onUpdate)) {
-      onUpdate = () => {};
-    }
-
     let isOptional = (value) => {
       return (
         !rules.includes("required") &&
@@ -119,8 +113,6 @@ export default function useValidation(input) {
           (Array.isArray(value) && value.length === 0))
       );
     };
-
-    // onUpdate(status, state, messages);
 
     let validate = (value, event) => {
       let newStatus = {
@@ -164,17 +156,10 @@ export default function useValidation(input) {
       validation.status = res.status
       validation.messages = res.messages
       validation.state = updateState()
-
-      // onUpdate(status, state, messages);
     }
 
     let updateState = () => {
       let { dirty, touched, validated, optional, valid } = validation.status;
-
-      // external state is set, return it
-      if (externalState && externalState.value !== null) {
-        return externalState.value;
-      }
 
       // optional input (not required and empty) cannot be valid or invalid,
       // return defalut state
@@ -224,7 +209,6 @@ export default function useValidation(input) {
       validation.state = "";
       validation.messages = {};
       isFunction(onReset) && onReset();
-      // onUpdate(status, state, messages);
     };
 
     return {
@@ -241,6 +225,10 @@ export default function useValidation(input) {
 document.addEventListener("alpine:init", () => {
   Alpine.store("validation", {
     inputs: {},
+  })
+
+  Alpine.directive("form", (el, {value, expression}) => {
+    let formName = value
   })
 
   Alpine.directive("validation", (el, {value, expression}, {Alpine, effect, evaluate, evaluateLater, cleanup}) => {
