@@ -18,6 +18,7 @@ module.exports = {
     "./chevron/**/*.{html, js}",
     "./notify/**/*.{html, js}",
     "./sidepanel/**/*.{html, js}",
+    "./collapse/**/*.{html, js}",
     "./*.js"
   ],
   darkMode: 'class',
