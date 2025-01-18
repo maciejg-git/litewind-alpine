@@ -224,11 +224,18 @@ export default function useValidation(input) {
 
 document.addEventListener("alpine:init", () => {
   Alpine.store("validation", {
-    inputs: {},
+    default: {}
   })
 
-  Alpine.directive("form", (el, {value, expression}) => {
-    let formName = value
+  Alpine.data("form", () => {
+    return {
+      formName: "",
+
+      init() {
+        this.formName = Alpine.bound(this.$el, "data-form")
+        Alpine.store("validation")[this.formName] = {}
+      }
+    }
   })
 
   Alpine.directive("validation", (el, {value, expression}, {Alpine, effect, evaluate, evaluateLater, cleanup}) => {
@@ -236,8 +243,9 @@ document.addEventListener("alpine:init", () => {
     let validateValue = Alpine.$data(el).validateValue
     let name = value ?? Alpine.bound(el, "name") ?? ""
     let getValue = evaluateLater(validateValue)
+    let formName = Alpine.$data(el).formName ?? "default"
 
-    Alpine.store("validation").inputs[name] = {
+    Alpine.store("validation")[formName][name] = {
       status: {},
       messages: {},
       state: "",
@@ -245,7 +253,7 @@ document.addEventListener("alpine:init", () => {
 
     let validation = useValidation({
       ...exp,
-      validation: Alpine.store("validation").inputs[name]
+      validation: Alpine.store("validation")[formName][name]
     })
 
     let getter = () => {
@@ -260,13 +268,13 @@ document.addEventListener("alpine:init", () => {
 
     Alpine.addScopeToNode(el, {
       touch: validation.touch,
-      validation: Alpine.store("validation").inputs[name]
+      validation: Alpine.store("validation")[formName][name]
     })
 
     cleanup(watchValue)
   })
 
-  Alpine.magic("validation", (el, {Alpine}) => input => {
-    return Alpine.store("validation").inputs[input]
+  Alpine.magic("validation", (el, {Alpine}) => ( form, input ) => {
+    return Alpine.store("validation")[form][input]
   })
 })

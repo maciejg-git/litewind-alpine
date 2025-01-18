@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
+    <link href="/output.css" rel="stylesheet" />
     <script defer type="module" src="./collapse.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script
@@ -13,14 +14,39 @@
   </head>
   <body>
     <div x-data="collapse">
-      <button x-bind="trigger">collapse</button>
-      <div x-bind="content" x-collapse>
-Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-      Lorem Ipsum has been the industry's standard dummy text ever since the
-      1500s, when an unknown printer took a galley of type and scrambled it to
-      make a type specimen book. It has survived not only five centuries, but
-      also the leap into electronic typesetting, remaining essentially
-      unchanged.
+      <button x-bind="trigger" class="block flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600">collapse</button>
+      <div x-bind="content" x-collapse x-cloak>
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+        Lorem Ipsum has been the industry's standard dummy text ever since the
+        1500s, when an unknown printer took a galley of type and scrambled it to
+        make a type specimen book. It has survived not only five centuries, but
+        also the leap into electronic typesetting, remaining essentially
+        unchanged.
+      </div>
+    </div>
+    accordion
+    <div x-data="accordion">
+      <div x-data="collapse">
+        <button x-bind="trigger" class="block flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600">collapse</button>
+        <div x-bind="content" x-collapse x-cloak>
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+          Lorem Ipsum has been the industry's standard dummy text ever since the
+          1500s, when an unknown printer took a galley of type and scrambled it to
+          make a type specimen book. It has survived not only five centuries, but
+          also the leap into electronic typesetting, remaining essentially
+          unchanged.
+        </div>
+      </div>
+      <div x-data="collapse">
+        <button x-bind="trigger" class="block flex items-center rounded-md border-violet-700 bg-violet-500 px-4 py-2 font-medium text-gray-100 hover:bg-violet-600 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600">collapse</button>
+        <div x-bind="content" x-collapse x-cloak>
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+          Lorem Ipsum has been the industry's standard dummy text ever since the
+          1500s, when an unknown printer took a galley of type and scrambled it to
+          make a type specimen book. It has survived not only five centuries, but
+          also the leap into electronic typesetting, remaining essentially
+          unchanged.
+        </div>
       </div>
     </div>
   </body>

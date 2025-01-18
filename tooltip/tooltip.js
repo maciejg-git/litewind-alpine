@@ -92,6 +92,7 @@ document.addEventListener("alpine:init", () => {
         flip: true,
         autoPlacement: false,
         transition: "fade",
+        func: false,
       };
 
       let getOptions = (modifiers) => {
