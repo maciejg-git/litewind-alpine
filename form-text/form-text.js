@@ -3,11 +3,13 @@ document.addEventListener("alpine:init", () => {
     return {
       input: "",
       validation: null,
+      form: "default",
 
       init() {
         this.$nextTick(() => {
           this.input = Alpine.bound(this.$el, "data-input") ?? this.input;
-          this.validation = Alpine.store("validation").inputs[this.input];
+          this.form = Alpine.$data(this.$el).formName ?? this.form
+          this.validation = Alpine.store("validation")[this.form][this.input];
         });
       },
       getMessages() {
