@@ -1,7 +1,5 @@
 document.addEventListener("alpine:init", () => {
   Alpine.data("input", (dataExtend = {}) => {
-    let isFunction = (f) => typeof f === "function";
-
     let bind = {};
     ["input", "loader", "clearButton"].forEach((i) => {
       if (dataExtend[i]) {
@@ -85,7 +83,7 @@ document.addEventListener("alpine:init", () => {
           this.isTouched = true;
         },
         "@blur"() {
-          if (isFunction(this.touch)) this.touch();
+          if (typeof this.touch === "function") this.touch();
         },
         ...bind.input,
       },

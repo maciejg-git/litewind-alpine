@@ -114,13 +114,8 @@ export default function useValidation(input) {
       );
     };
 
-    let validate = (value, event) => {
-      let newStatus = {
-        touched: validation.status.touched || event === "touch",
-        validated: validation.status.validated || event === "formValidate",
-        dirty: validation.status.dirty || !!(value && !!value.length),
-      };
-
+    let validate = (value) => {
+      let newStatus = {}
       let newMessages = {};
 
       newStatus.valid = rules.reduce((valid, rule) => {
@@ -151,7 +146,11 @@ export default function useValidation(input) {
 
     let on = (event, updatedValue) => {
       value = updatedValue !== undefined ? updatedValue : value
-      let res = validate(value, event);
+      let res = validate(value);
+
+      res.status.touched = validation.status.touched || event === "touch"
+      res.status.validated = validation.status.validated || event === "formValidate"
+      res.status.dirty = validation.status.dirty || !!(value && !!value.length)
 
       validation.status = res.status
       validation.messages = res.messages
@@ -241,11 +240,11 @@ document.addEventListener("alpine:init", () => {
   Alpine.directive("validation", (el, {value, expression}, {Alpine, effect, evaluate, evaluateLater, cleanup}) => {
     let exp = JSON.parse(expression)
     let validateValue = Alpine.$data(el).validateValue
-    let name = value ?? Alpine.bound(el, "name") ?? ""
+    let inputName = value ?? Alpine.bound(el, "name") ?? ""
     let getValue = evaluateLater(validateValue)
     let formName = Alpine.$data(el).formName ?? "default"
 
-    Alpine.store("validation")[formName][name] = {
+    Alpine.store("validation")[formName][inputName] = {
       status: {},
       messages: {},
       state: "",
@@ -253,7 +252,7 @@ document.addEventListener("alpine:init", () => {
 
     let validation = useValidation({
       ...exp,
-      validation: Alpine.store("validation")[formName][name]
+      validation: Alpine.store("validation")[formName][inputName]
     })
 
     let getter = () => {
@@ -262,13 +261,15 @@ document.addEventListener("alpine:init", () => {
       return value
     }
 
+    validation.updateValue(getter())
+
     let watchValue = Alpine.watch(getter, (value) => {
       validation.updateValue(value)
     })
 
     Alpine.addScopeToNode(el, {
       touch: validation.touch,
-      validation: Alpine.store("validation")[formName][name]
+      validation: Alpine.store("validation")[formName][inputName]
     })
 
     cleanup(watchValue)

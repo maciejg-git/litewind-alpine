@@ -28,8 +28,6 @@ document.addEventListener("alpine:init", () => {
           text.charAt(0).toUpperCase() + text.substring(1).toLowerCase(),
       );
 
-    let isFunction = (f) => typeof f === "function";
-
     let definitionDefaults = {
       sortable: false,
       filterable: true,
@@ -150,7 +148,7 @@ document.addEventListener("alpine:init", () => {
       getDataPaginated() {
         let filteredData = this.getDataFiltered();
 
-        if (isFunction(this.onFilter)) {
+        if (typeof this.onFilter === "function") {
           this.onFilter(filteredData);
         }
 

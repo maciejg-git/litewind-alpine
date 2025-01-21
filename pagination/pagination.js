@@ -1,12 +1,26 @@
 document.addEventListener("alpine:init", () => {
   Alpine.data("pagination", (dataExtend = {}) => {
+    let aria = {
+      main: {
+        "aria-label": "Pagination",
+      },
+      pageButton: {
+        ":aria-current"() {
+          return this.isSelected() ? "page" : false
+        }
+      },
+      prevButton: {
+        "aria-label": "Previous",
+      },
+      nextButton: {
+        "aria-label": "Next",
+      },
+    }
     let clamp = (v, f, t) => (v < f ? f : v >= t ? t : v);
 
     let getNumberRange = (from, count) => {
       return Array.from({ length: count }, (_, i) => i + from);
     };
-
-    let isFunction = (f) => typeof f === "function";
 
     let bind = {};
     ["prevButton", "nextButton", "pageButton"].forEach((i) => {
@@ -45,6 +59,7 @@ document.addEventListener("alpine:init", () => {
         Alpine.bind(this.$el, {
           ["x-modelable"]: "currentPage",
         });
+        Alpine.bind(this.$el, aria.main)
       },
       getPagesCount() {
         if (this.itemsPerPage <= 0 || this.itemsCount <= 0) return 1;
@@ -92,12 +107,14 @@ document.addEventListener("alpine:init", () => {
           this.handleClickPrev();
         },
         ...bind.prevButton,
+        ...aria.prevButton,
       },
       nextButton: {
         "@click"() {
           this.handleClickNext();
         },
         ...bind.nextButton,
+        ...aria.nextButton,
       },
       pageButton: {
         "@click"() {
@@ -115,6 +132,7 @@ document.addEventListener("alpine:init", () => {
           return c;
         },
         ...bind.pageButton,
+        ...aria.pageButton,
       },
       ...dataExtend,
     };
