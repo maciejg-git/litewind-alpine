@@ -1,5 +1,25 @@
 document.addEventListener("alpine:init", () => {
   Alpine.data("dropdown", (dataExtend = {}) => {
+    let aria = {
+      main: {
+        "x-id"() {
+          return ["dropdown-aria"]
+        }
+      },
+      trigger: {
+        "aria-haspopup": true,
+        ":aria-controls"() {
+          return this.$id("dropdown-aria")
+        }
+      },
+      menu: {
+        ":id"() {
+          return this.$id("dropdown-aria")
+        },
+        role: "menu"
+      }
+    }
+
     let floatingUIoptions = [
       "placement",
       "offsetX",
@@ -88,6 +108,8 @@ document.addEventListener("alpine:init", () => {
             this.close();
           },
         });
+
+        Alpine.bind(this.$el, aria.main)
       },
       scheduleHide() {
         return setTimeout(() => {
@@ -127,6 +149,7 @@ document.addEventListener("alpine:init", () => {
       trigger: {
         "x-ref": "trigger",
         ...bind.trigger,
+        ...aria.trigger,
       },
       menu: {
         "x-show"() {
@@ -148,6 +171,7 @@ document.addEventListener("alpine:init", () => {
           }
         },
         ...bind.menu,
+        ...aria.menu,
       },
       ...dataExtend,
     };

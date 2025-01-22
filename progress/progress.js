@@ -1,5 +1,14 @@
 document.addEventListener("alpine:init", () => {
   Alpine.data("progress", (dataExtend = {}) => {
+    let aria = {
+      main: {
+        role: "progressbar",
+        ":aria-valuenow"() {
+          return this._value
+        }
+      }
+    }
+
     let bind = {};
     ["progressBar"].forEach((i) => {
       if (dataExtend[i]) {
@@ -16,6 +25,7 @@ document.addEventListener("alpine:init", () => {
         this.interactive = JSON.parse(
           Alpine.bound(this.$el, "data-interactive") ?? this.interactive,
         );
+
         Alpine.bind(this.$el, {
           "x-modelable": "_value",
           "@click"() {
@@ -25,6 +35,8 @@ document.addEventListener("alpine:init", () => {
             this.$dispatch("progress-clicked", x);
           },
         });
+
+        Alpine.bind(this.$el, aria.main)
       },
       progressBar: {
         ":style"() {

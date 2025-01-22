@@ -72,8 +72,6 @@ let globalValidators = {
   }
 };
 
-let isFunction = (v) => typeof v === "function";
-
 let validOptions = {
   validateOn: ["blur", "immediate", "form"],
   validateMode: ["silent", "eager"],
@@ -101,9 +99,6 @@ export default function useValidation(input) {
 
     validateOn = validOptions.validateOn.includes(validateOn) ? validateOn : "blur"
     validateMode = validOptions.validateMode.includes(validateMode) ? validateMode : "silent"
-    let stateDefaultValue = ""
-    let stateValidValue = "valid"
-    let stateInvalidValue = "invalid"
 
     let isOptional = (value) => {
       return (
@@ -122,7 +117,7 @@ export default function useValidation(input) {
         let [key, v] =
           typeof rule === "string" ? [rule, null] : Object.entries(rule)[0];
 
-        let validator = (isFunction(v) && v) || globalValidators[key];
+        let validator = (typeof v === "function" && v) || globalValidators[key];
 
         if (!validator) return valid;
 
@@ -163,7 +158,7 @@ export default function useValidation(input) {
       // optional input (not required and empty) cannot be valid or invalid,
       // return defalut state
       if (optional) {
-        return stateDefaultValue;
+        return "";
       }
 
       // input has not been yet interacted in any way, return current state
@@ -185,16 +180,16 @@ export default function useValidation(input) {
       // and can change state
       // for invalid inputs always return invalid state
       if (!valid) {
-        return stateInvalidValue;
+        return "invalid";
       }
 
       // for valid inputs return valid only in eager mode or when changing
       // from non default state
       if (
         validateMode === "eager" ||
-        validation.state !== stateDefaultValue
+        validation.state !== ""
       ) {
-        return stateValidValue;
+        return "valid";
       }
 
       // return default state
@@ -207,7 +202,7 @@ export default function useValidation(input) {
       validation.status = { ...defaultStatus };
       validation.state = "";
       validation.messages = {};
-      isFunction(onReset) && onReset();
+      typeof onReset === "function" && onReset();
     };
 
     return {
@@ -239,10 +234,10 @@ document.addEventListener("alpine:init", () => {
 
   Alpine.directive("validation", (el, {value, expression}, {Alpine, effect, evaluate, evaluateLater, cleanup}) => {
     let exp = JSON.parse(expression)
-    let validateValue = Alpine.$data(el).validateValue
     let inputName = value ?? Alpine.bound(el, "name") ?? ""
-    let getValue = evaluateLater(validateValue)
     let formName = Alpine.$data(el).formName ?? "default"
+    let validateValue = Alpine.$data(el).validateValue
+    let getValue = evaluateLater(validateValue)
 
     Alpine.store("validation")[formName][inputName] = {
       status: {},
