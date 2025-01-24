@@ -1,5 +1,12 @@
 document.addEventListener("alpine:init", () => {
   Alpine.data("formText", () => {
+    let aria = {
+      message: {
+        role: "alert",
+        "aria-live": "polite",
+      }
+    }
+
     return {
       input: "",
       validation: null,
@@ -32,6 +39,7 @@ document.addEventListener("alpine:init", () => {
 
           return c;
         },
+        ...aria.message,
       },
     };
   });

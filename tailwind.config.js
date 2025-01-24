@@ -19,6 +19,7 @@ module.exports = {
     "./notify/**/*.{html, js}",
     "./sidepanel/**/*.{html, js}",
     "./collapse/**/*.{html, js}",
+    "./breadcrumb/**/*.{html, js}",
     "./*.js"
   ],
   darkMode: 'class',

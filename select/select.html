@@ -145,9 +145,9 @@
           <template x-for="(item, index) in getItems()">
             <button
               x-bind="option"
-              class="w-full cursor-pointer scroll-mb-20 scroll-mt-20 px-6 py-4 text-left text-text-800 transition-colors hover:bg-secondary-100 focus:outline-none dark:text-text-300 dark:hover:bg-dark-600"
-              class-selected="bg-secondary-200 dark:bg-dark-700"
-              class-highlight="bg-secondary-100 dark:bg-dark-600"
+              class="w-full cursor-pointer scroll-mb-20 scroll-mt-20 px-6 py-4 text-left transition-colors focus:outline-none"
+              class-default="text-text-800 hover:bg-secondary-100 dark:text-text-300 dark:hover:bg-dark-600 focus:bg-secondary-200 dark:focus:bg-dark-600"
+              class-selected="bg-secondary-200 dark:bg-dark-600 focus:bg-secondary-300 dark:focus:bg-dark-700"
             >
               <span x-text="item.text"></span>
             </button>

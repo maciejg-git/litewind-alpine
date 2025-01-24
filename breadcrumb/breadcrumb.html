@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link href="/output.css" rel="stylesheet" />
+    <script defer type="module" src="./breadcrumb.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    <ul
+      x-data="breadcrumb"
+      :data-items="['item', 'item 2', 'item 4']"
+      class="flex gap-x-2"
+    >
+      <template x-for="(item, index) in items">
+        <li class="flex gap-x-2">
+          <a href="" x-text="item"></a>
+          <span x-text="divider" x-show="index < items.length - 1"></span>
+        </li>
+      </template>
+    </ul>
+  </body>
+</html>

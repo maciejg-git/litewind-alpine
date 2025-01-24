@@ -1,5 +1,11 @@
 document.addEventListener("alpine:init", () => {
   Alpine.data("dropdownContext", (dataExtend = {}) => {
+    let aria = {
+      menu: {
+        role: "menu",
+      }
+    }
+
     let floatingUIoptions = [
       "placement",
       "offsetX",
@@ -92,6 +98,7 @@ document.addEventListener("alpine:init", () => {
           }
         },
         ...bind.menu,
+        ...aria.menu,
       },
       ...dataExtend,
     };

@@ -1,10 +1,10 @@
 document.addEventListener("alpine:init", () => {
   Alpine.data("modal", (dataExtend = {}) => {
     let aria = {
-      content: {
+      main: {
         role: "dialog",
-        ["aria-modal"]: "true",
-      },
+        "aria-modal": true,
+      }
     };
 
     let bind = {};
@@ -34,6 +34,8 @@ document.addEventListener("alpine:init", () => {
             );
           });
         });
+
+        Alpine.bind(this.$el, aria.main)
       },
       getScrollBarWidth() {
         return window.innerWidth - document.documentElement.clientWidth;

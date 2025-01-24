@@ -280,9 +280,8 @@ document.addEventListener("alpine:init", () => {
           let c = "";
           if (this.selected.has(this.item.value)) {
             c += (classes["class-selected"]?.textContent || "") + " ";
-          }
-          if (+this.$el.dataset.index === this.highlightedIndex) {
-            c += (classes["class-highlight"]?.textContent || "") + " ";
+          } else {
+            c += (classes["class-default"]?.textContent || "") + " "
           }
 
           return c;

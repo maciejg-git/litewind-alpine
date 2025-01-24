@@ -1,5 +1,9 @@
 document.addEventListener("alpine:init", () => {
   Alpine.data("notify", (dataExtend = {}) => {
+    let aria = {
+      role: "status",
+    }
+
     let bind = {};
     ["notification"].forEach((i) => {
       if (dataExtend[i]) {
@@ -195,6 +199,7 @@ document.addEventListener("alpine:init", () => {
           });
         },
         ...bind.notification,
+        ...aria.notification,
       },
       ...dataExtend,
     };

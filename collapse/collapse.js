@@ -1,5 +1,34 @@
 document.addEventListener("alpine:init", () => {
-  Alpine.data("collapse", () => {
+  Alpine.data("collapse", (dataExtend = {}) => {
+    let aria = {
+      main: {
+        "x-id"() {
+          return ["collapse-aria"]
+        }
+      },
+      trigger: {
+        ":aria-expanded"() {
+          return this.isOpen
+        },
+        ":aria-controls"() {
+          return this.$id("collapse-aria")
+        }
+      },
+      content: {
+        ":id"() {
+          return this.$id("collapse-aria")
+        }
+      }
+    }
+
+    let bind = {};
+    ["trigger", "content"].forEach((i) => {
+      if (dataExtend[i]) {
+        bind[i] = dataExtend[i];
+        delete dataExtend[i];
+      }
+    });
+
     return {
       isOpen: false,
       id: null,
@@ -11,6 +40,8 @@ document.addEventListener("alpine:init", () => {
             this.updateAccordion(this)
           })
         }
+
+        Alpine.bind(this.$el, aria.main)
       },
       open() {
         this.isOpen = true
@@ -29,13 +60,18 @@ document.addEventListener("alpine:init", () => {
       trigger: {
         "@click"() {
           this.toggle()
-        }
+        },
+        ...bind.trigger,
+        ...aria.trigger,
       },
       content: {
         "x-show"() {
           return this.isOpen
         },
-      }
+        ...bind.content,
+        ...aria.content,
+      },
+      ...dataExtend,
     }
   })
 

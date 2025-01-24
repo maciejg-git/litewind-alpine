@@ -32,6 +32,19 @@ document.addEventListener("alpine:init", () => {
       },
       toggle() {
         this.isOpen = !this.open
+      },
+      sidepanel: {
+        "x-show"() {
+          return this.isOpen
+        }
+      },
+      backdrop: {
+        "x-show"() {
+          return this.isOpen
+        },
+        "@click"() {
+          this.close()
+        }
       }
     }
   })

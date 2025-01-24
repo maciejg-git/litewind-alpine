@@ -226,7 +226,7 @@ document.addEventListener("alpine:init", () => {
       formName: "",
 
       init() {
-        this.formName = Alpine.bound(this.$el, "data-form")
+        this.formName = Alpine.bound(this.$el, "data-form-name")
         Alpine.store("validation")[this.formName] = {}
       }
     }

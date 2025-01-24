@@ -8,13 +8,14 @@
     <script defer type="module" src="./input.js"></script>
     <script defer type="module" src="/scripts/validation.js"></script>
     <script defer type="module" src="/form-text/form-text.js"></script>
+    <script defer type="module" src="/plugins/extend.js"></script>
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
   </head>
   <body>
-    <div x-data="form" data-form="login">
+    <div x-data="form" data-form-name="login">
       <div x-data="{model: ''}">
         <span x-text="model"></span>
         <div
