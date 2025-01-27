@@ -15,14 +15,16 @@
   <button x-data @click="$dispatch('open-sidepanel', 'sidepanel')">open</button>
   <body>
     <div x-data="sidepanel" id="sidepanel">
-      <div
-        x-bind="backdrop"
-        x-alt-transition='{
-          "enter": ["opacity-0", "transition ease-out duration-100", "opacity-100"],
-          "leave": ["opacity-100", "transition ease-in duration-100", "opacity-0"]
-        }'
-        class="fixed inset-0 z-30 overflow-y-auto bg-black/50"
-      ></div>
+      <template x-if="isModal">
+        <div
+          x-bind="backdrop"
+          x-alt-transition='{
+            "enter": ["opacity-0", "transition ease-out duration-100", "opacity-100"],
+            "leave": ["opacity-100", "transition ease-in duration-100", "opacity-0"]
+          }'
+          class="fixed inset-0 z-30 overflow-y-auto bg-black/50"
+        ></div>
+      </template>
       <aside
         x-bind="sidepanel"
         class="fixed right-0 top-0 z-30 h-full w-[350px] bg-secondary-100 px-6 text-left shadow-lg shadow-black/40 dark:bg-dark-700 dark:text-text-300"

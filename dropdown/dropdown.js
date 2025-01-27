@@ -7,18 +7,30 @@ document.addEventListener("alpine:init", () => {
         }
       },
       trigger: {
-        "aria-haspopup": true,
+        ":aria-expanded"() {
+          return this.isShow
+        },
         ":aria-controls"() {
           return this.$id("dropdown-aria")
+        },
+        ":aria-haspopup"() {
+          return this.role
         }
       },
       menu: {
         ":id"() {
           return this.$id("dropdown-aria")
         },
-        role: "menu"
-      }
+        ":role"() {
+          return this.role
+        }
+      },
+      menuItem: {
+        role: "menuitem",
+      },
     }
+
+    let ariaRoles = ["menu", "listbox", "dialog"]
 
     let floatingUIoptions = [
       "placement",
@@ -48,6 +60,7 @@ document.addEventListener("alpine:init", () => {
       offsetY: 0,
       flip: false,
       autoPlacement: false,
+      role: "",
 
       init() {
         this.$nextTick(() => {
@@ -70,6 +83,8 @@ document.addEventListener("alpine:init", () => {
           this.autoPlacement = JSON.parse(
             Alpine.bound(this.$el, "data-auto-placement") ?? this.autoPlacement,
           );
+          let role = Alpine.bound(this.$el, "data-role")
+          this.role = ariaRoles.includes(role) ? role : null
 
           let options = floatingUIoptions.reduce((acc, v) => {
             return { ...acc, [v]: this[v]}
@@ -172,6 +187,9 @@ document.addEventListener("alpine:init", () => {
         },
         ...bind.menu,
         ...aria.menu,
+      },
+      menuItem: {
+        ...aria.menuItem,
       },
       ...dataExtend,
     };

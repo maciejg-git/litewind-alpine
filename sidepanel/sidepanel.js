@@ -10,8 +10,12 @@ document.addEventListener("alpine:init", () => {
 
     return {
       isOpen: false,
+      isModal: false,
 
       init() {
+        this.$nextTick(() => {
+          this.isModal = JSON.parse(Alpine.bound(this.$el, "data-modal") ?? this.isModal)
+        })
         Alpine.bind(this.$el, {
           "x-show"() {
             return this.isOpen
