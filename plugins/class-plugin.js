@@ -2,74 +2,79 @@ document.addEventListener("alpine:init", () => {
   window.Alpine.directive(
     "class",
     (el, { value, modifiers, expression }, { effect, evaluateLater }) => {
-      let camelValue = value && value
-        .toLowerCase()
-        .replace(/-(\w)/g, (match, char) => char.toUpperCase());
+      let camelValue =
+        value &&
+        value
+          .toLowerCase()
+          .replace(/-(\w)/g, (match, char) => char.toUpperCase());
 
       let mod = {
         not: modifiers.includes("not"),
         only: modifiers.includes("only"),
-        else: modifiers.includes("else")
-      }
+        else: modifiers.includes("else"),
+      };
 
       let getValue = camelValue && evaluateLater(camelValue);
 
       let classes = expression.split(" ");
 
       if (!Alpine.$data(el)._xClasses) {
-        Alpine.addScopeToNode(el, { _xClasses: [], _xClassesEnable: false })
+        Alpine.addScopeToNode(el, { _xClasses: [], _xClassesEnable: false });
       }
-      Alpine.$data(el)._xClasses.push({ getValue, mod, classes })
+      Alpine.$data(el)._xClasses.push({ getValue, mod, classes });
 
       Alpine.nextTick(() => {
         if (!Alpine.$data(el)._xClassesEnable) {
-          Alpine.$data(el)._xClassesEnable = true
+          Alpine.$data(el)._xClassesEnable = true;
+
           effect(() => {
-            let only = []
-            let value = []
-            let e = []
-            let eMod = []
+            let onlyClass = [];
+            let valueClass = [];
+            let elseClass = [];
+            let elseModClass = [];
+
             Alpine.$data(el)._xClasses.forEach((i) => {
-              i.getValue && i.getValue((v) => {
-                if (i.mod.not ? !v : v) {
-                  if (i.mod.only) {
-                    only.push(i.classes)
-                    return
-                  }
-                  if (i.mod.else) {
-                    if (!e.length) {
-                      e.push(i.classes)
+              i.getValue &&
+                i.getValue((v) => {
+                  if (i.mod.not ? !v : v) {
+                    if (i.mod.only) {
+                      onlyClass.push(i.classes);
+                      return;
                     }
-                    return
+                    if (i.mod.else) {
+                      if (!elseClass.length) {
+                        elseClass.push(i.classes);
+                      }
+                      return;
+                    }
+                    valueClass.push(i.classes);
                   }
-                  value.push(i.classes)
-                }
-              })
+                });
               if (!i.getValue && i.mod.else) {
-                eMod.push(i.classes)
+                elseModClass.push(i.classes);
               }
-            })
+            });
 
-            el.classList.remove(...classes)
+            el.classList.remove(...classes);
 
-            classes = []
-            if (only.length) {
-              classes = only.flat()
+            classes = [];
+            if (onlyClass.length) {
+              classes = onlyClass.flat();
             } else {
-              if (e.length) {
-                classes = e.flat()
-              } else if (eMod.length) {
-                classes = eMod.flat()
+              if (elseClass.length) {
+                classes = elseClass.flat();
+              } else if (elseModClass.length) {
+                classes = elseModClass.flat();
               }
-              if (value.length) {
-                classes.push(...value.flat())
+              if (valueClass.length) {
+                classes.push(...valueClass.flat());
               }
-            } 
+            }
 
-            el.classList.add(...classes)
-          })
+            el.classList.add(...classes);
+          });
         }
-      })
+      });
     },
   );
 });
