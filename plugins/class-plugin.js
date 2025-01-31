@@ -1,6 +1,6 @@
 document.addEventListener("alpine:init", () => {
   window.Alpine.directive(
-    "cs",
+    "class",
     (el, { value, modifiers, expression }, { effect, evaluateLater }) => {
       let camelValue = value && value
         .toLowerCase()
@@ -16,24 +16,20 @@ document.addEventListener("alpine:init", () => {
 
       let classes = expression.split(" ");
 
-      if (!Alpine.$data(el)._csClasses) {
-        Alpine.addScopeToNode(el, { _csClasses: [], _csEnable: false })
+      if (!Alpine.$data(el)._xClasses) {
+        Alpine.addScopeToNode(el, { _xClasses: [], _xClassesEnable: false })
       }
-      Alpine.$data(el)._csClasses.push({
-        getValue,
-        mod,
-        classes,
-      })
+      Alpine.$data(el)._xClasses.push({ getValue, mod, classes })
 
       Alpine.nextTick(() => {
-        if (!Alpine.$data(el)._csEnable) {
-          Alpine.$data(el)._csEnable = true
-          Alpine.effect(() => {
+        if (!Alpine.$data(el)._xClassesEnable) {
+          Alpine.$data(el)._xClassesEnable = true
+          effect(() => {
             let only = []
             let value = []
             let e = []
             let eMod = []
-            Alpine.$data(el)._csClasses.forEach((i) => {
+            Alpine.$data(el)._xClasses.forEach((i) => {
               i.getValue && i.getValue((v) => {
                 if (i.mod.not ? !v : v) {
                   if (i.mod.only) {
@@ -53,7 +49,9 @@ document.addEventListener("alpine:init", () => {
                 eMod.push(i.classes)
               }
             })
+
             el.classList.remove(...classes)
+
             classes = []
             if (only.length) {
               classes = only.flat()
@@ -67,20 +65,11 @@ document.addEventListener("alpine:init", () => {
                 classes.push(...value.flat())
               }
             } 
+
             el.classList.add(...classes)
           })
         }
       })
-
-      // effect(() => {
-      //   getValue((v) => {
-      //     if (mod.not ? !v : v) {
-      //       el.classList.add(...classes);
-      //     } else {
-      //       el.classList.remove(...classes);
-      //     }
-      //   });
-      // });
     },
   );
 });
