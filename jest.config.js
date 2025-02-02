@@ -3,6 +3,7 @@ const config = {
   testEnvironmentOptions: {
     runScripts: "dangerously",
     resources: "usable",
+    url: "http://localhost:8080"
   }
 }
 
