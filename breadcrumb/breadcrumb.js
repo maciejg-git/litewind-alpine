@@ -1,4 +1,4 @@
-document.addEventListener("alpine:init", () => {
+export default function (Alpine) {
   Alpine.data("breadcrumb", () => {
     return {
       items: [],
@@ -14,4 +14,4 @@ document.addEventListener("alpine:init", () => {
       }
     }
   })
-})
+}  

@@ -1,4 +1,4 @@
-document.addEventListener("alpine:init", () => {
+export default function (Alpine) {
   Alpine.data("modal", (dataExtend = {}) => {
     let aria = {
       main: {
@@ -100,4 +100,4 @@ document.addEventListener("alpine:init", () => {
       ...dataExtend,
     };
   });
-});
+}  

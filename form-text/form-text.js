@@ -1,4 +1,4 @@
-document.addEventListener("alpine:init", () => {
+export default function (Alpine) {
   Alpine.data("formText", () => {
     let aria = {
       message: {
@@ -43,4 +43,4 @@ document.addEventListener("alpine:init", () => {
       },
     };
   });
-});
+}  

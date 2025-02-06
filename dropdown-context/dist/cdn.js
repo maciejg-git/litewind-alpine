@@ -1,0 +1,106 @@
+(() => {
+  // ../dropdown-context.js
+  function dropdown_context_default(Alpine2) {
+    Alpine2.data("dropdownContext", (dataExtend = {}) => {
+      let aria = {
+        menu: {
+          role: "menu"
+        }
+      };
+      let floatingUIoptions = [
+        "placement",
+        "offsetX",
+        "offsetY",
+        "flip",
+        "autoPlacement",
+        "inline"
+      ];
+      let bind = {};
+      ["menu"].forEach((i) => {
+        if (dataExtend[i]) {
+          bind[i] = dataExtend[i];
+          delete dataExtend[i];
+        }
+      });
+      return {
+        isShow: false,
+        floating: null,
+        contextData: {},
+        autoClose: true,
+        placement: "bottom-start",
+        offsetX: 0,
+        offsetY: 0,
+        flip: false,
+        autoPlacement: false,
+        init() {
+          this.$nextTick(() => {
+            this.autoClose = JSON.parse(
+              Alpine2.bound(this.$el, "data-auto-close") ?? this.autoClose
+            );
+            this.placement = Alpine2.bound(this.$el, "data-placement") ?? this.placement;
+            this.offsetX = parseInt(
+              Alpine2.bound(this.$el, "data-offset-x") ?? this.offsetX
+            );
+            this.offsetY = parseInt(
+              Alpine2.bound(this.$el, "data-offset-y") ?? this.offsetY
+            );
+            this.flip = JSON.parse(
+              Alpine2.bound(this.$el, "data-flip") ?? this.flip
+            );
+            this.autoPlacement = JSON.parse(
+              Alpine2.bound(this.$el, "data-auto-placement") ?? this.autoPlacement
+            );
+            let options = floatingUIoptions.reduce((acc, v) => {
+              return { ...acc, [v]: this[v] };
+            });
+            this.floating = useFloating(null, this.$refs.menu, options);
+          });
+          Alpine2.bind(this.$el, {
+            ["@keydown.escape.window.prevent"]() {
+              this.close();
+            }
+          });
+        },
+        open() {
+          this.floating.startAutoUpdate();
+          this.isShow = true;
+        },
+        close() {
+          this.floating.destroy();
+          this.isShow = false;
+        },
+        menu: {
+          "x-show"() {
+            return this.isShow;
+          },
+          "@open-contextmenu.window"() {
+            if (this.$event.detail.id !== this.$root.id) {
+              return;
+            }
+            let mouseEvent = this.$event.detail.$event;
+            this.floating.updateVirtualElement(mouseEvent);
+            this.contextData = this.$event.detail.data;
+            this.open();
+          },
+          "x-ref": "menu",
+          "@click.outside"() {
+            this.close();
+          },
+          "@click"() {
+            if (this.autoClose && this.$el.contains(this.$event.target)) {
+              this.close();
+            }
+          },
+          ...bind.menu,
+          ...aria.menu
+        },
+        ...dataExtend
+      };
+    });
+  }
+
+  // cdn.js
+  document.addEventListener("alpine:init", () => {
+    Alpine.plugin(dropdown_context_default);
+  });
+})();

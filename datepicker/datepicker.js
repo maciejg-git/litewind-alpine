@@ -1,4 +1,4 @@
-document.addEventListener("alpine:init", () => {
+export default function (Alpine) {
   Alpine.data("datepicker", (dataExtend = {}) => {
     let getNumberRange = (from, count) => {
       return Array.from({ length: count }, (_, i) => i + from);
@@ -356,4 +356,4 @@ document.addEventListener("alpine:init", () => {
       ...dataExtend,
     };
   });
-});
+}  

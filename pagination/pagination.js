@@ -1,4 +1,4 @@
-document.addEventListener("alpine:init", () => {
+export default function (Alpine) {
   Alpine.data("pagination", (dataExtend = {}) => {
     let aria = {
       main: {
@@ -137,4 +137,4 @@ document.addEventListener("alpine:init", () => {
       ...dataExtend,
     };
   });
-});
+}  

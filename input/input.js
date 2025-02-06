@@ -1,4 +1,4 @@
-document.addEventListener("alpine:init", () => {
+export default function (Alpine) {
   Alpine.data("input", (dataExtend = {}) => {
     let bind = {};
     ["input", "loader", "clearButton"].forEach((i) => {
@@ -102,4 +102,4 @@ document.addEventListener("alpine:init", () => {
       ...dataExtend,
     };
   });
-});
+}

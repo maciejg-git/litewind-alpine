@@ -1,4 +1,4 @@
-document.addEventListener("alpine:init", () => {
+export default function (Alpine) {
   Alpine.data("tabs", (dataExtend = {}) => {
     let aria = {
       tabBar: {
@@ -79,4 +79,4 @@ document.addEventListener("alpine:init", () => {
       ...dataExtend,
     };
   });
-});
+}  

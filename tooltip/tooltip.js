@@ -1,4 +1,4 @@
-document.addEventListener("alpine:init", () => {
+export default function (Alpine) {
   const correctPlacement = ["top", "bottom", "right", "left"]
     .map((i) => [i, i + "-start", i + "-end"])
     .flat();
@@ -155,4 +155,4 @@ document.addEventListener("alpine:init", () => {
       el.addEventListener("mouseleave", hide);
     },
   );
-});
+}

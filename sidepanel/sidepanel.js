@@ -1,4 +1,4 @@
-document.addEventListener("alpine:init", () => {
+export default function (Alpine) {
   Alpine.data("sidepanel", (dataExtend = {}) => {
     let bind = {};
     [].forEach((i) => {
@@ -52,4 +52,4 @@ document.addEventListener("alpine:init", () => {
       }
     }
   })
-})
+}  

@@ -1,4 +1,4 @@
-document.addEventListener("alpine:init", () => {
+export default function (Alpine) {
   Alpine.data("table", (dataExtend = {}) => {
     let undefNullToStr = (v) => (v === undefined || v === null ? "" : v);
 
@@ -196,4 +196,4 @@ document.addEventListener("alpine:init", () => {
       ...dataExtend,
     };
   });
-});
+}  

@@ -1,3 +1,5 @@
+import {computePosition, offset, inline, flip, autoPlacement, size, autoUpdate} from '@floating-ui/dom';
+
 export let useFloating = (reference, floating, opts) => {
   let options = {
     placement: opts.placement ?? "bottom-start",
@@ -42,21 +44,21 @@ export let useFloating = (reference, floating, opts) => {
   let stopUpdate = null;
 
   let update = async () => {
-    let { x, y, placement } = await FloatingUIDOM.computePosition(
+    let { x, y, placement } = await computePosition(
       localReference,
       floating,
       {
         placement: options.placement,
         middleware: [
-          FloatingUIDOM.offset({
+          offset({
             mainAxis: options.offsetY,
             crossAxis: options.offsetX,
           }),
-          options.inline && FloatingUIDOM.inline(),
-          options.flip && FloatingUIDOM.flip(),
-          options.autoPlacement && FloatingUIDOM.autoPlacement(),
+          options.inline && inline(),
+          options.flip && flip(),
+          options.autoPlacement && autoPlacement(),
           options.resize &&
-            FloatingUIDOM.size({
+            size({
               apply({ rects }) {
                 Object.assign(floating.style, {
                   width: `${rects.reference.width}px`,
@@ -80,7 +82,7 @@ export let useFloating = (reference, floating, opts) => {
   };
 
   let startAutoUpdate = () => {
-    stopUpdate = FloatingUIDOM.autoUpdate(localReference, floating, () => update());
+    stopUpdate = autoUpdate(localReference, floating, () => update());
   };
   
   return {
@@ -90,5 +92,3 @@ export let useFloating = (reference, floating, opts) => {
     updateVirtualElement,
   };
 };
-
-window.useFloating = useFloating
