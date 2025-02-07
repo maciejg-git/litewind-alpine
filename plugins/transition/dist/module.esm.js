@@ -1,4 +1,5 @@
-document.addEventListener("alpine:init", () => {
+// ../transition.js
+function transition_default(Alpine) {
   window.Alpine.directive(
     "alt-transition",
     (el, { value, expression }, { evaluate }) => {
@@ -15,9 +16,8 @@ document.addEventListener("alpine:init", () => {
       if (t.leave[1]) transition["x-transition:leave"] = t.leave[1];
       if (t.leave[0]) transition["x-transition:leave-start"] = t.leave[0];
       if (t.leave[2]) transition["x-transition:leave-end"] = t.leave[2];
-
       Alpine.bind(el, transition);
-    },
+    }
   );
   window.Alpine.directive(
     "vue-transition",
@@ -28,10 +28,15 @@ document.addEventListener("alpine:init", () => {
         ["x-transition:enter-end"]: `${expression}-enter-to`,
         ["x-transition:leave"]: `${expression}-leave-active`,
         ["x-transition:leave-start"]: `${expression}-leave-from`,
-        ["x-transition:leave-end"]: `${expression}-leave-to`,
+        ["x-transition:leave-end"]: `${expression}-leave-to`
       };
-
       Alpine.bind(el, transition);
-    },
+    }
   );
-});
+}
+
+// module.js
+var module_default = transition_default;
+export {
+  module_default as default
+};
