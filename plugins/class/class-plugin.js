@@ -1,4 +1,4 @@
-document.addEventListener("alpine:init", () => {
+export default function (Alpine) {
   window.Alpine.directive(
     "class",
     (el, { value, modifiers, expression }, { effect, evaluateLater }) => {
@@ -77,4 +77,4 @@ document.addEventListener("alpine:init", () => {
       });
     },
   );
-});
+}

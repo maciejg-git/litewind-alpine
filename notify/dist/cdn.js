@@ -66,14 +66,14 @@
           if (this.order === "default" && this.stickyAt === "end") {
             return [...this.notifications, ...this.notificationsSticky];
           }
+          if (this.order === "default" && this.stickyAt === "start") {
+            return [...this.notificationsSticky, ...this.notifications];
+          }
           if (this.order === "reversed" && this.stickyAt === "end") {
             return [
               ...this.notifications.toReversed(),
               ...this.notificationsSticky.toReversed()
             ];
-          }
-          if (this.order === "default" && this.stickyAt === "start") {
-            return [...this.notificationsSticky, ...this.notifications];
           }
           if (this.order === "reversed" && this.stickyAt === "start") {
             return [
@@ -91,6 +91,13 @@
           this.notifications.forEach((notification) => {
             notification.restartTimer();
           });
+        },
+        remove(notification) {
+          if (notification.sticky) {
+            this.removeStickyById(notification.notifyId);
+          } else {
+            this.removeById(notification.notifyId);
+          }
         },
         removeById(id) {
           let index = this.notifications.findIndex((i) => id === i.notifyId);
@@ -111,7 +118,6 @@
           this.notify.isVisible.value = false;
         },
         push(notify) {
-          let container = this;
           let newNotify = {
             header: notify?.header || "",
             text: notify?.text || "",
@@ -127,17 +133,10 @@
           };
           newNotify.restartTimer = function() {
             if (this.static) return null;
-            if (newNotify.sticky) {
-              this.timer = setTimeout(
-                () => this.isVisible.value = false,
-                this.delay
-              );
-            } else {
-              this.timer = setTimeout(
-                () => this.isVisible.value = false,
-                this.delay
-              );
-            }
+            this.timer = setTimeout(
+              () => this.isVisible.value = false,
+              this.delay
+            );
           };
           newNotify.pauseTimer = function() {
             if (this.timer) {
@@ -167,18 +166,10 @@
               if (value) return;
               Alpine2.bind(this.$el, {
                 "@transitionend"() {
-                  if (this.notify.sticky) {
-                    this.removeStickyById(this.notify.notifyId);
-                  } else {
-                    this.removeById(this.notify.notifyId);
-                  }
+                  this.remove(this.notify);
                 },
                 "@transitioncancel"() {
-                  if (this.notify.sticky) {
-                    this.removeStickyById(this.notify.notifyId);
-                  } else {
-                    this.removeById(this.notify.notifyId);
-                  }
+                  this.remove(this.notify);
                 }
               });
             });
