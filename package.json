@@ -1,8 +1,25 @@
 {
-  "name": "alpine-components",
-  "version": "0.0.0",
+  "name": "litewind-alpine",
+  "version": "0.0.1",
   "description": "",
-  "main": "floating.js",
+  "exports": {
+    "./breadcrumb.js": "./components/breadcrumb/dist/modules.esm.js",
+    "./collapse.js": "./components/collapse/dist/module.esm.js",
+    "./datepicker.js": "./components/datepicker/dist/module.esm.js",
+    "./dropdown.js": "./components/dropdown/dist/module.esm.js",
+    "./dropdown-context.js": "./components/dropdown-context/dist/module.esm.js",
+    "./modal.js": "./components/modal/dist/module.esm.js",
+    "./notify.js": "./components/notify/dist/module.esm.js",
+    "./pagination.js": "./components/pagination/dist/module.esm.js",
+    "./progress.js": "./components/progress/dist/module.esm.js",
+    "./sidepanel.js": "./components/sidepanel/dist/module.esm.js",
+    "./table.js": "./components/table/dist/module.esm.js",
+    "./tabs.js": "./components/tabs/dist/module.esm.js",
+    "./tooltip.js": "./components/tooltip/dist/module.esm.js",
+    "./form-text.js": "./components/form-text/dist/module.esm.js",
+    "./input.js": "./components/input/dist/module.esm.js",
+    "./select.js": "./components/select/dist/module.esm.js"
+  },
   "scripts": {
     "tailwind": "npx tailwindcss -i ./input.css -o ./output.css --watch",
     "dev": "npx http-server .\\ -c-1",

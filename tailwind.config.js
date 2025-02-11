@@ -3,23 +3,7 @@ const colors = require('tailwindcss/colors')
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [ 
-    "./tabs/**/*.{html, js}",
-    "./table/**/*.{html, js}",
-    "./pagination/**/*.{html, js}",
-    "./progress/**/*.{html, js}",
-    "./dropdown/**/*.{html, js}",
-    "./dropdown-context/**/*.{html, js}",
-    "./input/**/*.{html, js}",
-    "./checkbox/**/*.{html, js}",
-    "./modal/**/*.{html, js}",
-    "./tooltip/**/*.{html, js}",
-    "./select/**/*.{html, js}",
-    "./datepicker/**/*.{html, js}",
-    "./chevron/**/*.{html, js}",
-    "./notify/**/*.{html, js}",
-    "./sidepanel/**/*.{html, js}",
-    "./collapse/**/*.{html, js}",
-    "./breadcrumb/**/*.{html, js}",
+    "./components/**/*.{html, js}",
     "./*.js"
   ],
   darkMode: 'class',
