@@ -16,7 +16,7 @@ export default function (Alpine) {
         this.$nextTick(() => {
           this.input = Alpine.bound(this.$el, "data-input") ?? this.input;
           this.form = Alpine.$data(this.$el).formName ?? this.form
-          this.validation = Alpine.store("validation")[this.form][this.input];
+          this.validation = this.inputs[this.input]
         });
       },
       getMessages() {
