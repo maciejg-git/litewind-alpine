@@ -16,10 +16,13 @@ export default function (Alpine) {
         this.$nextTick(() => {
           this.input = Alpine.bound(this.$el, "data-input") ?? this.input;
           this.form = Alpine.$data(this.$el).formName ?? this.form
-          this.validation = this.inputs[this.input]
+          this.validation = this.inputs?.[this.input] ?? null
         });
       },
       getMessages() {
+        if (!this.validation) {
+          return {}
+        }
         if (this.validation?.state === "invalid") {
           if (this.validation.messages.required) {
             return { required: this.validation.messages.required };
