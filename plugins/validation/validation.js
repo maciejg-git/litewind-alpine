@@ -1,4 +1,4 @@
-import useValidation from "./use-validation.js"
+import useValidation from "./use-validation.js";
 
 export default function (Alpine) {
   Alpine.data("form", () => {
@@ -7,62 +7,65 @@ export default function (Alpine) {
       inputs: {},
 
       init() {
-        this.formName = Alpine.bound(this.$el, "data-form-name")
+        this.formName = Alpine.bound(this.$el, "data-form-name");
       },
       addInput(input) {
-        this.inputs[input.name] = input
+        this.inputs[input.name] = input;
+      },
+    };
+  });
+
+  Alpine.directive(
+    "validation",
+    (el, { value, expression }, { Alpine, evaluateLater, cleanup }) => {
+      let validateValue = Alpine.$data(el).validateValue;
+
+      if (!validateValue) {
+        return;
       }
-    }
-  })
 
-  Alpine.directive("validation", (el, {value, expression}, {Alpine, effect, evaluate, evaluateLater, cleanup}) => {
-    let validateValue = Alpine.$data(el).validateValue
+      let exp = JSON.parse(expression);
+      let inputName = value ?? Alpine.bound(el, "name") ?? "";
+      let getValue = evaluateLater(validateValue);
 
-    if (!validateValue) {
-      return
-    }
+      if (Alpine.$data(el).formName === undefined) {
+        return;
+      }
 
-    let exp = JSON.parse(expression)
-    let inputName = value ?? Alpine.bound(el, "name") ?? ""
-    let getValue = evaluateLater(validateValue)
+      Alpine.$data(el).addInput({
+        name: inputName,
+        status: {},
+        messages: {},
+        state: "",
+      });
 
-    if (Alpine.$data(el).formName === undefined) {
-      return
-    }
+      let validation = useValidation({
+        ...exp,
+        validation: Alpine.$data(el).inputs[inputName],
+      });
 
-    Alpine.$data(el).addInput({
-      name: inputName,
-      status: {},
-      messages: {},
-      state: "",
-    })
+      let getter = () => {
+        let value;
+        getValue((v) => (value = v));
+        return value;
+      };
 
-    let validation = useValidation({
-      ...exp,
-      validation: Alpine.$data(el).inputs[inputName]
-    })
+      validation.updateValue(getter());
 
-    let getter = () => {
-      let value
-      getValue((v) => value = v)
-      return value
-    }
+      let watchValue = Alpine.watch(getter, (value) => {
+        validation.updateValue(value);
+      });
 
-    validation.updateValue(getter())
+      Alpine.addScopeToNode(el, {
+        touch: validation.touch,
+        validation: Alpine.$data(el).inputs[inputName],
+      });
 
-    let watchValue = Alpine.watch(getter, (value) => {
-      validation.updateValue(value)
-    })
+      cleanup(watchValue);
+    },
+  );
 
-    Alpine.addScopeToNode(el, {
-      touch: validation.touch,
-      validation: Alpine.$data(el).inputs[inputName]
-    })
-
-    cleanup(watchValue)
-  })
-
-  Alpine.magic("validation", (el, {Alpine}) => ( input ) => {
-    return Alpine.$data(el).inputs[input]
-  })
+  Alpine.magic("validation", (el, { Alpine }) => (input) => {
+    return Alpine.$data(el).inputs[input];
+  });
 }

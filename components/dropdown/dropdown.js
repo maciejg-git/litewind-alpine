@@ -61,6 +61,8 @@ export default function (Alpine) {
       flip: false,
       autoPlacement: false,
       role: "",
+      menuItems: null,
+      highlightedMenuItemIndex: -1,
 
       init() {
         this.$nextTick(() => {
@@ -122,6 +124,32 @@ export default function (Alpine) {
           ["@keydown.escape.prevent"]() {
             this.close();
           },
+          ["@keydown.down.prevent"]() {
+            if (!this.isShow) {
+              this.open()
+              this.highlightedMenuItemIndex = -1
+            }
+            this.$nextTick(() => {
+              if (this.highlightedMenuItemIndex < this.menuItems.length - 1) {
+                this.highlightedMenuItemIndex++
+              }
+              let el = this.menuItems[this.highlightedMenuItemIndex]
+              el.focus()
+            })
+          },
+          ["@keydown.up.prevent"]() {
+            if (!this.isShow) {
+              this.open()
+              this.highlightedMenuItemIndex = this.menuItems.length
+            }
+            this.$nextTick(() => {
+              if (this.highlightedMenuItemIndex > 0) {
+                this.highlightedMenuItemIndex--
+              }
+              let el = this.menuItems[this.highlightedMenuItemIndex]
+              el.focus()
+            })
+          }
         });
 
         Alpine.bind(this.$el, aria.main)
@@ -138,6 +166,7 @@ export default function (Alpine) {
         }
         this.floating.startAutoUpdate();
         this.isShow = true;
+        this.menuItems = this.$refs.menu.querySelectorAll("[role='menuitem']")
       },
       close() {
         if (!this.isShow) return;
