@@ -16,7 +16,9 @@ export default function (Alpine) {
         this.$nextTick(() => {
           this.input = Alpine.bound(this.$el, "data-input") ?? this.input;
           this.form = Alpine.$data(this.$el).formName ?? this.form
-          this.validation = this.inputs?.[this.input] ?? null
+          Alpine.effect(() => {
+            this.validation = this.inputs?.[this.input] ?? null
+          })
         });
       },
       getMessages() {
@@ -27,6 +29,7 @@ export default function (Alpine) {
           if (this.validation.messages.required) {
             return { required: this.validation.messages.required };
           }
+          console.log(this.validation.messages)
           return this.validation.messages;
         }
       },

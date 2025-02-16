@@ -2,9 +2,17 @@ export default function (Alpine) {
   Alpine.data("dropdownContext", (dataExtend = {}) => {
     let aria = {
       menu: {
-        role: "menu",
-      }
+        ":role"() {
+          return this.role
+        }
+      },
+      menuItem: {
+        role: "menuitem",
+        tabindex: -1,
+      },
     }
+
+    let ariaRoles = ["menu", "listbox", "dialog"]
 
     let floatingUIoptions = [
       "placement",
@@ -33,6 +41,7 @@ export default function (Alpine) {
       offsetY: 0,
       flip: false,
       autoPlacement: false,
+      role: "",
 
       init() {
         this.$nextTick(() => {
@@ -53,6 +62,8 @@ export default function (Alpine) {
           this.autoPlacement = JSON.parse(
             Alpine.bound(this.$el, "data-auto-placement") ?? this.autoPlacement,
           );
+          let role = Alpine.bound(this.$el, "data-role")
+          this.role = ariaRoles.includes(role) ? role : null
 
           let options = floatingUIoptions.reduce((acc, v) => {
             return { ...acc, [v]: this[v] };
@@ -99,6 +110,9 @@ export default function (Alpine) {
         },
         ...bind.menu,
         ...aria.menu,
+      },
+      menuItem: {
+        ...aria.menuItem,
       },
       ...dataExtend,
     };

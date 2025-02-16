@@ -12,6 +12,9 @@ export default function (Alpine) {
       addInput(input) {
         this.inputs[input.name] = input;
       },
+      removeInput(input) {
+        delete this.inputs[input]
+      }
     };
   });
 
@@ -62,6 +65,7 @@ export default function (Alpine) {
       });
 
       cleanup(watchValue);
+      cleanup(() => Alpine.$data(el).removeInput(inputName))
     },
   );
 

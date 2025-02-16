@@ -27,6 +27,7 @@ export default function (Alpine) {
       },
       menuItem: {
         role: "menuitem",
+        tabindex: -1,
       },
     }
 
@@ -62,7 +63,7 @@ export default function (Alpine) {
       autoPlacement: false,
       role: "",
       menuItems: null,
-      highlightedMenuItemIndex: -1,
+      focusedMenuItemIndex: -1,
 
       init() {
         this.$nextTick(() => {
@@ -127,26 +128,33 @@ export default function (Alpine) {
           ["@keydown.down.prevent"]() {
             if (!this.isShow) {
               this.open()
-              this.highlightedMenuItemIndex = -1
+            }
+            if (!this.menuItems.length) {
+              return
             }
             this.$nextTick(() => {
-              if (this.highlightedMenuItemIndex < this.menuItems.length - 1) {
-                this.highlightedMenuItemIndex++
+              if (this.focusedMenuItemIndex < this.menuItems.length - 1) {
+                this.focusedMenuItemIndex++
               }
-              let el = this.menuItems[this.highlightedMenuItemIndex]
+              let el = this.menuItems[this.focusedMenuItemIndex]
               el.focus()
             })
           },
           ["@keydown.up.prevent"]() {
             if (!this.isShow) {
               this.open()
-              this.highlightedMenuItemIndex = this.menuItems.length
+            }
+            if (!this.menuItems.length) {
+              return
+            }
+            if (this.focusedMenuItemIndex === -1) {
+              this.focusedMenuItemIndex = this.menuItems.length
             }
             this.$nextTick(() => {
-              if (this.highlightedMenuItemIndex > 0) {
-                this.highlightedMenuItemIndex--
+              if (this.focusedMenuItemIndex > 0) {
+                this.focusedMenuItemIndex--
               }
-              let el = this.menuItems[this.highlightedMenuItemIndex]
+              let el = this.menuItems[this.focusedMenuItemIndex]
               el.focus()
             })
           }
@@ -176,6 +184,7 @@ export default function (Alpine) {
         }
         this.floating.destroy();
         this.isShow = false;
+        this.focusedMenuItemIndex = -1
       },
       preventHiding() {
         if (this.triggerEv === "hover") {
