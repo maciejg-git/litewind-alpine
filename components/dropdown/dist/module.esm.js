@@ -27,7 +27,8 @@ function dropdown_default(Alpine) {
         }
       },
       menuItem: {
-        role: "menuitem"
+        role: "menuitem",
+        tabindex: -1
       }
     };
     let ariaRoles = ["menu", "listbox", "dialog"];
@@ -58,6 +59,8 @@ function dropdown_default(Alpine) {
       flip: false,
       autoPlacement: false,
       role: "",
+      menuItems: null,
+      focusedMenuItemIndex: -1,
       init() {
         this.$nextTick(() => {
           this.triggerEv = Alpine.bound(this.$el, "data-trigger-event") ?? this.triggerEv;
@@ -109,6 +112,39 @@ function dropdown_default(Alpine) {
         Alpine.bind(this.$el, {
           ["@keydown.escape.prevent"]() {
             this.close();
+          },
+          ["@keydown.down.prevent"]() {
+            if (!this.isShow) {
+              this.open();
+            }
+            if (!this.menuItems.length) {
+              return;
+            }
+            this.$nextTick(() => {
+              if (this.focusedMenuItemIndex < this.menuItems.length - 1) {
+                this.focusedMenuItemIndex++;
+              }
+              let el = this.menuItems[this.focusedMenuItemIndex];
+              el.focus();
+            });
+          },
+          ["@keydown.up.prevent"]() {
+            if (!this.isShow) {
+              this.open();
+            }
+            if (!this.menuItems.length) {
+              return;
+            }
+            if (this.focusedMenuItemIndex === -1) {
+              this.focusedMenuItemIndex = this.menuItems.length;
+            }
+            this.$nextTick(() => {
+              if (this.focusedMenuItemIndex > 0) {
+                this.focusedMenuItemIndex--;
+              }
+              let el = this.menuItems[this.focusedMenuItemIndex];
+              el.focus();
+            });
           }
         });
         Alpine.bind(this.$el, aria.main);
@@ -125,6 +161,7 @@ function dropdown_default(Alpine) {
         }
         this.floating.startAutoUpdate();
         this.isShow = true;
+        this.menuItems = this.$refs.menu.querySelectorAll("[role='menuitem']");
       },
       close() {
         if (!this.isShow) return;
@@ -134,6 +171,7 @@ function dropdown_default(Alpine) {
         }
         this.floating.destroy();
         this.isShow = false;
+        this.focusedMenuItemIndex = -1;
       },
       preventHiding() {
         if (this.triggerEv === "hover") {

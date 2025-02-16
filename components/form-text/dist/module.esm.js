@@ -15,14 +15,20 @@ function form_text_default(Alpine) {
         this.$nextTick(() => {
           this.input = Alpine.bound(this.$el, "data-input") ?? this.input;
           this.form = Alpine.$data(this.$el).formName ?? this.form;
-          this.validation = Alpine.store("validation")[this.form][this.input];
+          Alpine.effect(() => {
+            this.validation = this.inputs?.[this.input] ?? null;
+          });
         });
       },
       getMessages() {
+        if (!this.validation) {
+          return {};
+        }
         if (this.validation?.state === "invalid") {
           if (this.validation.messages.required) {
             return { required: this.validation.messages.required };
           }
+          console.log(this.validation.messages);
           return this.validation.messages;
         }
       },
