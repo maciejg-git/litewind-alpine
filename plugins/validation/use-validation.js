@@ -2,11 +2,9 @@ import { globalValidators } from "./validators.js";
 
 export default function useValidation(input) {
   let {
-    form = null,
     name = "input",
     value,
     rules = [],
-    onReset,
     validation,
     validateOn,
     validateMode,
@@ -45,25 +43,25 @@ export default function useValidation(input) {
     let newStatus = {};
     let newMessages = {};
 
-    newStatus.valid = rules.reduce((valid, rule) => {
-      let [key, v] =
-        typeof rule === "string" ? [rule, null] : Object.entries(rule)[0];
+    newStatus.valid = rules.reduce((valid, i) => {
+      let [rule, ruleValue] =
+        typeof i === "string" ? [i, null] : Object.entries(i)[0];
 
-      let validator = (typeof v === "function" && v) || globalValidators[key];
+      let validator = (typeof ruleValue === "function" && ruleValue) || globalValidators[rule];
 
       if (!validator) return valid;
 
-      newStatus[key] = false;
+      newStatus[rule] = false;
 
-      let res = validator(value, v);
+      let res = validator(value, ruleValue);
 
       if (res === true) {
-        newStatus[key] = true;
+        newStatus[rule] = true;
       } else {
-        newMessages[key] = res;
+        newMessages[rule] = res;
       }
 
-      return valid && newStatus[key];
+      return valid && newStatus[rule];
     }, true);
 
     newStatus.optional = isOptional(value);
@@ -132,13 +130,10 @@ export default function useValidation(input) {
     validation.status = { ...defaultStatus };
     validation.state = "";
     validation.messages = {};
-    typeof onReset === "function" && onReset();
   };
 
   return {
-    form,
     name,
-    value,
     touch: () => on("touch"),
     formValidate: () => on("formValidate"),
     updateValue: (value) => on("valueUpdate", value),

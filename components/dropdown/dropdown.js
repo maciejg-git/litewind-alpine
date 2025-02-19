@@ -62,7 +62,7 @@ export default function (Alpine) {
       flip: false,
       autoPlacement: false,
       role: "",
-      menuItems: null,
+      menuItemsElements: null,
       focusedMenuItemIndex: -1,
 
       init() {
@@ -129,14 +129,14 @@ export default function (Alpine) {
             if (!this.isShow) {
               this.open()
             }
-            if (!this.menuItems.length) {
+            if (!this.menuItemsElements.length) {
               return
             }
             this.$nextTick(() => {
-              if (this.focusedMenuItemIndex < this.menuItems.length - 1) {
+              if (this.focusedMenuItemIndex < this.menuItemsElements.length - 1) {
                 this.focusedMenuItemIndex++
               }
-              let el = this.menuItems[this.focusedMenuItemIndex]
+              let el = this.menuItemsElements[this.focusedMenuItemIndex]
               el.focus()
             })
           },
@@ -144,17 +144,17 @@ export default function (Alpine) {
             if (!this.isShow) {
               this.open()
             }
-            if (!this.menuItems.length) {
+            if (!this.menuItemsElements.length) {
               return
             }
             if (this.focusedMenuItemIndex === -1) {
-              this.focusedMenuItemIndex = this.menuItems.length
+              this.focusedMenuItemIndex = this.menuItemsElements.length
             }
             this.$nextTick(() => {
               if (this.focusedMenuItemIndex > 0) {
                 this.focusedMenuItemIndex--
               }
-              let el = this.menuItems[this.focusedMenuItemIndex]
+              let el = this.menuItemsElements[this.focusedMenuItemIndex]
               el.focus()
             })
           }
@@ -174,7 +174,7 @@ export default function (Alpine) {
         }
         this.floating.startAutoUpdate();
         this.isShow = true;
-        this.menuItems = this.$refs.menu.querySelectorAll("[role='menuitem']")
+        this.menuItemsElements = this.$refs.menu.querySelectorAll("[role='menuitem']")
       },
       close() {
         if (!this.isShow) return;

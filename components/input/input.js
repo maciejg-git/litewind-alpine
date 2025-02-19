@@ -14,8 +14,6 @@ export default function (Alpine) {
       isLoading: false,
       placeholder: "",
       clearable: false,
-      isDirty: false,
-      isTouched: false,
       validateValue: "_value",
 
       init() {
@@ -61,9 +59,6 @@ export default function (Alpine) {
             this.$refs.input.focus();
           },
         });
-        Alpine.effect(() => {
-          if (this._value.length) this.isDirty = true;
-        });
       },
       clear() {
         this._value = "";
@@ -78,9 +73,6 @@ export default function (Alpine) {
         "x-ref": "input",
         ":placeholder"() {
           return this.placeholder;
-        },
-        "@focus"() {
-          this.isTouched = true;
         },
         "@blur"() {
           if (typeof this.touch === "function") this.touch();
