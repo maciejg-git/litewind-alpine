@@ -5,15 +5,11 @@ export default function useValidation(input) {
     name = "input",
     value,
     rules = [],
+    mode,
     validation,
-    validateOn,
-    validateMode,
   } = input;
 
-  let validOptions = {
-    validateOn: ["blur", "immediate", "form"],
-    validateMode: ["silent", "eager"],
-  };
+  let [validateOn, validateMode] = ["blur-silent", "blur-eager", "form-silent", "form-eager", "immdiate-eager"].includes(mode) ? mode.split("-") : ["blur", "silent"]
 
   let defaultStatus = {
     touched: false,
@@ -22,13 +18,6 @@ export default function useValidation(input) {
     optional: false,
     validated: false,
   };
-
-  validateOn = validOptions.validateOn.includes(validateOn)
-    ? validateOn
-    : "blur";
-  validateMode = validOptions.validateMode.includes(validateMode)
-    ? validateMode
-    : "silent";
 
   let isOptional = (value) => {
     return (
