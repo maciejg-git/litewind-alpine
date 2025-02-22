@@ -13,8 +13,8 @@ export default function (Alpine) {
         this.inputs[input.name] = input;
       },
       removeInput(input) {
-        delete this.inputs[input]
-      }
+        delete this.inputs[input];
+      },
     };
   });
 
@@ -42,10 +42,16 @@ export default function (Alpine) {
         state: "",
       });
 
-      let validation = useValidation({
-        ...exp,
-        validation: Alpine.$data(el).inputs[inputName],
-      });
+      let validation = useValidation(
+        {
+          ...exp,
+        },
+        (res) => {
+          Alpine.$data(el).inputs[inputName].status = res.status;
+          Alpine.$data(el).inputs[inputName].messages = res.messages;
+          Alpine.$data(el).inputs[inputName].state = res.state;
+        },
+      );
 
       let getter = () => {
         let value;
@@ -65,7 +71,7 @@ export default function (Alpine) {
       });
 
       cleanup(watchValue);
-      cleanup(() => Alpine.$data(el).removeInput(inputName))
+      cleanup(() => Alpine.$data(el).removeInput(inputName));
     },
   );
 

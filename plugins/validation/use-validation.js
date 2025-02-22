@@ -1,34 +1,26 @@
 import { globalValidators } from "./validators.js";
 
-export default function useValidation(input) {
+export default function useValidation(input, updateValidation) {
   let {
     name = "input",
     value,
+    dirty = false,
+    touched = false,
+    validated = false,
+    stateChanged = false,
     rules = [],
-    validation,
-    validateOn,
-    validateMode,
+    mode = "blur-silent",
   } = input;
 
-  let validOptions = {
-    validateOn: ["blur", "immediate", "form"],
-    validateMode: ["silent", "eager"],
-  };
-
-  let defaultStatus = {
-    touched: false,
-    dirty: false,
-    valid: false,
-    optional: false,
-    validated: false,
-  };
-
-  validateOn = validOptions.validateOn.includes(validateOn)
-    ? validateOn
-    : "blur";
-  validateMode = validOptions.validateMode.includes(validateMode)
-    ? validateMode
-    : "silent";
+  let [validateOn, validateMode] = [
+    "blur-silent",
+    "blur-eager",
+    "form-silent",
+    "form-eager",
+    "immediate-eager",
+  ].includes(mode)
+    ? mode.split("-")
+    : ["blur", "silent"];
 
   let isOptional = (value) => {
     return (
@@ -40,51 +32,55 @@ export default function useValidation(input) {
   };
 
   let validate = (value) => {
-    let newStatus = {};
-    let newMessages = {};
+    let status = {};
+    let messages = {};
 
-    newStatus.valid = rules.reduce((valid, i) => {
+    status.valid = rules.reduce((valid, i) => {
       let [rule, ruleValue] =
         typeof i === "string" ? [i, null] : Object.entries(i)[0];
 
-      let validator = (typeof ruleValue === "function" && ruleValue) || globalValidators[rule];
+      let validator =
+        (typeof ruleValue === "function" && ruleValue) ||
+        globalValidators[rule];
 
       if (!validator) return valid;
 
-      newStatus[rule] = false;
+      status[rule] = false;
 
       let res = validator(value, ruleValue);
 
       if (res === true) {
-        newStatus[rule] = true;
+        status[rule] = true;
       } else {
-        newMessages[rule] = res;
+        messages[rule] = res;
       }
 
-      return valid && newStatus[rule];
+      return valid && status[rule];
     }, true);
 
-    newStatus.optional = isOptional(value);
+    status.optional = isOptional(value);
 
-    return { status: newStatus, messages: newMessages };
+    return { status, messages };
   };
 
   let on = (event, updatedValue) => {
     value = updatedValue !== undefined ? updatedValue : value;
     let res = validate(value);
 
-    res.status.touched = validation.status.touched || event === "touch";
-    res.status.validated =
-      validation.status.validated || event === "formValidate";
-    res.status.dirty = validation.status.dirty || !!(value && !!value.length);
+    touched = touched || event === "touch";
+    validated = validated || event === "formValidate";
+    dirty = dirty || !!(value && !!value.length);
 
-    validation.status = res.status;
-    validation.messages = res.messages;
-    validation.state = updateState();
+    res.status = { ...res.status, touched, validated, dirty };
+    res.state = updateState(res.status);
+
+    stateChanged = stateChanged || res.state !== "";
+
+    updateValidation(res);
   };
 
-  let updateState = () => {
-    let { dirty, touched, validated, optional, valid } = validation.status;
+  let updateState = (status) => {
+    let { optional, valid } = status;
 
     // optional input (not required and empty) cannot be valid or invalid,
     // return defalut state
@@ -94,17 +90,17 @@ export default function useValidation(input) {
 
     // input has not been yet interacted in any way, return current state
     if (!dirty && !touched && !validated) {
-      return validation.state;
+      return "";
     }
 
     // input is validated manually, return current state
     if (validateOn === "form" && !validated) {
-      return validation.state;
+      return "";
     }
 
     // input is validated on blur, return current state
     if (validateOn === "blur" && !touched && !validated) {
-      return validation.state;
+      return "";
     }
 
     // input is validated immediately, has been touched or validated manually
@@ -116,20 +112,22 @@ export default function useValidation(input) {
 
     // for valid inputs return valid only in eager mode or when changing
     // from non default state
-    if (validateMode === "eager" || validation.state !== "") {
+    if (validateMode === "eager" || stateChanged) {
       return "valid";
     }
 
     // return default state
-    return validation.state;
+    return "";
   };
 
   // reset
 
   let reset = () => {
-    validation.status = { ...defaultStatus };
-    validation.state = "";
-    validation.messages = {};
+    dirty = false;
+    touched = false;
+    validated = false;
+    stateChanged = false;
+    updateValidation({ status: {}, messages: {}, state: "" });
   };
 
   return {

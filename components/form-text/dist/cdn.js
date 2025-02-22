@@ -29,7 +29,6 @@
             if (this.validation.messages.required) {
               return { required: this.validation.messages.required };
             }
-            console.log(this.validation.messages);
             return this.validation.messages;
           }
         },
