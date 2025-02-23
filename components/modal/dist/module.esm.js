@@ -1,4 +1,4 @@
-// ../modal.js
+// components/modal/modal.js
 function modal_default(Alpine) {
   Alpine.data("modal", (dataExtend = {}) => {
     let aria = {
@@ -99,7 +99,7 @@ function modal_default(Alpine) {
   });
 }
 
-// module.js
+// components/modal/builds/module.js
 var module_default = modal_default;
 export {
   module_default as default

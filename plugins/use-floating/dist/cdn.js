@@ -1,5 +1,5 @@
 (() => {
-  // ../../../node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs
+  // node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs
   var sides = ["top", "right", "bottom", "left"];
   var alignments = ["start", "end"];
   var placements = /* @__PURE__ */ sides.reduce((acc, side) => acc.concat(side, side + "-" + alignments[0], side + "-" + alignments[1]), []);
@@ -129,7 +129,7 @@
     };
   }
 
-  // ../../../node_modules/@floating-ui/core/dist/floating-ui.core.mjs
+  // node_modules/@floating-ui/core/dist/floating-ui.core.mjs
   function computeCoordsFromPlacement(_ref, placement, rtl) {
     let {
       reference,
@@ -788,7 +788,7 @@
     };
   };
 
-  // ../../../node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs
+  // node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs
   function hasWindow() {
     return typeof window !== "undefined";
   }
@@ -934,7 +934,7 @@
     return win.parent && Object.getPrototypeOf(win.parent) ? win.frameElement : null;
   }
 
-  // ../../../node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs
+  // node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs
   function getCssDimensions(element) {
     const css = getComputedStyle(element);
     let width = parseFloat(css.width) || 0;
@@ -1528,7 +1528,7 @@
     });
   };
 
-  // ../use-floating.js
+  // plugins/use-floating/use-floating.js
   var useFloating = (reference, floating, opts) => {
     let options = {
       placement: opts.placement ?? "bottom-start",
@@ -1608,6 +1608,6 @@
     };
   };
 
-  // cdn.js
+  // plugins/use-floating/builds/cdn.js
   window.useFloating = useFloating;
 })();

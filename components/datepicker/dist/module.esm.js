@@ -1,4 +1,4 @@
-// ../datepicker.js
+// components/datepicker/datepicker.js
 function datepicker_default(Alpine) {
   Alpine.data("datepicker", (dataExtend = {}) => {
     let getNumberRange = (from, count) => {
@@ -312,7 +312,7 @@ function datepicker_default(Alpine) {
   });
 }
 
-// module.js
+// components/datepicker/builds/module.js
 var module_default = datepicker_default;
 export {
   module_default as default

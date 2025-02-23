@@ -1,5 +1,5 @@
 (() => {
-  // ../class-plugin.js
+  // plugins/class/class-plugin.js
   function class_plugin_default(Alpine2) {
     window.Alpine.directive(
       "class",
@@ -66,7 +66,7 @@
     );
   }
 
-  // cdn.js
+  // plugins/class/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(class_plugin_default);
   });

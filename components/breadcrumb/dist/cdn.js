@@ -1,5 +1,5 @@
 (() => {
-  // ../breadcrumb.js
+  // components/breadcrumb/breadcrumb.js
   function breadcrumb_default(Alpine2) {
     Alpine2.data("breadcrumb", () => {
       return {
@@ -17,7 +17,7 @@
     });
   }
 
-  // cdn.js
+  // components/breadcrumb/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(breadcrumb_default);
   });

@@ -1,4 +1,4 @@
-// ../tooltip.js
+// components/tooltip/tooltip.js
 function tooltip_default(Alpine) {
   const correctPlacement = ["top", "bottom", "right", "left"].map((i) => [i, i + "-start", i + "-end"]).flat();
   let transitions = ["fade", "scale-fade", ""];
@@ -120,7 +120,7 @@ function tooltip_default(Alpine) {
   );
 }
 
-// module.js
+// components/tooltip/builds/module.js
 var module_default = tooltip_default;
 export {
   module_default as default

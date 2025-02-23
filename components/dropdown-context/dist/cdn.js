@@ -1,5 +1,5 @@
 (() => {
-  // ../dropdown-context.js
+  // components/dropdown-context/dropdown-context.js
   function dropdown_context_default(Alpine2) {
     Alpine2.data("dropdownContext", (dataExtend = {}) => {
       let aria = {
@@ -145,7 +145,7 @@
     });
   }
 
-  // cdn.js
+  // components/dropdown-context/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(dropdown_context_default);
   });

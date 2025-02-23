@@ -1,5 +1,5 @@
 (() => {
-  // ../pagination.js
+  // components/pagination/pagination.js
   function pagination_default(Alpine2) {
     Alpine2.data("pagination", (dataExtend = {}) => {
       let aria = {
@@ -134,7 +134,7 @@
     });
   }
 
-  // cdn.js
+  // components/pagination/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(pagination_default);
   });

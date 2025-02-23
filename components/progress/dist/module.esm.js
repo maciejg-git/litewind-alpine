@@ -1,4 +1,4 @@
-// ../progress.js
+// components/progress/progress.js
 function progress_default(Alpine) {
   Alpine.data("progress", (dataExtend = {}) => {
     let aria = {
@@ -45,7 +45,7 @@ function progress_default(Alpine) {
   });
 }
 
-// module.js
+// components/progress/builds/module.js
 var module_default = progress_default;
 export {
   module_default as default

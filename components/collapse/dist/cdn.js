@@ -1,5 +1,5 @@
 (() => {
-  // ../collapse.js
+  // components/collapse/collapse.js
   function collapse_default(Alpine2) {
     Alpine2.data("collapse", (dataExtend = {}) => {
       let aria = {
@@ -98,7 +98,7 @@
     });
   }
 
-  // cdn.js
+  // components/collapse/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(collapse_default);
   });

@@ -1,5 +1,5 @@
 (() => {
-  // ../sidepanel.js
+  // components/sidepanel/sidepanel.js
   function sidepanel_default(Alpine2) {
     Alpine2.data("sidepanel", (dataExtend = {}) => {
       let bind = {};
@@ -54,7 +54,7 @@
     });
   }
 
-  // cdn.js
+  // components/sidepanel/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(sidepanel_default);
   });

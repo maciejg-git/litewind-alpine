@@ -1,5 +1,5 @@
 (() => {
-  // ../validators.js
+  // plugins/validation/validators.js
   var validationMessages = {
     required: "This field is required",
     alpha: "Please enter only letters",
@@ -73,7 +73,7 @@
     }
   };
 
-  // ../use-validation.js
+  // plugins/validation/use-validation.js
   function useValidation(input, updateValidation) {
     let {
       name = "input",
@@ -163,7 +163,7 @@
     };
   }
 
-  // ../validation.js
+  // plugins/validation/validation.js
   function validation_default(Alpine2) {
     Alpine2.data("form", () => {
       return {
@@ -231,7 +231,7 @@
     });
   }
 
-  // cdn.js
+  // plugins/validation/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(validation_default);
   });

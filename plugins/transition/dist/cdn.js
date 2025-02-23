@@ -1,5 +1,5 @@
 (() => {
-  // ../transition.js
+  // plugins/transition/transition.js
   function transition_default(Alpine2) {
     window.Alpine.directive(
       "alt-transition",
@@ -36,7 +36,7 @@
     );
   }
 
-  // cdn.js
+  // plugins/transition/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(transition_default);
   });

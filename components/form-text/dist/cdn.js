@@ -1,5 +1,5 @@
 (() => {
-  // ../form-text.js
+  // components/form-text/form-text.js
   function form_text_default(Alpine2) {
     Alpine2.data("formText", () => {
       let aria = {
@@ -49,7 +49,7 @@
     });
   }
 
-  // cdn.js
+  // components/form-text/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(form_text_default);
   });

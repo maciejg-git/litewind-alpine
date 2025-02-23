@@ -1,5 +1,5 @@
 (() => {
-  // ../tabs.js
+  // components/tabs/tabs.js
   function tabs_default(Alpine2) {
     Alpine2.data("tabs", (dataExtend = {}) => {
       let aria = {
@@ -77,7 +77,7 @@
     });
   }
 
-  // cdn.js
+  // components/tabs/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(tabs_default);
   });

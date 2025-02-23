@@ -1,4 +1,4 @@
-// ../form-text.js
+// components/form-text/form-text.js
 function form_text_default(Alpine) {
   Alpine.data("formText", () => {
     let aria = {
@@ -48,7 +48,7 @@ function form_text_default(Alpine) {
   });
 }
 
-// module.js
+// components/form-text/builds/module.js
 var module_default = form_text_default;
 export {
   module_default as default

@@ -1,4 +1,4 @@
-// ../notify.js
+// components/notify/notify.js
 function notify_default(Alpine) {
   Alpine.data("notify", (dataExtend = {}) => {
     let aria = {
@@ -45,11 +45,7 @@ function notify_default(Alpine) {
         });
         Alpine.bind(this.$el, {
           "@show-notify.window"() {
-            let id = this.$event.detail.id || null;
-            let rootId = this.$root.id || null;
-            if (id === null && rootId === null || id === rootId) {
-              this.push(this.$event.detail);
-            }
+            this.push(this.$event.detail);
           }
         });
         Alpine.bind(this.$el, {
@@ -65,14 +61,14 @@ function notify_default(Alpine) {
         if (this.order === "default" && this.stickyAt === "end") {
           return [...this.notifications, ...this.notificationsSticky];
         }
+        if (this.order === "default" && this.stickyAt === "start") {
+          return [...this.notificationsSticky, ...this.notifications];
+        }
         if (this.order === "reversed" && this.stickyAt === "end") {
           return [
             ...this.notifications.toReversed(),
             ...this.notificationsSticky.toReversed()
           ];
-        }
-        if (this.order === "default" && this.stickyAt === "start") {
-          return [...this.notificationsSticky, ...this.notifications];
         }
         if (this.order === "reversed" && this.stickyAt === "start") {
           return [
@@ -90,6 +86,13 @@ function notify_default(Alpine) {
         this.notifications.forEach((notification) => {
           notification.restartTimer();
         });
+      },
+      remove(notification) {
+        if (notification.sticky) {
+          this.removeStickyById(notification.notifyId);
+        } else {
+          this.removeById(notification.notifyId);
+        }
       },
       removeById(id) {
         let index = this.notifications.findIndex((i) => id === i.notifyId);
@@ -110,7 +113,6 @@ function notify_default(Alpine) {
         this.notify.isVisible.value = false;
       },
       push(notify) {
-        let container = this;
         let newNotify = {
           header: notify?.header || "",
           text: notify?.text || "",
@@ -126,17 +128,10 @@ function notify_default(Alpine) {
         };
         newNotify.restartTimer = function() {
           if (this.static) return null;
-          if (newNotify.sticky) {
-            this.timer = setTimeout(
-              () => this.isVisible.value = false,
-              this.delay
-            );
-          } else {
-            this.timer = setTimeout(
-              () => this.isVisible.value = false,
-              this.delay
-            );
-          }
+          this.timer = setTimeout(
+            () => this.isVisible.value = false,
+            this.delay
+          );
         };
         newNotify.pauseTimer = function() {
           if (this.timer) {
@@ -166,18 +161,10 @@ function notify_default(Alpine) {
             if (value) return;
             Alpine.bind(this.$el, {
               "@transitionend"() {
-                if (this.notify.sticky) {
-                  this.removeStickyById(this.notify.notifyId);
-                } else {
-                  this.removeById(this.notify.notifyId);
-                }
+                this.remove(this.notify);
               },
               "@transitioncancel"() {
-                if (this.notify.sticky) {
-                  this.removeStickyById(this.notify.notifyId);
-                } else {
-                  this.removeById(this.notify.notifyId);
-                }
+                this.remove(this.notify);
               }
             });
           });
@@ -190,7 +177,7 @@ function notify_default(Alpine) {
   });
 }
 
-// module.js
+// components/notify/builds/module.js
 var module_default = notify_default;
 export {
   module_default as default

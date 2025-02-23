@@ -1,5 +1,5 @@
 (() => {
-  // ../notify.js
+  // components/notify/notify.js
   function notify_default(Alpine2) {
     Alpine2.data("notify", (dataExtend = {}) => {
       let aria = {
@@ -46,11 +46,7 @@
           });
           Alpine2.bind(this.$el, {
             "@show-notify.window"() {
-              let id = this.$event.detail.id || null;
-              let rootId = this.$root.id || null;
-              if (id === null && rootId === null || id === rootId) {
-                this.push(this.$event.detail);
-              }
+              this.push(this.$event.detail);
             }
           });
           Alpine2.bind(this.$el, {
@@ -182,7 +178,7 @@
     });
   }
 
-  // cdn.js
+  // components/notify/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(notify_default);
   });

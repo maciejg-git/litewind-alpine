@@ -1,5 +1,5 @@
 (() => {
-  // ../table.js
+  // components/table/table.js
   function table_default(Alpine2) {
     Alpine2.data("table", (dataExtend = {}) => {
       let undefNullToStr = (v) => v === void 0 || v === null ? "" : v;
@@ -169,7 +169,7 @@
     });
   }
 
-  // cdn.js
+  // components/table/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(table_default);
   });

@@ -1,4 +1,4 @@
-// ../tabs.js
+// components/tabs/tabs.js
 function tabs_default(Alpine) {
   Alpine.data("tabs", (dataExtend = {}) => {
     let aria = {
@@ -76,7 +76,7 @@ function tabs_default(Alpine) {
   });
 }
 
-// module.js
+// components/tabs/builds/module.js
 var module_default = tabs_default;
 export {
   module_default as default

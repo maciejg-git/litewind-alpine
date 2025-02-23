@@ -1,5 +1,5 @@
 (() => {
-  // ../tooltip.js
+  // components/tooltip/tooltip.js
   function tooltip_default(Alpine2) {
     const correctPlacement = ["top", "bottom", "right", "left"].map((i) => [i, i + "-start", i + "-end"]).flat();
     let transitions = ["fade", "scale-fade", ""];
@@ -121,7 +121,7 @@
     );
   }
 
-  // cdn.js
+  // components/tooltip/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(tooltip_default);
   });

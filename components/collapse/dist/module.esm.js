@@ -1,4 +1,4 @@
-// ../collapse.js
+// components/collapse/collapse.js
 function collapse_default(Alpine) {
   Alpine.data("collapse", (dataExtend = {}) => {
     let aria = {
@@ -97,7 +97,7 @@ function collapse_default(Alpine) {
   });
 }
 
-// module.js
+// components/collapse/builds/module.js
 var module_default = collapse_default;
 export {
   module_default as default

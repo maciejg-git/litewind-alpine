@@ -1,4 +1,4 @@
-// ../sidepanel.js
+// components/sidepanel/sidepanel.js
 function sidepanel_default(Alpine) {
   Alpine.data("sidepanel", (dataExtend = {}) => {
     let bind = {};
@@ -53,7 +53,7 @@ function sidepanel_default(Alpine) {
   });
 }
 
-// module.js
+// components/sidepanel/builds/module.js
 var module_default = sidepanel_default;
 export {
   module_default as default

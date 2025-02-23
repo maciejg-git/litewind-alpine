@@ -1,4 +1,4 @@
-// ../pagination.js
+// components/pagination/pagination.js
 function pagination_default(Alpine) {
   Alpine.data("pagination", (dataExtend = {}) => {
     let aria = {
@@ -133,7 +133,7 @@ function pagination_default(Alpine) {
   });
 }
 
-// module.js
+// components/pagination/builds/module.js
 var module_default = pagination_default;
 export {
   module_default as default

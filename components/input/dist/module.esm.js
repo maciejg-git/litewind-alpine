@@ -1,4 +1,4 @@
-// ../input.js
+// components/input/input.js
 function input_default(Alpine) {
   Alpine.data("input", (dataExtend = {}) => {
     let bind = {};
@@ -14,8 +14,6 @@ function input_default(Alpine) {
       isLoading: false,
       placeholder: "",
       clearable: false,
-      isDirty: false,
-      isTouched: false,
       validateValue: "_value",
       init() {
         this.$nextTick(() => {
@@ -58,9 +56,6 @@ function input_default(Alpine) {
             this.$refs.input.focus();
           }
         });
-        Alpine.effect(() => {
-          if (this._value.length) this.isDirty = true;
-        });
       },
       clear() {
         this._value = "";
@@ -75,9 +70,6 @@ function input_default(Alpine) {
         "x-ref": "input",
         ":placeholder"() {
           return this.placeholder;
-        },
-        "@focus"() {
-          this.isTouched = true;
         },
         "@blur"() {
           if (typeof this.touch === "function") this.touch();
@@ -101,7 +93,7 @@ function input_default(Alpine) {
   });
 }
 
-// module.js
+// components/input/builds/module.js
 var module_default = input_default;
 export {
   module_default as default

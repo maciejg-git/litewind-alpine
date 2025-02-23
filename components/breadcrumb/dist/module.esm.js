@@ -1,4 +1,4 @@
-// ../breadcrumb.js
+// components/breadcrumb/breadcrumb.js
 function breadcrumb_default(Alpine) {
   Alpine.data("breadcrumb", () => {
     return {
@@ -16,7 +16,7 @@ function breadcrumb_default(Alpine) {
   });
 }
 
-// module.js
+// components/breadcrumb/builds/module.js
 var module_default = breadcrumb_default;
 export {
   module_default as default

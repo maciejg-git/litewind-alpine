@@ -1,5 +1,5 @@
 (() => {
-  // ../modal.js
+  // components/modal/modal.js
   function modal_default(Alpine2) {
     Alpine2.data("modal", (dataExtend = {}) => {
       let aria = {
@@ -100,7 +100,7 @@
     });
   }
 
-  // cdn.js
+  // components/modal/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(modal_default);
   });

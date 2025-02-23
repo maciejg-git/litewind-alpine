@@ -1,4 +1,4 @@
-// ../transition.js
+// plugins/transition/transition.js
 function transition_default(Alpine) {
   window.Alpine.directive(
     "alt-transition",
@@ -35,7 +35,7 @@ function transition_default(Alpine) {
   );
 }
 
-// module.js
+// plugins/transition/builds/module.js
 var module_default = transition_default;
 export {
   module_default as default

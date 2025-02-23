@@ -1,4 +1,4 @@
-// ../textarea.js
+// components/textarea/textarea.js
 function textarea_default(Alpine) {
   Alpine.data("textarea", () => {
     return {
@@ -51,7 +51,7 @@ function textarea_default(Alpine) {
   });
 }
 
-// module.js
+// components/textarea/builds/module.js
 var module_default = textarea_default;
 export {
   module_default as default

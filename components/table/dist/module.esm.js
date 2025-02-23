@@ -1,4 +1,4 @@
-// ../table.js
+// components/table/table.js
 function table_default(Alpine) {
   Alpine.data("table", (dataExtend = {}) => {
     let undefNullToStr = (v) => v === void 0 || v === null ? "" : v;
@@ -168,7 +168,7 @@ function table_default(Alpine) {
   });
 }
 
-// module.js
+// components/table/builds/module.js
 var module_default = table_default;
 export {
   module_default as default

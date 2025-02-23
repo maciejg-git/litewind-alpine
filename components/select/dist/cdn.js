@@ -1,5 +1,5 @@
 (() => {
-  // ../select.js
+  // components/select/select.js
   function select_default(Alpine2) {
     Alpine2.data("select", (dataExtend = {}) => {
       let aria = {
@@ -282,7 +282,7 @@
     });
   }
 
-  // cdn.js
+  // components/select/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(select_default);
   });

@@ -1,4 +1,4 @@
-// ../class-plugin.js
+// plugins/class/class-plugin.js
 function class_plugin_default(Alpine) {
   window.Alpine.directive(
     "class",
@@ -65,7 +65,7 @@ function class_plugin_default(Alpine) {
   );
 }
 
-// module.js
+// plugins/class/builds/module.js
 var module_default = class_plugin_default;
 export {
   module_default as default

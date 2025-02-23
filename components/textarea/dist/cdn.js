@@ -1,5 +1,5 @@
 (() => {
-  // ../textarea.js
+  // components/textarea/textarea.js
   function textarea_default(Alpine2) {
     Alpine2.data("textarea", () => {
       return {
@@ -52,7 +52,7 @@
     });
   }
 
-  // cdn.js
+  // components/textarea/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(textarea_default);
   });

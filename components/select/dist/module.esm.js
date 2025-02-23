@@ -1,4 +1,4 @@
-// ../select.js
+// components/select/select.js
 function select_default(Alpine) {
   Alpine.data("select", (dataExtend = {}) => {
     let aria = {
@@ -281,7 +281,7 @@ function select_default(Alpine) {
   });
 }
 
-// module.js
+// components/select/builds/module.js
 var module_default = select_default;
 export {
   module_default as default

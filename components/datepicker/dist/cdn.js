@@ -1,5 +1,5 @@
 (() => {
-  // ../datepicker.js
+  // components/datepicker/datepicker.js
   function datepicker_default(Alpine2) {
     Alpine2.data("datepicker", (dataExtend = {}) => {
       let getNumberRange = (from, count) => {
@@ -313,7 +313,7 @@
     });
   }
 
-  // cdn.js
+  // components/datepicker/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(datepicker_default);
   });

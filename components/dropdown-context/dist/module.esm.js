@@ -1,4 +1,4 @@
-// ../dropdown-context.js
+// components/dropdown-context/dropdown-context.js
 function dropdown_context_default(Alpine) {
   Alpine.data("dropdownContext", (dataExtend = {}) => {
     let aria = {
@@ -144,7 +144,7 @@ function dropdown_context_default(Alpine) {
   });
 }
 
-// module.js
+// components/dropdown-context/builds/module.js
 var module_default = dropdown_context_default;
 export {
   module_default as default

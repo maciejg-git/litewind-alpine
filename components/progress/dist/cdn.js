@@ -1,5 +1,5 @@
 (() => {
-  // ../progress.js
+  // components/progress/progress.js
   function progress_default(Alpine2) {
     Alpine2.data("progress", (dataExtend = {}) => {
       let aria = {
@@ -46,7 +46,7 @@
     });
   }
 
-  // cdn.js
+  // components/progress/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(progress_default);
   });

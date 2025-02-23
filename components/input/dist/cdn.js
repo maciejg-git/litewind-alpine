@@ -1,5 +1,5 @@
 (() => {
-  // ../input.js
+  // components/input/input.js
   function input_default(Alpine2) {
     Alpine2.data("input", (dataExtend = {}) => {
       let bind = {};
@@ -15,8 +15,6 @@
         isLoading: false,
         placeholder: "",
         clearable: false,
-        isDirty: false,
-        isTouched: false,
         validateValue: "_value",
         init() {
           this.$nextTick(() => {
@@ -59,9 +57,6 @@
               this.$refs.input.focus();
             }
           });
-          Alpine2.effect(() => {
-            if (this._value.length) this.isDirty = true;
-          });
         },
         clear() {
           this._value = "";
@@ -76,9 +71,6 @@
           "x-ref": "input",
           ":placeholder"() {
             return this.placeholder;
-          },
-          "@focus"() {
-            this.isTouched = true;
           },
           "@blur"() {
             if (typeof this.touch === "function") this.touch();
@@ -102,7 +94,7 @@
     });
   }
 
-  // cdn.js
+  // components/input/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(input_default);
   });
