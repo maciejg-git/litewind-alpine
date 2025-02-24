@@ -46,7 +46,11 @@
           });
           Alpine2.bind(this.$el, {
             "@show-notify.window"() {
-              this.push(this.$event.detail);
+              let id = this.$event.detail.id || null;
+              let rootId = this.$root.id || null;
+              if (id === null && rootId === null || id === rootId) {
+                this.push(this.$event.detail);
+              }
             }
           });
           Alpine2.bind(this.$el, {
