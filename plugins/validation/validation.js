@@ -5,6 +5,7 @@ export default function (Alpine) {
     return {
       formName: "",
       inputs: {},
+      valid: false,
 
       init() {
         this.formName = Alpine.bound(this.$el, "data-form-name");
@@ -15,6 +16,15 @@ export default function (Alpine) {
       removeInput(input) {
         delete this.inputs[input];
       },
+      validate() {
+        this.valid = true
+
+        for (let input in this.inputs) {
+          this.inputs[input].formValidate()
+          let { status } = this.inputs[input]
+          this.valid = this.valid && (status.valid || status.optional)
+        }
+      }
     };
   });
 
@@ -35,13 +45,6 @@ export default function (Alpine) {
         return;
       }
 
-      Alpine.$data(el).addInput({
-        name: inputName,
-        status: {},
-        messages: {},
-        state: "",
-      });
-
       let validation = useValidation(
         {
           ...exp,
@@ -52,6 +55,14 @@ export default function (Alpine) {
           Alpine.$data(el).inputs[inputName].state = res.state;
         },
       );
+
+      Alpine.$data(el).addInput({
+        name: inputName,
+        status: {},
+        messages: {},
+        state: "",
+        formValidate: validation.formValidate,
+      });
 
       let getter = () => {
         let value;
