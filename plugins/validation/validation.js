@@ -17,14 +17,14 @@ export default function (Alpine) {
         delete this.inputs[input];
       },
       validate() {
-        this.valid = true
+        this.valid = true;
 
         for (let input in this.inputs) {
-          this.inputs[input].formValidate()
-          let { status } = this.inputs[input]
-          this.valid = this.valid && (status.valid || status.optional)
+          this.inputs[input].formValidate();
+          let { status } = this.inputs[input];
+          this.valid = this.valid && (status.valid || status.optional);
         }
-      }
+      },
     };
   });
 
