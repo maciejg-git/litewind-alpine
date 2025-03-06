@@ -10,6 +10,7 @@ export default function useValidation(input, updateValidation) {
     stateChanged = false,
     rules = [],
     mode = "blur-silent",
+    messages: validationMessages = {},
   } = input;
 
   let [validateOn, validateMode] = [
@@ -52,7 +53,8 @@ export default function useValidation(input, updateValidation) {
       if (res === true) {
         status[rule] = true;
       } else {
-        messages[rule] = res;
+        messages[rule] =
+          validationMessages[rule]?.replace("%d", ruleValue) || res;
       }
 
       return valid && status[rule];

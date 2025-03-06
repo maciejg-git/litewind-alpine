@@ -19,7 +19,7 @@ var validationMessages = {
 };
 var globalValidators = {
   required: (value, isRequired) => {
-    if (typeof value === "boolean") return value;
+    if (typeof value === "boolean") return value || validationMessages.required;
     if (Array.isArray(value)) return !!value.length || validationMessages.required;
     return !!value && !!value.trim() || validationMessages.required;
   },
@@ -82,7 +82,8 @@ function useValidation(input, updateValidation) {
     validated = false,
     stateChanged = false,
     rules = [],
-    mode = "blur-silent"
+    mode = "blur-silent",
+    messages: validationMessages2 = {}
   } = input;
   let [validateOn, validateMode] = [
     "blur-silent",
@@ -106,7 +107,7 @@ function useValidation(input, updateValidation) {
       if (res === true) {
         status[rule] = true;
       } else {
-        messages[rule] = res;
+        messages[rule] = validationMessages2[rule]?.replace("%d", ruleValue) || res;
       }
       return valid && status[rule];
     }, true);
@@ -168,6 +169,7 @@ function validation_default(Alpine) {
     return {
       formName: "",
       inputs: {},
+      valid: false,
       init() {
         this.formName = Alpine.bound(this.$el, "data-form-name");
       },
@@ -176,6 +178,14 @@ function validation_default(Alpine) {
       },
       removeInput(input) {
         delete this.inputs[input];
+      },
+      validate() {
+        this.valid = true;
+        for (let input in this.inputs) {
+          this.inputs[input].formValidate();
+          let { status } = this.inputs[input];
+          this.valid = this.valid && (status.valid || status.optional);
+        }
       }
     };
   });
@@ -192,12 +202,6 @@ function validation_default(Alpine) {
       if (Alpine2.$data(el).formName === void 0) {
         return;
       }
-      Alpine2.$data(el).addInput({
-        name: inputName,
-        status: {},
-        messages: {},
-        state: ""
-      });
       let validation = useValidation(
         {
           ...exp
@@ -208,6 +212,13 @@ function validation_default(Alpine) {
           Alpine2.$data(el).inputs[inputName].state = res.state;
         }
       );
+      Alpine2.$data(el).addInput({
+        name: inputName,
+        status: {},
+        messages: {},
+        state: "",
+        formValidate: validation.formValidate
+      });
       let getter = () => {
         let value2;
         getValue((v) => value2 = v);
