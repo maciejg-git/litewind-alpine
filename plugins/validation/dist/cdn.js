@@ -180,7 +180,7 @@
         removeInput(input) {
           delete this.inputs[input];
         },
-        validate() {
+        validateForm() {
           this.valid = true;
           for (let input in this.inputs) {
             this.inputs[input].formValidate();
@@ -218,7 +218,8 @@
           status: {},
           messages: {},
           state: "",
-          formValidate: validation.formValidate
+          formValidate: validation.formValidate,
+          reset: validation.reset
         });
         let getter = () => {
           let value2;
@@ -231,6 +232,7 @@
         });
         Alpine3.addScopeToNode(el, {
           touch: validation.touch,
+          reset: validation.reset,
           validation: Alpine3.$data(el).inputs[inputName]
         });
         cleanup(watchValue);
@@ -245,7 +247,10 @@
   // plugins/validation/builds/cdn.js
   document.addEventListener("alpine:init", () => {
     Alpine.plugin(validation_default);
-    window.Litewind = {};
+    if (!window.Litewind) {
+      window.Litewind = {};
+    }
     window.Litewind.validationMessages = validationMessages;
+    window.Litewind.globalValidators = globalValidators;
   });
 })();

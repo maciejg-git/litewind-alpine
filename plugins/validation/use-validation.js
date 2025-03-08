@@ -1,4 +1,5 @@
 import { globalValidators } from "./validators.js";
+export { validationMessages, globalValidators } from "./validators.js"
 
 export default function useValidation(input, updateValidation) {
   let {

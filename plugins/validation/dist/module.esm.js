@@ -179,7 +179,7 @@ function validation_default(Alpine) {
       removeInput(input) {
         delete this.inputs[input];
       },
-      validate() {
+      validateForm() {
         this.valid = true;
         for (let input in this.inputs) {
           this.inputs[input].formValidate();
@@ -217,7 +217,8 @@ function validation_default(Alpine) {
         status: {},
         messages: {},
         state: "",
-        formValidate: validation.formValidate
+        formValidate: validation.formValidate,
+        reset: validation.reset
       });
       let getter = () => {
         let value2;
@@ -230,6 +231,7 @@ function validation_default(Alpine) {
       });
       Alpine2.addScopeToNode(el, {
         touch: validation.touch,
+        reset: validation.reset,
         validation: Alpine2.$data(el).inputs[inputName]
       });
       cleanup(watchValue);
@@ -244,5 +246,7 @@ function validation_default(Alpine) {
 // plugins/validation/builds/module.js
 var module_default = validation_default;
 export {
-  module_default as default
+  module_default as default,
+  globalValidators,
+  validationMessages
 };

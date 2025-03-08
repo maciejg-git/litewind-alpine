@@ -16,7 +16,7 @@ export default function (Alpine) {
       removeInput(input) {
         delete this.inputs[input];
       },
-      validate() {
+      validateForm() {
         this.valid = true;
 
         for (let input in this.inputs) {
@@ -62,6 +62,7 @@ export default function (Alpine) {
         messages: {},
         state: "",
         formValidate: validation.formValidate,
+        reset: validation.reset,
       });
 
       let getter = () => {
@@ -78,6 +79,7 @@ export default function (Alpine) {
 
       Alpine.addScopeToNode(el, {
         touch: validation.touch,
+        reset: validation.reset,
         validation: Alpine.$data(el).inputs[inputName],
       });
 
