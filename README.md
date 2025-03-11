@@ -1,9 +1,14 @@
-# alpine-components
+# Litewind-alpine
 
-Alpine components are a components for Alpine and Tailwind.
+Litewind is a component framework for Alpine and Tailwind.
+
+[Documentation and examples](https://litewind-alpine.netlify.app/documentation/introduction/)
 
 ## Components
 
+- Accordion
+- Breadcrumb
+- Collapse
 - Datepicker
 - Dropdown
 - Dropdown context
@@ -14,6 +19,7 @@ Alpine components are a components for Alpine and Tailwind.
 - Sidepanel
 - Table
 - Tabs
+- Tooltips
 
 ## Form components
 
@@ -21,7 +27,11 @@ Alpine components are a components for Alpine and Tailwind.
 - Form text
 - Input
 - Select
+- Textarea
 
-## Directives
+## Plugins
 
-- x-tooltip
+- Transition plugin
+- FloatingUI plugin
+- Class plugin
+- Validation plugin
