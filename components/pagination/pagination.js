@@ -32,6 +32,7 @@ export default function (Alpine) {
 
     return {
       currentPage: 1,
+      // props
       itemsCount: 0,
       itemsPerPage: 10,
       maxPages: 7,

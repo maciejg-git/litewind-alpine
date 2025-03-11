@@ -8,9 +8,10 @@ export default function (Alpine) {
     }
 
     return {
-      input: "",
       validation: null,
       form: "default",
+      // props
+      input: "",
 
       init() {
         this.$nextTick(() => {

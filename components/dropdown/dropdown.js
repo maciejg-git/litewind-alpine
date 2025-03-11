@@ -53,17 +53,18 @@ export default function (Alpine) {
     return {
       isShow: false,
       floating: null,
+      hideTimeout: null,
+      menuItemsElements: null,
+      focusedMenuItemIndex: -1,
+      // props
       triggerEv: "click",
       autoClose: true,
-      hideTimeout: null,
       placement: "bottom-start",
       offsetX: 0,
       offsetY: 0,
       flip: false,
       autoPlacement: false,
       role: "",
-      menuItemsElements: null,
-      focusedMenuItemIndex: -1,
 
       init() {
         this.$nextTick(() => {

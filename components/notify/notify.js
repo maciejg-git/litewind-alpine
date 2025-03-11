@@ -15,11 +15,12 @@ export default function (Alpine) {
     return {
       notifications: [],
       notifyId: 1000,
+      buffer: [],
+      notificationsSticky: [],
+      // props
       order: "default",
       maxNotifications: 0,
       stickyAt: "end",
-      buffer: [],
-      notificationsSticky: [],
       delay: 10000,
       dismissable: true,
       static: false,

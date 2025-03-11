@@ -10,11 +10,12 @@ export default function (Alpine) {
 
     return {
       _value: "",
+      validateValue: "_value",
+      // props
       useLoader: false,
       isLoading: false,
       placeholder: "",
       clearable: false,
-      validateValue: "_value",
 
       init() {
         this.$nextTick(() => {

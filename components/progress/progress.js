@@ -19,6 +19,7 @@ export default function (Alpine) {
 
     return {
       _value: 0,
+      // props
       interactive: false,
 
       init() {

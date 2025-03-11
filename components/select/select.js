@@ -58,17 +58,17 @@ export default function (Alpine) {
     return {
       isOpen: false,
       floating: null,
-      items: [],
       _value: "",
       selected: new Map(),
       _items: [],
-      multiple: false,
       _model: null,
-      itemText: "text",
-      itemValue: "value",
       highlightedIndex: -1,
       selectEl: null,
-      isLoading: false,
+      // props
+      items: [],
+      multiple: false,
+      itemText: "text",
+      itemValue: "value",
 
       init() {
         this.$nextTick(() => {

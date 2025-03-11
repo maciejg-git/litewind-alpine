@@ -10,6 +10,7 @@ export default function (Alpine) {
 
     return {
       isOpen: false,
+      // props
       isModal: false,
 
       init() {

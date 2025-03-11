@@ -2,8 +2,9 @@ export default function (Alpine) {
   Alpine.data("textarea", () => {
     return {
       _value: "",
-      placeholder: "",
       validateValue: "_value",
+      // props
+      placeholder: "",
 
       init() {
         this.$nextTick(() => {

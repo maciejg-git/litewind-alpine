@@ -1,6 +1,7 @@
 export default function (Alpine) {
   Alpine.data("breadcrumb", () => {
     return {
+      // props
       items: [],
       divider: "/",
 
