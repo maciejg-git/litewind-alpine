@@ -1,5 +1,7 @@
 # Litewind-alpine
 
+![GitHub License](https://img.shields.io/github/license/maciejg-git/litewind-alpine)
+
 Litewind is a component framework for Alpine and Tailwind.
 
 [Documentation and examples](https://litewind-alpine.netlify.app/documentation/introduction/)
