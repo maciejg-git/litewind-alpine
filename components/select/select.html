@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title></title>
     <link href="/output.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.8"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.12"></script>
     <script defer type="module" src="/plugins/use-floating/dist/cdn.js"></script>
     <script defer type="module" src="./builds/cdn.js"></script>
-    <script defer src="/input/dist/cdn.js"></script>
+    <script defer src="/components/input/dist/cdn.js"></script>
     <script defer src="/plugins/transition/dist/cdn.js"></script>
     <script
       defer
@@ -39,19 +37,7 @@
       <span x-text="model"></span>
       <div
         x-data="select"
-        data-item-text="name"
-        data-item-value="id"
-        data-use-loader="true"
-        :data-is-loading="isLoading"
-        @open-selectmenu="() => {
-          isLoading = true
-          fetch('https://jsonplaceholder.typicode.com/comments')
-            .then(res => res.json())
-            .then(json => {
-              items = json
-              isLoading = false
-            })
-          }"
+        :data-items="selectItems"
         x-model="model"
         class="w-[340px]"
       >
