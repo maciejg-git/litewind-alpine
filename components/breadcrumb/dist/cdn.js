@@ -3,6 +3,7 @@
   function breadcrumb_default(Alpine2) {
     Alpine2.data("breadcrumb", () => {
       return {
+        // props
         items: [],
         divider: "/",
         init() {

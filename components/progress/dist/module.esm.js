@@ -18,6 +18,7 @@ function progress_default(Alpine) {
     });
     return {
       _value: 0,
+      // props
       interactive: false,
       init() {
         this.interactive = JSON.parse(

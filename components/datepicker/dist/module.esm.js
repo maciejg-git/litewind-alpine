@@ -49,15 +49,16 @@ function datepicker_default(Alpine) {
         months: null,
         weekdays: null
       },
-      locale: "en-GB",
-      mondayFirstWeekday: true,
-      adjacentMonthsDays: true,
-      range: false,
       _model: "",
       selectedSingle: null,
       selectedRange: [],
       rangeState: 0,
       mouseOverDate: null,
+      // props
+      locale: "en-GB",
+      mondayFirstWeekday: true,
+      adjacentMonthsDays: true,
+      range: false,
       init() {
         this.month = this.today.getMonth();
         this.year = this.today.getFullYear();

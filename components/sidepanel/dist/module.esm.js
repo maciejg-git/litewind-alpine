@@ -10,6 +10,7 @@ function sidepanel_default(Alpine) {
     });
     return {
       isOpen: false,
+      // props
       isModal: false,
       init() {
         this.$nextTick(() => {

@@ -8,9 +8,10 @@ function form_text_default(Alpine) {
       }
     };
     return {
-      input: "",
       validation: null,
       form: "default",
+      // props
+      input: "",
       init() {
         this.$nextTick(() => {
           this.input = Alpine.bound(this.$el, "data-input") ?? this.input;

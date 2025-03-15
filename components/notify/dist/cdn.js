@@ -15,11 +15,12 @@
       return {
         notifications: [],
         notifyId: 1e3,
+        buffer: [],
+        notificationsSticky: [],
+        // props
         order: "default",
         maxNotifications: 0,
         stickyAt: "end",
-        buffer: [],
-        notificationsSticky: [],
         delay: 1e4,
         dismissable: true,
         static: false,

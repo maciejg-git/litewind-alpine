@@ -17,9 +17,10 @@
       });
       return {
         isOpen: false,
+        options: {},
+        // props
         static: false,
         closable: true,
-        options: {},
         init() {
           this.$nextTick(() => {
             Alpine2.effect(() => {

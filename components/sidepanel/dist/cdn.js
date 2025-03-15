@@ -11,6 +11,7 @@
       });
       return {
         isOpen: false,
+        // props
         isModal: false,
         init() {
           this.$nextTick(() => {

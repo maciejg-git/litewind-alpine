@@ -32,16 +32,17 @@ function table_default(Alpine) {
       }
     });
     return {
-      tableData: [],
-      definition: [],
       sortKey: "",
       sortAsc: 1,
+      data: [],
+      // props
+      tableData: [],
+      definition: [],
       filter: "",
       page: 1,
       itemsPerPage: 0,
       locale: "en-GB",
       primaryKey: "",
-      data: [],
       onFilter: null,
       init() {
         this.$nextTick(() => {

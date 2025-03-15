@@ -9,9 +9,10 @@
         }
       };
       return {
-        input: "",
         validation: null,
         form: "default",
+        // props
+        input: "",
         init() {
           this.$nextTick(() => {
             this.input = Alpine2.bound(this.$el, "data-input") ?? this.input;

@@ -33,6 +33,9 @@ function dropdown_context_default(Alpine) {
       isShow: false,
       floating: null,
       contextData: {},
+      menuItems: null,
+      focusedMenuItemIndex: -1,
+      // props
       autoClose: true,
       placement: "bottom-start",
       offsetX: 0,
@@ -40,8 +43,6 @@ function dropdown_context_default(Alpine) {
       flip: false,
       autoPlacement: false,
       role: "",
-      menuItems: null,
-      focusedMenuItemIndex: -1,
       init() {
         this.$nextTick(() => {
           this.autoClose = JSON.parse(

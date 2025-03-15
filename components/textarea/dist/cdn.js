@@ -4,8 +4,9 @@
     Alpine2.data("textarea", () => {
       return {
         _value: "",
-        placeholder: "",
         validateValue: "_value",
+        // props
+        placeholder: "",
         init() {
           this.$nextTick(() => {
             Alpine2.effect(() => {
