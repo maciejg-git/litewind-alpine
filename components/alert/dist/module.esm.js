@@ -1,16 +1,28 @@
 // components/alert/alert.js
 function alert_default(Alpine) {
   Alpine.data("alert", () => {
+    let aria = {
+      main: {
+        ":role"() {
+          return this.role;
+        }
+      }
+    };
     return {
       isVisible: true,
+      // props
       variant: "info",
       closable: false,
+      role: "status",
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
             this.variant = Alpine.bound(this.$el, "data-variant") ?? this.variant;
           });
-          this.closable = Alpine.bound(this.$el, "data-closable") ?? this.closable;
+          this.closable = JSON.parse(
+            Alpine.bound(this.$el, "data-closable") ?? this.closable
+          );
+          this.role = Alpine.bound(this.$el, "data-role") ?? this.role;
           Alpine.bind(this.$el, {
             ":class"() {
               let classes = this.$el.attributes;
@@ -33,6 +45,7 @@ function alert_default(Alpine) {
             return this.isVisible;
           }
         });
+        Alpine.bind(this.$el, aria.main);
       },
       open() {
         this.isVisible = true;

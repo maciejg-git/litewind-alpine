@@ -1,9 +1,19 @@
 export default function (Alpine) {
   Alpine.data("alert", () => {
+    let aria = {
+      main: {
+        ":role"() {
+          return this.role
+        }
+      }
+    }
+
     return {
       isVisible: true,
+      // props
       variant: "info",
       closable: false,
+      role: "status",
 
       init() {
         this.$nextTick(() => {
@@ -11,8 +21,10 @@ export default function (Alpine) {
             this.variant =
               Alpine.bound(this.$el, "data-variant") ?? this.variant;
           });
-          this.closable =
-            Alpine.bound(this.$el, "data-closable") ?? this.closable;
+          this.closable = JSON.parse(
+            Alpine.bound(this.$el, "data-closable") ?? this.closable
+          )
+          this.role = Alpine.bound(this.$el, "data-role") ?? this.role
 
           Alpine.bind(this.$el, {
             ":class"() {
@@ -37,6 +49,7 @@ export default function (Alpine) {
             return this.isVisible;
           },
         });
+        Alpine.bind(this.$el, aria.main)
       },
       open() {
         this.isVisible = true;
