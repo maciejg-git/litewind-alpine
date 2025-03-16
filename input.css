@@ -86,20 +86,3 @@
     }
   }
 }
-
-.fade-leave-active,
-.fade-side-slide-leave-active,
-.fade-top-slide-leave-active {
-  position: absolute;
-  top: 0;
-  transition: opacity 0.2s ease;
-}
-
-.fade-enter-active {
-  transition: opacity 0.2s ease;
-  transition-delay: 0.2s;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
