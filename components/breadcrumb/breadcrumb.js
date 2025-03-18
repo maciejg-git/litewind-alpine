@@ -8,11 +8,11 @@ export default function (Alpine) {
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
-            this.items = Alpine.bound(this.$el, "data-items") ?? this.items
-          })
-        })
-        this.divider = Alpine.bound(this.$el, "data-divider") ?? this.divider
-      }
-    }
-  })
-}  
+            this.items = Alpine.bound(this.$el, "data-items") ?? this.items;
+          });
+        });
+        this.divider = Alpine.bound(this.$el, "data-divider") ?? this.divider;
+      },
+    };
+  });
+}

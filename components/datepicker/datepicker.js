@@ -98,6 +98,7 @@ export default function (Alpine) {
           });
         });
 
+        // update local selection after model changes
         Alpine.effect(() => {
           let dateRegexp = /^\d{4}-\d{2}-\d{2}$/;
 

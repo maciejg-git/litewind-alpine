@@ -8,7 +8,7 @@ export default function (Alpine) {
       },
       trigger: {
         ":aria-expanded"() {
-          return this.isShow
+          return this.isOpen
         },
         ":aria-controls"() {
           return this.$id("dropdown-aria")
@@ -51,7 +51,7 @@ export default function (Alpine) {
     });
 
     return {
-      isShow: false,
+      isOpen: false,
       floating: null,
       hideTimeout: null,
       menuItemsElements: null,
@@ -127,7 +127,7 @@ export default function (Alpine) {
             this.close();
           },
           ["@keydown.down.prevent"]() {
-            if (!this.isShow) {
+            if (!this.isOpen) {
               this.open()
             }
             if (!this.menuItemsElements.length) {
@@ -142,7 +142,7 @@ export default function (Alpine) {
             })
           },
           ["@keydown.up.prevent"]() {
-            if (!this.isShow) {
+            if (!this.isOpen) {
               this.open()
             }
             if (!this.menuItemsElements.length) {
@@ -166,7 +166,7 @@ export default function (Alpine) {
       scheduleHide() {
         return setTimeout(() => {
           this.floating.destroy();
-          this.isShow = false;
+          this.isOpen = false;
         }, 100);
       },
       open() {
@@ -174,17 +174,17 @@ export default function (Alpine) {
           clearTimeout(this.hideTimeout);
         }
         this.floating.startAutoUpdate();
-        this.isShow = true;
+        this.isOpen = true;
         this.menuItemsElements = this.$refs.menu.querySelectorAll("[role='menuitem']")
       },
       close() {
-        if (!this.isShow) return;
+        if (!this.isOpen) return;
         if (this.triggerEv === "hover") {
           this.hideTimeout = this.scheduleHide();
           return;
         }
         this.floating.destroy();
-        this.isShow = false;
+        this.isOpen = false;
         this.focusedMenuItemIndex = -1
       },
       preventHiding() {
@@ -198,7 +198,7 @@ export default function (Alpine) {
         }
       },
       toggle() {
-        this.isShow ? this.close() : this.open();
+        this.isOpen ? this.close() : this.open();
       },
       trigger: {
         "x-ref": "trigger",
@@ -207,7 +207,7 @@ export default function (Alpine) {
       },
       menu: {
         "x-show"() {
-          return this.isShow;
+          return this.isOpen;
         },
         "x-ref": "menu",
         "@mouseenter"() {

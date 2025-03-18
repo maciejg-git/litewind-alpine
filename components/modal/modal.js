@@ -38,6 +38,7 @@ export default function (Alpine) {
 
         Alpine.bind(this.$el, aria.main)
       },
+      // following functions remove scrollbar from the body when the modal is open
       getScrollBarWidth() {
         return window.innerWidth - document.documentElement.clientWidth;
       },

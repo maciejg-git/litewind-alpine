@@ -35,6 +35,7 @@ export default function (Alpine) {
 
       init() {
         this.id = this.$id("collapse")
+
         if (this.isAccordion) {
           this.$watch("isOpen", () => {
             this.updateAccordion(this)

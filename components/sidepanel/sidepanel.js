@@ -1,12 +1,12 @@
 export default function (Alpine) {
   Alpine.data("sidepanel", (dataExtend = {}) => {
     let bind = {};
-    [].forEach((i) => {
+    ["backdrop", "sidepanel"].forEach((i) => {
       if (dataExtend[i]) {
-        bind[i] = dataExtend[i]
-        delete dataExtend[i]
+        bind[i] = dataExtend[i];
+        delete dataExtend[i];
       }
-    })
+    });
 
     return {
       isOpen: false,
@@ -15,42 +15,46 @@ export default function (Alpine) {
 
       init() {
         this.$nextTick(() => {
-          this.isModal = JSON.parse(Alpine.bound(this.$el, "data-modal") ?? this.isModal)
-        })
+          this.isModal = JSON.parse(
+            Alpine.bound(this.$el, "data-modal") ?? this.isModal,
+          );
+        });
         Alpine.bind(this.$el, {
           "x-show"() {
-            return this.isOpen
+            return this.isOpen;
           },
           "@open-sidepanel.window"() {
-            let id = this.$event.detail.id || this.$event.detail
+            let id = this.$event.detail.id || this.$event.detail;
             if (id === this.$root.id) {
-              this.open()
+              this.open();
             }
-          }
-        })
+          },
+        });
       },
       open() {
-        this.isOpen = true
+        this.isOpen = true;
       },
       close() {
-        this.isOpen = false
+        this.isOpen = false;
       },
       toggle() {
-        this.isOpen = !this.open
+        this.isOpen = !this.open;
       },
       sidepanel: {
         "x-show"() {
-          return this.isOpen
-        }
+          return this.isOpen;
+        },
+        ...bind.sidepanel,
       },
       backdrop: {
         "x-show"() {
-          return this.isOpen
+          return this.isOpen;
         },
         "@click"() {
-          this.close()
-        }
-      }
-    }
-  })
-}  
+          this.close();
+        },
+        ...bind.backdrop,
+      },
+    };
+  });
+}

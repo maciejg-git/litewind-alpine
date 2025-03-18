@@ -57,6 +57,7 @@ export default function (Alpine) {
             }
           },
         });
+        // pause timers after mouse enters notify container
         Alpine.bind(this.$el, {
           "@mouseenter"() {
             this.handleContainerMouseEnter();
@@ -120,7 +121,6 @@ export default function (Alpine) {
       },
       close() {
         this.notify.isVisible.value = false;
-        // this.removeById(this.notify.notifyId)
       },
       push(notify) {
         let newNotify = {
@@ -172,6 +172,7 @@ export default function (Alpine) {
         this.notifications.push(newNotify);
       },
       notification: {
+        // notifications start hidden and are displayed in the nextTick to allow transitions
         "x-show"() {
           return this.notify.isVisible.value;
         },
