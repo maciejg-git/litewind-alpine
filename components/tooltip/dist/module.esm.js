@@ -41,8 +41,8 @@ function tooltip_default(Alpine) {
               floating.destroy();
               tooltip.destroyFloating = null;
               tooltip.isVisible = false;
-            },
-            tooltip.transition === "" ? 0 : 200
+            }
+            // tooltip.transition === "" ? 0 : 200,
           );
         }, tooltip.delay);
       }

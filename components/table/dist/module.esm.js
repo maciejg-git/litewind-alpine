@@ -125,6 +125,7 @@ function table_default(Alpine) {
         if (typeof this.onFilter === "function") {
           this.onFilter(filteredData);
         }
+        this.$dispatch("update:items-filtered", filteredData);
         if (!this.itemsPerPage) return filteredData;
         return filteredData.slice(
           (this.page - 1) * this.itemsPerPage,

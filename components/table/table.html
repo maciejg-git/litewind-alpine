@@ -6,7 +6,7 @@
     <title></title>
     <link href="/output.css" rel="stylesheet" />
     <script defer type="module" src="./builds/cdn.js"></script>
-    <script defer type="module" src="/pagination/pagination.js"></script>
+    <script defer type="module" src="/components/pagination/builds/cdn.js"></script>
     <script defer src="./table-store.js"></script>
     <script
       defer
@@ -69,9 +69,9 @@
       :data-definition="$store.table.definition"
       data-primary-key="id"
       :data-filter="$store.table.filter"
-      :data-on-filter="$store.table.onFilter"
       :data-page="$store.table.page"
       class="w-full table-auto border-collapse text-left text-[0.9rem]"
+      @update:items-filtered="$store.table.filteredItemsCount = $event.detail.length"
     >
       <thead>
         <tr>
