@@ -54,8 +54,8 @@ export default function useValidation(input, updateValidation) {
       if (res === true) {
         status[rule] = true;
       } else {
-        messages[rule] =
-          validationMessages[rule]?.replace("%d", ruleValue) || res;
+        messages[rule] = validationMessages[rule] || res;
+        messages[rule] = messages[rule].replace("%d", ruleValue)
       }
 
       return valid && status[rule];
