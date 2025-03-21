@@ -158,6 +158,7 @@
           this.notifications.push(newNotify);
         },
         notification: {
+          // notifications start hidden and are displayed in the nextTick to allow transitions
           "x-show"() {
             return this.notify.isVisible.value;
           },

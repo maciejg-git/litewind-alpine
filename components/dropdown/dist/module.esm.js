@@ -9,7 +9,7 @@ function dropdown_default(Alpine) {
       },
       trigger: {
         ":aria-expanded"() {
-          return this.isShow;
+          return this.isOpen;
         },
         ":aria-controls"() {
           return this.$id("dropdown-aria");
@@ -48,7 +48,7 @@ function dropdown_default(Alpine) {
       }
     });
     return {
-      isShow: false,
+      isOpen: false,
       floating: null,
       hideTimeout: null,
       menuItemsElements: null,
@@ -115,7 +115,7 @@ function dropdown_default(Alpine) {
             this.close();
           },
           ["@keydown.down.prevent"]() {
-            if (!this.isShow) {
+            if (!this.isOpen) {
               this.open();
             }
             if (!this.menuItemsElements.length) {
@@ -130,7 +130,7 @@ function dropdown_default(Alpine) {
             });
           },
           ["@keydown.up.prevent"]() {
-            if (!this.isShow) {
+            if (!this.isOpen) {
               this.open();
             }
             if (!this.menuItemsElements.length) {
@@ -153,7 +153,7 @@ function dropdown_default(Alpine) {
       scheduleHide() {
         return setTimeout(() => {
           this.floating.destroy();
-          this.isShow = false;
+          this.isOpen = false;
         }, 100);
       },
       open() {
@@ -161,17 +161,17 @@ function dropdown_default(Alpine) {
           clearTimeout(this.hideTimeout);
         }
         this.floating.startAutoUpdate();
-        this.isShow = true;
+        this.isOpen = true;
         this.menuItemsElements = this.$refs.menu.querySelectorAll("[role='menuitem']");
       },
       close() {
-        if (!this.isShow) return;
+        if (!this.isOpen) return;
         if (this.triggerEv === "hover") {
           this.hideTimeout = this.scheduleHide();
           return;
         }
         this.floating.destroy();
-        this.isShow = false;
+        this.isOpen = false;
         this.focusedMenuItemIndex = -1;
       },
       preventHiding() {
@@ -185,7 +185,7 @@ function dropdown_default(Alpine) {
         }
       },
       toggle() {
-        this.isShow ? this.close() : this.open();
+        this.isOpen ? this.close() : this.open();
       },
       trigger: {
         "x-ref": "trigger",
@@ -194,7 +194,7 @@ function dropdown_default(Alpine) {
       },
       menu: {
         "x-show"() {
-          return this.isShow;
+          return this.isOpen;
         },
         "x-ref": "menu",
         "@mouseenter"() {

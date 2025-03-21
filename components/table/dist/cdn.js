@@ -76,12 +76,14 @@
             this.primaryKey = Alpine2.bound(this.$el, "data-primary-key") ?? this.primaryKey;
           });
         },
+        // generate definition array from the first record of items array
         generateDefinitionFromData() {
           if (!this.tableData || !this.tableData.length) return [];
           return Object.keys(this.tableData[0]).map((item) => {
             return { key: item };
           });
         },
+        // validate definition provided by user
         getUserDefinition() {
           let definition = Alpine2.bound(this.$el, "data-definition");
           if (!Array.isArray(definition)) return false;

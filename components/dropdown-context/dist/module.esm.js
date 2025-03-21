@@ -30,7 +30,7 @@ function dropdown_context_default(Alpine) {
       }
     });
     return {
-      isShow: false,
+      isOpen: false,
       floating: null,
       contextData: {},
       menuItems: null,
@@ -103,18 +103,18 @@ function dropdown_context_default(Alpine) {
       },
       open() {
         this.floating.startAutoUpdate();
-        this.isShow = true;
+        this.isOpen = true;
         this.menuItems = this.$refs.menu.querySelectorAll("[role='menuitem']");
         this.$nextTick(() => this.$refs.menu.focus());
       },
       close() {
         this.floating.destroy();
-        this.isShow = false;
+        this.isOpen = false;
         this.focusedMenuItemIndex = -1;
       },
       menu: {
         "x-show"() {
-          return this.isShow;
+          return this.isOpen;
         },
         "@open-contextmenu.window"() {
           if (this.$event.detail.id !== this.$root.id) {

@@ -2,7 +2,7 @@
 function sidepanel_default(Alpine) {
   Alpine.data("sidepanel", (dataExtend = {}) => {
     let bind = {};
-    [].forEach((i) => {
+    ["backdrop", "sidepanel"].forEach((i) => {
       if (dataExtend[i]) {
         bind[i] = dataExtend[i];
         delete dataExtend[i];
@@ -14,7 +14,9 @@ function sidepanel_default(Alpine) {
       isModal: false,
       init() {
         this.$nextTick(() => {
-          this.isModal = JSON.parse(Alpine.bound(this.$el, "data-modal") ?? this.isModal);
+          this.isModal = JSON.parse(
+            Alpine.bound(this.$el, "data-modal") ?? this.isModal
+          );
         });
         Alpine.bind(this.$el, {
           "x-show"() {
@@ -40,7 +42,8 @@ function sidepanel_default(Alpine) {
       sidepanel: {
         "x-show"() {
           return this.isOpen;
-        }
+        },
+        ...bind.sidepanel
       },
       backdrop: {
         "x-show"() {
@@ -48,7 +51,8 @@ function sidepanel_default(Alpine) {
         },
         "@click"() {
           this.close();
-        }
+        },
+        ...bind.backdrop
       }
     };
   });

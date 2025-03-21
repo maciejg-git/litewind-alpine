@@ -10,7 +10,7 @@
         },
         trigger: {
           ":aria-expanded"() {
-            return this.isShow;
+            return this.isOpen;
           },
           ":aria-controls"() {
             return this.$id("dropdown-aria");
@@ -49,7 +49,7 @@
         }
       });
       return {
-        isShow: false,
+        isOpen: false,
         floating: null,
         hideTimeout: null,
         menuItemsElements: null,
@@ -116,7 +116,7 @@
               this.close();
             },
             ["@keydown.down.prevent"]() {
-              if (!this.isShow) {
+              if (!this.isOpen) {
                 this.open();
               }
               if (!this.menuItemsElements.length) {
@@ -131,7 +131,7 @@
               });
             },
             ["@keydown.up.prevent"]() {
-              if (!this.isShow) {
+              if (!this.isOpen) {
                 this.open();
               }
               if (!this.menuItemsElements.length) {
@@ -154,7 +154,7 @@
         scheduleHide() {
           return setTimeout(() => {
             this.floating.destroy();
-            this.isShow = false;
+            this.isOpen = false;
           }, 100);
         },
         open() {
@@ -162,17 +162,17 @@
             clearTimeout(this.hideTimeout);
           }
           this.floating.startAutoUpdate();
-          this.isShow = true;
+          this.isOpen = true;
           this.menuItemsElements = this.$refs.menu.querySelectorAll("[role='menuitem']");
         },
         close() {
-          if (!this.isShow) return;
+          if (!this.isOpen) return;
           if (this.triggerEv === "hover") {
             this.hideTimeout = this.scheduleHide();
             return;
           }
           this.floating.destroy();
-          this.isShow = false;
+          this.isOpen = false;
           this.focusedMenuItemIndex = -1;
         },
         preventHiding() {
@@ -186,7 +186,7 @@
           }
         },
         toggle() {
-          this.isShow ? this.close() : this.open();
+          this.isOpen ? this.close() : this.open();
         },
         trigger: {
           "x-ref": "trigger",
@@ -195,7 +195,7 @@
         },
         menu: {
           "x-show"() {
-            return this.isShow;
+            return this.isOpen;
           },
           "x-ref": "menu",
           "@mouseenter"() {
