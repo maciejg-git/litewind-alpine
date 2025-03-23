@@ -36,9 +36,9 @@ export default function (Alpine) {
         tooltip.timer = setTimeout(() => {
           document.body.appendChild(tooltip.wrapper);
 
-          // requestAnimationFrame(() => {
-          //   addTransition(tooltip, false);
-          // });
+          requestAnimationFrame(() => {
+            addTransition(tooltip, false);
+          });
 
           tooltip.destroyFloating = floating.startAutoUpdate(el);
           tooltip.isVisible = true;
@@ -54,7 +54,7 @@ export default function (Alpine) {
         if (!tooltip.isVisible) return;
 
         tooltip.timerOut = setTimeout(() => {
-          // addTransition(tooltip, true);
+          addTransition(tooltip, true);
 
           tooltip.timerRemove = setTimeout(
             () => {
@@ -64,7 +64,7 @@ export default function (Alpine) {
               tooltip.isVisible = false;
             },
 
-            // tooltip.transition === "" ? 0 : 200,
+            tooltip.transition === "" ? 0 : 200,
           );
         }, tooltip.delay);
       }
@@ -81,6 +81,22 @@ export default function (Alpine) {
         el.innerHTML = "<div class='tooltip'></div>";
 
         return el;
+      }
+
+      let addTransition = (m, v) => {
+        if (m.transition === "") {
+          return
+        }
+
+        m.tooltip.style.transition = "opacity 0.2s ease, transform 0.2s"
+
+        if (m.transition === "fade" || m.transition === "scale-fade") {
+          m.tooltip.style.opacity = v ? 0 : 1
+        }
+
+        if (m.transition === "scale-fade") {
+          m.tooltip.style.transform = v ? "scale(0.9)": "scale(1)"
+        }
       }
 
       let defaults = {
@@ -120,6 +136,9 @@ export default function (Alpine) {
           if (i === "func") {
             return ["func", true];
           }
+          if (i === "fade" || i === "scale-fade") {
+            return ["transition", i]
+          }
         });
 
         return {
@@ -148,6 +167,8 @@ export default function (Alpine) {
       };
 
       el._v_tooltip.tooltip.innerText = !options.func ? expression : "";
+
+      addTransition(el._v_tooltip, true)
 
       floating = useFloating(el, el._v_tooltip.wrapper, el._v_tooltip);
 

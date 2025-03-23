@@ -26,6 +26,9 @@
           }
           tooltip.timer = setTimeout(() => {
             document.body.appendChild(tooltip.wrapper);
+            requestAnimationFrame(() => {
+              addTransition(tooltip, false);
+            });
             tooltip.destroyFloating = floating.startAutoUpdate(el2);
             tooltip.isVisible = true;
           }, tooltip.delay);
@@ -36,14 +39,15 @@
           clearShowTimer(el2);
           if (!tooltip.isVisible) return;
           tooltip.timerOut = setTimeout(() => {
+            addTransition(tooltip, true);
             tooltip.timerRemove = setTimeout(
               () => {
                 tooltip.wrapper.remove();
                 floating.destroy();
                 tooltip.destroyFloating = null;
                 tooltip.isVisible = false;
-              }
-              // tooltip.transition === "" ? 0 : 200,
+              },
+              tooltip.transition === "" ? 0 : 200
             );
           }, tooltip.delay);
         }
@@ -57,6 +61,18 @@
           el2.innerHTML = "<div class='tooltip'></div>";
           return el2;
         }
+        let addTransition = (m, v) => {
+          if (m.transition === "") {
+            return;
+          }
+          m.tooltip.style.transition = "opacity 0.2s ease, transform 0.2s";
+          if (m.transition === "fade" || m.transition === "scale-fade") {
+            m.tooltip.style.opacity = v ? 0 : 1;
+          }
+          if (m.transition === "scale-fade") {
+            m.tooltip.style.transform = v ? "scale(0.9)" : "scale(1)";
+          }
+        };
         let defaults = {
           placement: "bottom",
           delay: 50,
@@ -91,6 +107,9 @@
             }
             if (i === "func") {
               return ["func", true];
+            }
+            if (i === "fade" || i === "scale-fade") {
+              return ["transition", i];
             }
           });
           return {

@@ -56,8 +56,11 @@ export default function (Alpine) {
         });
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_value",
-          ["@mousedown.prevent"]() {
+          ["@mousedown"]() {
             this.$refs.input.focus();
+            if (this.$event.target !== this.$refs.input) {
+              this.$event.preventDefault()
+            }
           },
         });
       },
