@@ -57,7 +57,10 @@ export default function (Alpine) {
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_value",
           ["@mousedown"]() {
+            // click on elements inside wrapper (slots, icon, clear button) should focus input element
             this.$refs.input.focus();
+            // prevent default on elements inside wrapper because mouse down on them will
+            // focus out input element. Do not prevent default for input element to allow text selection.
             if (this.$event.target !== this.$refs.input) {
               this.$event.preventDefault()
             }

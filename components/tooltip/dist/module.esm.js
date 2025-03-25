@@ -132,6 +132,7 @@ function tooltip_default(Alpine) {
         ...options
       };
       el._v_tooltip.tooltip.innerText = !options.func ? expression : "";
+      addTransition(el._v_tooltip, true);
       floating = useFloating(el, el._v_tooltip.wrapper, el._v_tooltip);
       el.addEventListener("mouseenter", show);
       el.addEventListener("mouseleave", hide);
