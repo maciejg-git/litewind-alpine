@@ -1,6 +1,6 @@
 // components/dropdown/dropdown.js
 function dropdown_default(Alpine) {
-  Alpine.data("dropdown", (dataExtend = {}) => {
+  Alpine.data("dropdown", () => {
     let aria = {
       main: {
         "x-id"() {
@@ -40,13 +40,6 @@ function dropdown_default(Alpine) {
       "autoPlacement",
       "inline"
     ];
-    let bind = {};
-    ["trigger", "menu"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
     return {
       isOpen: false,
       floating: null,
@@ -189,7 +182,6 @@ function dropdown_default(Alpine) {
       },
       trigger: {
         "x-ref": "trigger",
-        ...bind.trigger,
         ...aria.trigger
       },
       menu: {
@@ -211,13 +203,11 @@ function dropdown_default(Alpine) {
             this.close();
           }
         },
-        ...bind.menu,
         ...aria.menu
       },
       menuItem: {
         ...aria.menuItem
-      },
-      ...dataExtend
+      }
     };
   });
 }

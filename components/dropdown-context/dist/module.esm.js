@@ -1,6 +1,6 @@
 // components/dropdown-context/dropdown-context.js
 function dropdown_context_default(Alpine) {
-  Alpine.data("dropdownContext", (dataExtend = {}) => {
+  Alpine.data("dropdownContext", () => {
     let aria = {
       menu: {
         ":role"() {
@@ -22,13 +22,6 @@ function dropdown_context_default(Alpine) {
       "autoPlacement",
       "inline"
     ];
-    let bind = {};
-    ["menu"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
     return {
       isOpen: false,
       floating: null,
@@ -134,13 +127,11 @@ function dropdown_context_default(Alpine) {
             this.close();
           }
         },
-        ...bind.menu,
         ...aria.menu
       },
       menuItem: {
         ...aria.menuItem
-      },
-      ...dataExtend
+      }
     };
   });
 }

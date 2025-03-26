@@ -1,7 +1,7 @@
 (() => {
   // components/tabs/tabs.js
   function tabs_default(Alpine2) {
-    Alpine2.data("tabs", (dataExtend = {}) => {
+    Alpine2.data("tabs", () => {
       let aria = {
         tabBar: {
           role: "tablist"
@@ -16,13 +16,6 @@
           role: "tabpanel"
         }
       };
-      let bind = {};
-      ["label", "content"].forEach((i) => {
-        if (dataExtend[i]) {
-          bind[i] = dataExtend[i];
-          delete dataExtend[i];
-        }
-      });
       return {
         selectedTab: "",
         init() {
@@ -62,17 +55,14 @@
             }
             return c;
           },
-          ...aria.label,
-          ...bind.label
+          ...aria.label
         },
         content: {
           "x-show"() {
             return this.isSelected();
           },
-          ...aria.content,
-          ...bind.content
-        },
-        ...dataExtend
+          ...aria.content
+        }
       };
     });
   }

@@ -1,6 +1,6 @@
 // components/table/table.js
 function table_default(Alpine) {
-  Alpine.data("table", (dataExtend = {}) => {
+  Alpine.data("table", () => {
     let undefNullToStr = (v) => v === void 0 || v === null ? "" : v;
     let isDate = (d) => Object.prototype.toString.call(d) == "[object Date]";
     let compare = (a, b) => a < b ? -1 : a > b ? 1 : 0;
@@ -24,13 +24,6 @@ function table_default(Alpine) {
       filterable: true,
       visible: true
     };
-    let bind = {};
-    ["header"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
     return {
       sortKey: "",
       sortAsc: 1,
@@ -164,10 +157,8 @@ function table_default(Alpine) {
         },
         ":class"() {
           return this.isSortable() ? "cursor-pointer" : "";
-        },
-        ...bind.header
-      },
-      ...dataExtend
+        }
+      }
     };
   });
 }

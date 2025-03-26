@@ -1,7 +1,7 @@
 (() => {
   // components/collapse/collapse.js
   function collapse_default(Alpine2) {
-    Alpine2.data("collapse", (dataExtend = {}) => {
+    Alpine2.data("collapse", () => {
       let aria = {
         main: {
           "x-id"() {
@@ -22,13 +22,6 @@
           }
         }
       };
-      let bind = {};
-      ["trigger", "content"].forEach((i) => {
-        if (dataExtend[i]) {
-          bind[i] = dataExtend[i];
-          delete dataExtend[i];
-        }
-      });
       return {
         isOpen: false,
         id: null,
@@ -59,17 +52,14 @@
           "@click"() {
             this.toggle();
           },
-          ...bind.trigger,
           ...aria.trigger
         },
         content: {
           "x-show"() {
             return this.isOpen;
           },
-          ...bind.content,
           ...aria.content
-        },
-        ...dataExtend
+        }
       };
     });
     Alpine2.data("accordion", () => {

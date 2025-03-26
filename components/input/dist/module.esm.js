@@ -1,13 +1,6 @@
 // components/input/input.js
 function input_default(Alpine) {
-  Alpine.data("input", (dataExtend = {}) => {
-    let bind = {};
-    ["input", "loader", "clearButton"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
+  Alpine.data("input", () => {
     return {
       _value: "",
       validateValue: "_value",
@@ -77,22 +70,18 @@ function input_default(Alpine) {
         },
         "@blur"() {
           if (typeof this.touch === "function") this.touch();
-        },
-        ...bind.input
+        }
       },
       loader: {
         "x-show"() {
           return this.useLoader && this.isLoading;
-        },
-        ...bind.loader
+        }
       },
       clearButton: {
         "x-show"() {
           return this.clearable;
-        },
-        ...bind.clearButton
-      },
-      ...dataExtend
+        }
+      }
     };
   });
 }

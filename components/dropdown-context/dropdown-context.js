@@ -1,5 +1,5 @@
 export default function (Alpine) {
-  Alpine.data("dropdownContext", (dataExtend = {}) => {
+  Alpine.data("dropdownContext", () => {
     let aria = {
       menu: {
         ":role"() {
@@ -23,14 +23,6 @@ export default function (Alpine) {
       "autoPlacement",
       "inline",
     ];
-
-    let bind = {};
-    ["menu"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
 
     return {
       isOpen: false,
@@ -142,13 +134,11 @@ export default function (Alpine) {
             this.close();
           }
         },
-        ...bind.menu,
         ...aria.menu,
       },
       menuItem: {
         ...aria.menuItem,
       },
-      ...dataExtend,
     };
   });
 }  

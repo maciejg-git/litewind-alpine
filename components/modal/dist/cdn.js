@@ -1,20 +1,13 @@
 (() => {
   // components/modal/modal.js
   function modal_default(Alpine2) {
-    Alpine2.data("modal", (dataExtend = {}) => {
+    Alpine2.data("modal", () => {
       let aria = {
         main: {
           role: "dialog",
           "aria-modal": true
         }
       };
-      let bind = {};
-      ["container", "positioner", "content", "backdrop"].forEach((i) => {
-        if (dataExtend[i]) {
-          bind[i] = dataExtend[i];
-          delete dataExtend[i];
-        }
-      });
       return {
         isOpen: false,
         options: {},
@@ -77,27 +70,21 @@
           "@keydown.escape"() {
             if (this.static) return;
             this.close();
-          },
-          ...bind.container
+          }
         },
-        positioner: {
-          ...bind.positioner
-        },
+        positioner: {},
         content: {
           "x-show"() {
             return this.isOpen;
           },
           "@click.stop"() {
-          },
-          ...bind.content
+          }
         },
         backdrop: {
           "x-show"() {
             return this.isOpen;
-          },
-          ...bind.backdrop
-        },
-        ...dataExtend
+          }
+        }
       };
     });
   }

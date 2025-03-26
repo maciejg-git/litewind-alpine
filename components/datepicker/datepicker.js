@@ -1,5 +1,5 @@
 export default function (Alpine) {
-  Alpine.data("datepicker", (dataExtend = {}) => {
+  Alpine.data("datepicker", () => {
     let getNumberRange = (from, count) => {
       return Array.from({ length: count }, (_, i) => i + from);
     };
@@ -33,20 +33,6 @@ export default function (Alpine) {
       FROM_SELECTED: 1,
       TO_SELECTED: 2,
     };
-
-    let bind = {};
-    [
-      "prevYearButton",
-      "prevMonthButton",
-      "nextMonthButton",
-      "nextYearButton",
-      "day",
-    ].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
 
     return {
       today: new Date(),
@@ -297,25 +283,21 @@ export default function (Alpine) {
         "@click"() {
           this.setPrevMonth();
         },
-        ...bind.prevMonthButton,
       },
       nextMonthButton: {
         "@click"() {
           this.setNextMonth();
         },
-        ...bind.nextMonthButton,
       },
       prevYearButton: {
         "@click"() {
           this.setPrevYear();
         },
-        ...bind.prevYearButton,
       },
       nextYearButton: {
         "@click"() {
           this.setNextYear();
         },
-        ...bind.nextYearButton,
       },
       day: {
         ":class"() {
@@ -353,9 +335,7 @@ export default function (Alpine) {
         "@mouseenter"() {
           this.mouseOverDate = this.d;
         },
-        ...bind.day,
       },
-      ...dataExtend,
     };
   });
 }  

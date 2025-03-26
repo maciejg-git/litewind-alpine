@@ -1,16 +1,8 @@
 export default function (Alpine) {
-  Alpine.data("notify", (dataExtend = {}) => {
+  Alpine.data("notify", () => {
     let aria = {
       role: "status",
     }
-
-    let bind = {};
-    ["notification"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
 
     return {
       notifications: [],
@@ -190,10 +182,8 @@ export default function (Alpine) {
             });
           });
         },
-        ...bind.notification,
         ...aria.notification,
       },
-      ...dataExtend,
     };
   });
 }  

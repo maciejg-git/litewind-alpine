@@ -1,7 +1,7 @@
 (() => {
   // components/datepicker/datepicker.js
   function datepicker_default(Alpine2) {
-    Alpine2.data("datepicker", (dataExtend = {}) => {
+    Alpine2.data("datepicker", () => {
       let getNumberRange = (from, count) => {
         return Array.from({ length: count }, (_, i) => i + from);
       };
@@ -29,19 +29,6 @@
         FROM_SELECTED: 1,
         TO_SELECTED: 2
       };
-      let bind = {};
-      [
-        "prevYearButton",
-        "prevMonthButton",
-        "nextMonthButton",
-        "nextYearButton",
-        "day"
-      ].forEach((i) => {
-        if (dataExtend[i]) {
-          bind[i] = dataExtend[i];
-          delete dataExtend[i];
-        }
-      });
       return {
         today: /* @__PURE__ */ new Date(),
         month: null,
@@ -253,26 +240,22 @@
         prevMonthButton: {
           "@click"() {
             this.setPrevMonth();
-          },
-          ...bind.prevMonthButton
+          }
         },
         nextMonthButton: {
           "@click"() {
             this.setNextMonth();
-          },
-          ...bind.nextMonthButton
+          }
         },
         prevYearButton: {
           "@click"() {
             this.setPrevYear();
-          },
-          ...bind.prevYearButton
+          }
         },
         nextYearButton: {
           "@click"() {
             this.setNextYear();
-          },
-          ...bind.nextYearButton
+          }
         },
         day: {
           ":class"() {
@@ -306,10 +289,8 @@
           },
           "@mouseenter"() {
             this.mouseOverDate = this.d;
-          },
-          ...bind.day
-        },
-        ...dataExtend
+          }
+        }
       };
     });
   }

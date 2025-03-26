@@ -1,5 +1,5 @@
 export default function (Alpine) {
-  Alpine.data("tabs", (dataExtend = {}) => {
+  Alpine.data("tabs", () => {
     let aria = {
       tabBar: {
         role: "tablist",
@@ -14,14 +14,6 @@ export default function (Alpine) {
         role: "tabpanel",
       },
     };
-
-    let bind = {};
-    ["label", "content"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
 
     return {
       selectedTab: "",
@@ -67,16 +59,13 @@ export default function (Alpine) {
           return c;
         },
         ...aria.label,
-        ...bind.label,
       },
       content: {
         "x-show"() {
           return this.isSelected();
         },
         ...aria.content,
-        ...bind.content,
       },
-      ...dataExtend,
     };
   });
 }  

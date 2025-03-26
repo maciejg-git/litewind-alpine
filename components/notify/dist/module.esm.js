@@ -1,16 +1,9 @@
 // components/notify/notify.js
 function notify_default(Alpine) {
-  Alpine.data("notify", (dataExtend = {}) => {
+  Alpine.data("notify", () => {
     let aria = {
       role: "status"
     };
-    let bind = {};
-    ["notification"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
     return {
       notifications: [],
       notifyId: 1e3,
@@ -175,10 +168,8 @@ function notify_default(Alpine) {
             });
           });
         },
-        ...bind.notification,
         ...aria.notification
-      },
-      ...dataExtend
+      }
     };
   });
 }

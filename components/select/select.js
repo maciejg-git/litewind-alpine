@@ -1,5 +1,5 @@
 export default function (Alpine) {
-  Alpine.data("select", (dataExtend = {}) => {
+  Alpine.data("select", () => {
     let aria = {
       main: {
         "x-id"() {
@@ -46,14 +46,6 @@ export default function (Alpine) {
         el.offsetTop - el.parentElement.clientHeight / 2 + el.clientHeight / 2,
       );
     };
-
-    let bind = {};
-    ["trigger", "menu", "option"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
 
     return {
       isOpen: false,
@@ -243,7 +235,6 @@ export default function (Alpine) {
         ":data-placeholder"() {
           return Alpine.bound(this.selectEl, "data-placeholder");
         },
-        ...bind.trigger,
         ...aria.trigger,
       },
       menu: {
@@ -267,7 +258,6 @@ export default function (Alpine) {
             this.$dispatch("scroll-to-bottom");
           }
         },
-        ...bind.menu,
         ...aria.menu,
       },
       option: {
@@ -292,10 +282,8 @@ export default function (Alpine) {
         ":data-index"() {
           return this.index;
         },
-        ...bind.option,
         ...aria.option,
       },
-      ...dataExtend,
     };
   });
 }  

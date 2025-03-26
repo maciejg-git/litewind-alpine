@@ -1,5 +1,5 @@
 export default function (Alpine) {
-  Alpine.data("dropdown", (dataExtend = {}) => {
+  Alpine.data("dropdown", () => {
     let aria = {
       main: {
         "x-id"() {
@@ -41,14 +41,6 @@ export default function (Alpine) {
       "autoPlacement",
       "inline",
     ];
-
-    let bind = {};
-    ["trigger", "menu"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
 
     return {
       isOpen: false,
@@ -202,7 +194,6 @@ export default function (Alpine) {
       },
       trigger: {
         "x-ref": "trigger",
-        ...bind.trigger,
         ...aria.trigger,
       },
       menu: {
@@ -224,13 +215,11 @@ export default function (Alpine) {
             this.close();
           }
         },
-        ...bind.menu,
         ...aria.menu,
       },
       menuItem: {
         ...aria.menuItem,
       },
-      ...dataExtend,
     };
   });
 }  

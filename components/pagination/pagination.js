@@ -1,5 +1,5 @@
 export default function (Alpine) {
-  Alpine.data("pagination", (dataExtend = {}) => {
+  Alpine.data("pagination", () => {
     let aria = {
       main: {
         "aria-label": "Pagination",
@@ -21,14 +21,6 @@ export default function (Alpine) {
     let getNumberRange = (from, count) => {
       return Array.from({ length: count }, (_, i) => i + from);
     };
-
-    let bind = {};
-    ["prevButton", "nextButton", "pageButton"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
 
     return {
       currentPage: 1,
@@ -107,14 +99,12 @@ export default function (Alpine) {
         "@click"() {
           this.handleClickPrev();
         },
-        ...bind.prevButton,
         ...aria.prevButton,
       },
       nextButton: {
         "@click"() {
           this.handleClickNext();
         },
-        ...bind.nextButton,
         ...aria.nextButton,
       },
       pageButton: {
@@ -132,10 +122,8 @@ export default function (Alpine) {
 
           return c;
         },
-        ...bind.pageButton,
         ...aria.pageButton,
       },
-      ...dataExtend,
     };
   });
 }  

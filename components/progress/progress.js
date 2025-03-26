@@ -1,5 +1,5 @@
 export default function (Alpine) {
-  Alpine.data("progress", (dataExtend = {}) => {
+  Alpine.data("progress", () => {
     let aria = {
       main: {
         role: "progressbar",
@@ -8,14 +8,6 @@ export default function (Alpine) {
         }
       }
     }
-
-    let bind = {};
-    ["progressBar"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
 
     return {
       _value: 0,
@@ -43,9 +35,7 @@ export default function (Alpine) {
         ":style"() {
           return `width: ${this._value}%`;
         },
-        ...bind.progressBar,
       },
-      ...dataExtend,
     };
   });
 }  

@@ -1,14 +1,7 @@
 (() => {
   // components/sidepanel/sidepanel.js
   function sidepanel_default(Alpine2) {
-    Alpine2.data("sidepanel", (dataExtend = {}) => {
-      let bind = {};
-      ["backdrop", "sidepanel"].forEach((i) => {
-        if (dataExtend[i]) {
-          bind[i] = dataExtend[i];
-          delete dataExtend[i];
-        }
-      });
+    Alpine2.data("sidepanel", () => {
       return {
         isOpen: false,
         // props
@@ -43,8 +36,7 @@
         sidepanel: {
           "x-show"() {
             return this.isOpen;
-          },
-          ...bind.sidepanel
+          }
         },
         backdrop: {
           "x-show"() {
@@ -52,8 +44,7 @@
           },
           "@click"() {
             this.close();
-          },
-          ...bind.backdrop
+          }
         }
       };
     });

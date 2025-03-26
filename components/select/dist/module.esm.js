@@ -1,6 +1,6 @@
 // components/select/select.js
 function select_default(Alpine) {
-  Alpine.data("select", (dataExtend = {}) => {
+  Alpine.data("select", () => {
     let aria = {
       main: {
         "x-id"() {
@@ -41,13 +41,6 @@ function select_default(Alpine) {
         el.offsetTop - el.parentElement.clientHeight / 2 + el.clientHeight / 2
       );
     };
-    let bind = {};
-    ["trigger", "menu", "option"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
     return {
       isOpen: false,
       floating: null,
@@ -227,7 +220,6 @@ function select_default(Alpine) {
         ":data-placeholder"() {
           return Alpine.bound(this.selectEl, "data-placeholder");
         },
-        ...bind.trigger,
         ...aria.trigger
       },
       menu: {
@@ -249,7 +241,6 @@ function select_default(Alpine) {
             this.$dispatch("scroll-to-bottom");
           }
         },
-        ...bind.menu,
         ...aria.menu
       },
       option: {
@@ -273,10 +264,8 @@ function select_default(Alpine) {
         ":data-index"() {
           return this.index;
         },
-        ...bind.option,
         ...aria.option
-      },
-      ...dataExtend
+      }
     };
   });
 }

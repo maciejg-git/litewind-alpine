@@ -1,7 +1,7 @@
 (() => {
   // components/progress/progress.js
   function progress_default(Alpine2) {
-    Alpine2.data("progress", (dataExtend = {}) => {
+    Alpine2.data("progress", () => {
       let aria = {
         main: {
           role: "progressbar",
@@ -10,13 +10,6 @@
           }
         }
       };
-      let bind = {};
-      ["progressBar"].forEach((i) => {
-        if (dataExtend[i]) {
-          bind[i] = dataExtend[i];
-          delete dataExtend[i];
-        }
-      });
       return {
         _value: 0,
         // props
@@ -39,10 +32,8 @@
         progressBar: {
           ":style"() {
             return `width: ${this._value}%`;
-          },
-          ...bind.progressBar
-        },
-        ...dataExtend
+          }
+        }
       };
     });
   }

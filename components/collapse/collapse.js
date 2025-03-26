@@ -1,5 +1,5 @@
 export default function (Alpine) {
-  Alpine.data("collapse", (dataExtend = {}) => {
+  Alpine.data("collapse", () => {
     let aria = {
       main: {
         "x-id"() {
@@ -20,14 +20,6 @@ export default function (Alpine) {
         }
       }
     }
-
-    let bind = {};
-    ["trigger", "content"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
 
     return {
       isOpen: false,
@@ -62,17 +54,14 @@ export default function (Alpine) {
         "@click"() {
           this.toggle()
         },
-        ...bind.trigger,
         ...aria.trigger,
       },
       content: {
         "x-show"() {
           return this.isOpen
         },
-        ...bind.content,
         ...aria.content,
       },
-      ...dataExtend,
     }
   })
 

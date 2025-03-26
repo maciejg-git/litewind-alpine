@@ -1,6 +1,6 @@
 // components/pagination/pagination.js
 function pagination_default(Alpine) {
-  Alpine.data("pagination", (dataExtend = {}) => {
+  Alpine.data("pagination", () => {
     let aria = {
       main: {
         "aria-label": "Pagination"
@@ -21,13 +21,6 @@ function pagination_default(Alpine) {
     let getNumberRange = (from, count) => {
       return Array.from({ length: count }, (_, i) => i + from);
     };
-    let bind = {};
-    ["prevButton", "nextButton", "pageButton"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
     return {
       currentPage: 1,
       // props
@@ -102,14 +95,12 @@ function pagination_default(Alpine) {
         "@click"() {
           this.handleClickPrev();
         },
-        ...bind.prevButton,
         ...aria.prevButton
       },
       nextButton: {
         "@click"() {
           this.handleClickNext();
         },
-        ...bind.nextButton,
         ...aria.nextButton
       },
       pageButton: {
@@ -126,10 +117,8 @@ function pagination_default(Alpine) {
           }
           return c;
         },
-        ...bind.pageButton,
         ...aria.pageButton
-      },
-      ...dataExtend
+      }
     };
   });
 }

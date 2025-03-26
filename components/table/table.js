@@ -1,5 +1,5 @@
 export default function (Alpine) {
-  Alpine.data("table", (dataExtend = {}) => {
+  Alpine.data("table", () => {
     let undefNullToStr = (v) => (v === undefined || v === null ? "" : v);
 
     let isDate = (d) => Object.prototype.toString.call(d) == "[object Date]";
@@ -33,14 +33,6 @@ export default function (Alpine) {
       filterable: true,
       visible: true,
     };
-
-    let bind = {};
-    ["header"].forEach((i) => {
-      if (dataExtend[i]) {
-        bind[i] = dataExtend[i];
-        delete dataExtend[i];
-      }
-    });
 
     return {
       sortKey: "",
@@ -195,9 +187,7 @@ export default function (Alpine) {
         ":class"() {
           return this.isSortable() ? "cursor-pointer" : "";
         },
-        ...bind.header,
       },
-      ...dataExtend,
     };
   });
 }  
