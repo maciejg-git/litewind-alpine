@@ -103,7 +103,7 @@
             </svg>
           </button>
         </div>
-        <div class="mb-2 grid grid-cols-7">
+        <div class="mb-3 grid grid-cols-7">
           <template x-for="weekday in weekdays">
             <div
               x-text="weekday"
@@ -111,12 +111,12 @@
             ></div>
           </template>
         </div>
-        <div class="relative mb-2 grid grid-cols-7 justify-items-center">
+        <div class="relative mb-3 grid grid-cols-7 justify-items-center gap-2">
           <template x-for="d in days" :key="getDayKey()">
             <button
               x-bind="day"
               x-text="getDayText"
-              class="mx-1 my-1 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full py-1 text-sm font-semibold"
+              class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full py-1 text-sm font-semibold"
               class-default="hover:bg-secondary-200 dark:hover:bg-dark-700"
               class-today="border border-primary-400 !font-bold text-primary-400 dark:text-primary-400"
               class-adjacent="text-text-800/20 dark:text-text-200/10"
