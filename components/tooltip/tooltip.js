@@ -25,7 +25,10 @@ export default function (Alpine) {
 
         clearHideTimers(el);
 
-        if (tooltip.isVisible) return;
+        if (tooltip.isVisible) {
+          addTransition(tooltip, false)
+          return;
+        }
 
         if (typeof el._v_tooltip.func === "function") {
           el._v_tooltip.func((v) => {
