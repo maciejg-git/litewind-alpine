@@ -14,7 +14,7 @@
   <body>
     <div
       x-data="textarea"
-      class="flex flex-1 items-center rounded border px-3 py-2 outline-none transition-shadow duration-200 focus-within:ring focus:outline-none"
+      class="flex flex-1 items-center rounded-sm border px-3 py-2 outline-hidden transition-shadow duration-200 focus-within:ring-3 focus:outline-hidden"
       class-default="border-secondary-300 bg-white focus-within:border-secondary-400 focus-within:ring-primary-200 dark:border-dark-600 dark:bg-dark-800 dark:text-text-300 dark:focus-within:ring-primary-300"
       class-valid="text-success-600 dark:text-success-600 border-success-300 dark:border-success-400 focus-within:ring-success-200 dark:focus-within:ring-success-300"
       class-invalid="text-danger-600 dark:text-danger-600 border-danger-300 dark:border-danger-400 focus-within:ring-danger-200 dark:focus-within:ring-danger-300"
@@ -23,7 +23,7 @@
         x-bind="textarea"
         rows=""
         cols=""
-        class="min-w-0 flex-1 border-0 bg-transparent p-0 outline-none focus:min-w-[64px] focus:outline-none"
+        class="min-w-0 flex-1 border-0 bg-transparent p-0 outline-hidden focus:min-w-[64px] focus:outline-hidden"
       ></textarea>
     </div>
   </body>

@@ -23,7 +23,7 @@
     "./alert.js": "./components/alert/dist/module.esm.js"
   },
   "scripts": {
-    "tailwind": "npx tailwindcss -i ./input.css -o ./output.css --watch",
+    "tailwind": "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch",
     "dev": "npx @11ty/eleventy-dev-server",
     "test": "jest",
     "build": "node scripts/build.js"
@@ -40,9 +40,10 @@
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.4.1",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^4.0.17"
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.6.13"
+    "@floating-ui/dom": "^1.6.13",
+    "@tailwindcss/cli": "^4.0.17"
   }
 }

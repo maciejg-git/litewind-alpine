@@ -1,29 +1,141 @@
-@tailwind base;
-@tailwind components;
+@import 'tailwindcss';
 
-[x-cloak] { display: none !important; }
+@custom-variant dark (&:is(.dark *));
 
-@tailwind utilities;
+@theme {
+  --color-primary-50: #f5f3ff;
+  --color-primary-100: #ede9fe;
+  --color-primary-200: #ddd6fe;
+  --color-primary-300: #c4b5fd;
+  --color-primary-400: #a78bfa;
+  --color-primary-500: #8b5cf6;
+  --color-primary-600: #7c3aed;
+  --color-primary-700: #6d28d9;
+  --color-primary-800: #5b21b6;
+  --color-primary-900: #4c1d95;
+  --color-primary-950: #2e1065;
 
-@layer components {
-  .btn {
-    @apply px-4 py-1 rounded
+  --color-secondary-50: #f9fafb;
+  --color-secondary-100: #f3f4f6;
+  --color-secondary-200: #e5e7eb;
+  --color-secondary-300: #d1d5db;
+  --color-secondary-400: #9ca3af;
+  --color-secondary-500: #6b7280;
+  --color-secondary-600: #4b5563;
+  --color-secondary-700: #374151;
+  --color-secondary-800: #1f2937;
+  --color-secondary-900: #111827;
+  --color-secondary-950: #030712;
+
+  --color-info-50: #eff6ff;
+  --color-info-100: #dbeafe;
+  --color-info-200: #bfdbfe;
+  --color-info-300: #93c5fd;
+  --color-info-400: #60a5fa;
+  --color-info-500: #3b82f6;
+  --color-info-600: #2563eb;
+  --color-info-700: #1d4ed8;
+  --color-info-800: #1e40af;
+  --color-info-900: #1e3a8a;
+  --color-info-950: #172554;
+
+  --color-warn-50: #fefce8;
+  --color-warn-100: #fef9c3;
+  --color-warn-200: #fef08a;
+  --color-warn-300: #fde047;
+  --color-warn-400: #facc15;
+  --color-warn-500: #eab308;
+  --color-warn-600: #ca8a04;
+  --color-warn-700: #a16207;
+  --color-warn-800: #854d0e;
+  --color-warn-900: #713f12;
+  --color-warn-950: #422006;
+
+  --color-success-50: #f0fdf4;
+  --color-success-100: #dcfce7;
+  --color-success-200: #bbf7d0;
+  --color-success-300: #86efac;
+  --color-success-400: #4ade80;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-success-700: #15803d;
+  --color-success-800: #166534;
+  --color-success-900: #14532d;
+  --color-success-950: #052e16;
+
+  --color-danger-50: #fef2f2;
+  --color-danger-100: #fee2e2;
+  --color-danger-200: #fecaca;
+  --color-danger-300: #fca5a5;
+  --color-danger-400: #f87171;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
+  --color-danger-800: #991b1b;
+  --color-danger-900: #7f1d1d;
+  --color-danger-950: #450a0a;
+
+  --color-dark-50: #fafafa;
+  --color-dark-100: #f5f5f5;
+  --color-dark-200: #e5e5e5;
+  --color-dark-300: #d4d4d4;
+  --color-dark-400: #a3a3a3;
+  --color-dark-500: #737373;
+  --color-dark-600: #525252;
+  --color-dark-700: #404040;
+  --color-dark-800: #262626;
+  --color-dark-900: #171717;
+  --color-dark-950: #0a0a0a;
+
+  --color-light: #fff;
+
+  --color-text-50: #f9fafb;
+  --color-text-100: #f3f4f6;
+  --color-text-200: #e5e7eb;
+  --color-text-300: #d1d5db;
+  --color-text-400: #9ca3af;
+  --color-text-500: #6b7280;
+  --color-text-600: #4b5563;
+  --color-text-700: #374151;
+  --color-text-800: #1f2937;
+  --color-text-900: #111827;
+  --color-text-950: #030712;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
   }
+}
 
-  .btn-primary {
-    @apply 
-      text-gray-100
+@utility btn {
+  @apply px-4 py-1 rounded-sm;
+}
+
+@utility btn-primary {
+  @apply text-gray-100
       bg-violet-500
       dark:bg-violet-500
       hover:bg-violet-600
       dark:hover:bg-violet-600
       border-violet-700
-      focus:ring-violet-200
-  }
+      focus:ring-violet-200;
+}
 
-  .card {
-    @apply
-      p-4
+@utility card {
+  @apply p-4
       rounded-md
       shadow-md
       border
@@ -31,12 +143,33 @@
       bg-white
       dark:bg-neutral-800
       border-gray-200
-      dark:border-neutral-700
-  }
+      dark:border-neutral-700;
+}
 
-  .tooltip {
-    @apply rounded-md z-50 max-w-sm text-gray-100 bg-neutral-700 font-semibold p-1 px-3
+@utility tooltip {
+  @apply rounded-md z-50 max-w-sm text-gray-100 bg-neutral-700 font-semibold p-1 px-3;
+}
+
+@utility spinner-svg {
+  animation: loader-rotate 1s linear infinite;
+  transform-origin: center center;
+
+  & circle {
+    stroke: currentColor;
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
+    animation: loader-dash 1s ease-in-out infinite;
+    stroke-linecap: round;
   }
+}
+
+@layer components {
+  [x-cloak] {
+    display: none !important;
+  }
+}
+
+@layer components {
 
   @keyframes slide {
     from, 15% {
@@ -48,19 +181,6 @@
       left: 100%;
       transform: scaleX(1)
     }
-  }
-
-  .spinner-svg {
-    animation: loader-rotate 1s linear infinite;
-    transform-origin: center center;
-  }
-
-  .spinner-svg circle {
-    stroke: currentColor;
-    stroke-dasharray: 89, 200;
-    stroke-dashoffset: -35px;
-    animation: loader-dash 1s ease-in-out infinite;
-    stroke-linecap: round;
   }
 
   @keyframes loader-rotate {

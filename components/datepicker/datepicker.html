@@ -24,7 +24,7 @@
         <div class="my-4 grid grid-flow-col grid-cols-6">
           <button
             x-bind="prevYearButton"
-            class="mx-auto flex flex-col justify-center rounded px-2 py-1 leading-none focus:outline-none focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-400"
+            class="mx-auto flex flex-col justify-center rounded-sm px-2 py-1 leading-none focus:outline-hidden focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-400"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +45,7 @@
           </button>
           <button
             x-bind="prevMonthButton"
-            class="mx-auto flex flex-col justify-center rounded px-2 py-1 leading-none focus:outline-none focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-400"
+            class="mx-auto flex flex-col justify-center rounded-sm px-2 py-1 leading-none focus:outline-hidden focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-400"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +66,7 @@
           ></div>
           <button
             x-bind="nextMonthButton"
-            class="mx-auto flex flex-col justify-center rounded px-2 py-1 leading-none focus:outline-none focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-400"
+            class="mx-auto flex flex-col justify-center rounded-sm px-2 py-1 leading-none focus:outline-hidden focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-400"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +83,7 @@
           </button>
           <button
             x-bind="nextYearButton"
-            class="mx-auto flex flex-col justify-center rounded px-2 py-1 leading-none focus:outline-none focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-400"
+            class="mx-auto flex flex-col justify-center rounded-sm px-2 py-1 leading-none focus:outline-hidden focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-400"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -118,7 +118,7 @@
               x-text="getDayText"
               class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full py-1 text-sm font-semibold"
               class-default="hover:bg-secondary-200 dark:hover:bg-dark-700"
-              class-today="border border-primary-400 !font-bold text-primary-400 dark:text-primary-400"
+              class-today="border border-primary-400 font-bold! text-primary-400 dark:text-primary-400"
               class-adjacent="text-text-800/20 dark:text-text-200/10"
               class-selected="bg-primary-400 text-white hover:bg-primary-600 dark:bg-primary-500 dark:text-text-200 dark:hover:bg-primary-700"
               class-selected-range="bg-primary-400 text-white hover:bg-primary-600 dark:bg-primary-500 dark:text-text-200 dark:hover:bg-primary-700"
