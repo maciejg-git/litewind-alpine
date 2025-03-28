@@ -17,7 +17,10 @@ function tooltip_default(Alpine) {
         let el2 = ev.target;
         let tooltip = el2._v_tooltip;
         clearHideTimers(el2);
-        if (tooltip.isVisible) return;
+        if (tooltip.isVisible) {
+          addTransition(tooltip, false);
+          return;
+        }
         if (typeof el2._v_tooltip.func === "function") {
           el2._v_tooltip.func((v) => {
             el2._v_tooltip.tooltip.innerText = v;
