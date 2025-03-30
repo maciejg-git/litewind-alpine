@@ -103,7 +103,7 @@
             </svg>
           </button>
         </div>
-        <div class="mb-3 grid grid-cols-7">
+        <div class="mb-3 grid grid-cols-7 px-2">
           <template x-for="weekday in weekdays">
             <div
               x-text="weekday"
@@ -111,7 +111,7 @@
             ></div>
           </template>
         </div>
-        <div class="relative mb-3 grid grid-cols-7 justify-items-center gap-2">
+        <div class="relative mb-3 grid grid-cols-7 justify-items-center gap-2 px-2">
           <template x-for="d in days" :key="getDayKey()">
             <button
               x-bind="day"
