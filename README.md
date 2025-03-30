@@ -10,6 +10,7 @@ Litewind is a component framework for Alpine and Tailwind.
 ## Components
 
 - Accordion
+- Alert
 - Breadcrumb
 - Collapse
 - Datepicker
@@ -26,10 +27,10 @@ Litewind is a component framework for Alpine and Tailwind.
 
 ## Form components
 
-- Checkbox
 - Form text
 - Input
 - Select
+- Switch
 - Textarea
 
 ## Plugins
