@@ -2,7 +2,7 @@ export default function (Alpine) {
   Alpine.data("notify", () => {
     let aria = {
       role: "status",
-    }
+    };
 
     return {
       notifications: [],
@@ -12,7 +12,6 @@ export default function (Alpine) {
       // props
       order: "default",
       maxNotifications: 0,
-      stickyAt: "end",
       delay: 10000,
       dismissable: true,
       static: false,
@@ -22,8 +21,6 @@ export default function (Alpine) {
       init() {
         this.$nextTick(() => {
           this.order = Alpine.bound(this.$el, "data-order") ?? this.order;
-          this.stickyAt =
-            Alpine.bound(this.$el, "data-sticky-at") ?? this.stickyAt;
           this.maxNotifications = parseInt(
             Alpine.bound(this.$el, "data-max-notifications") ??
               this.maxNotifications,
@@ -38,7 +35,7 @@ export default function (Alpine) {
             Alpine.bound(this.$el, "data-static") ?? this.static,
           );
           this.variant = Alpine.bound(this.$el, "data-variant") ?? this.variant;
-          this.options = Alpine.bound(this.$el, "data-options") ?? this.options
+          this.options = Alpine.bound(this.$el, "data-options") ?? this.options;
         });
         Alpine.bind(this.$el, {
           "@show-notify.window"() {
@@ -60,19 +57,10 @@ export default function (Alpine) {
         });
       },
       getNotifications() {
-        if (this.order === "default" && this.stickyAt === "end") {
+        if (this.order === "default") {
           return [...this.notifications, ...this.notificationsSticky];
         }
-        if (this.order === "default" && this.stickyAt === "start") {
-          return [...this.notificationsSticky, ...this.notifications];
-        }
-        if (this.order === "reversed" && this.stickyAt === "end") {
-          return [
-            ...this.notifications.toReversed(),
-            ...this.notificationsSticky.toReversed(),
-          ];
-        }
-        if (this.order === "reversed" && this.stickyAt === "start") {
+        if (this.order === "reversed") {
           return [
             ...this.notificationsSticky.toReversed(),
             ...this.notifications.toReversed(),
@@ -91,9 +79,9 @@ export default function (Alpine) {
       },
       remove(notification) {
         if (notification.sticky) {
-          this.removeStickyById(notification.notifyId)
+          this.removeStickyById(notification.notifyId);
         } else {
-          this.removeById(notification.notifyId)
+          this.removeById(notification.notifyId);
         }
       },
       removeById(id) {
@@ -131,10 +119,10 @@ export default function (Alpine) {
 
         newNotify.restartTimer = function () {
           if (this.static) return null;
-            this.timer = setTimeout(
-              () => (this.isVisible.value = false),
-              this.delay,
-            );
+          this.timer = setTimeout(
+            () => (this.isVisible.value = false),
+            this.delay,
+          );
         };
 
         newNotify.pauseTimer = function () {
@@ -174,10 +162,10 @@ export default function (Alpine) {
             if (value) return;
             Alpine.bind(this.$el, {
               "@transitionend"() {
-                this.remove(this.notify)
+                this.remove(this.notify);
               },
               "@transitioncancel"() {
-                this.remove(this.notify)
+                this.remove(this.notify);
               },
             });
           });
@@ -186,4 +174,4 @@ export default function (Alpine) {
       },
     };
   });
-}  
+}

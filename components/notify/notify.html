@@ -12,12 +12,18 @@
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
   </head>
-  <body class="bg-dark-800">
+  <body>
     <button
       x-data
       @click="$dispatch('show-notify', {text: 'notify', delay: 2000, header: 'notify header'})"
     >
       add notify
+    </button>
+    <button
+      x-data
+      @click="$dispatch('show-notify', {text: 'notify', delay: 2000, header: 'notify header', sticky: true})"
+    >
+      add notify sticky
     </button>
     <ul
       x-data="notify"
@@ -41,7 +47,7 @@
                 class="mb-2 px-4 font-semibold"
               ></header>
               <div
-                x-text="notify.text"
+                x-text="notify.text + notify.notifyId"
                 class="px-4 dark:text-secondary-300"
               ></div>
             </div>

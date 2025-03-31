@@ -12,7 +12,6 @@ function notify_default(Alpine) {
       // props
       order: "default",
       maxNotifications: 0,
-      stickyAt: "end",
       delay: 1e4,
       dismissable: true,
       static: false,
@@ -21,7 +20,6 @@ function notify_default(Alpine) {
       init() {
         this.$nextTick(() => {
           this.order = Alpine.bound(this.$el, "data-order") ?? this.order;
-          this.stickyAt = Alpine.bound(this.$el, "data-sticky-at") ?? this.stickyAt;
           this.maxNotifications = parseInt(
             Alpine.bound(this.$el, "data-max-notifications") ?? this.maxNotifications
           );
@@ -56,19 +54,10 @@ function notify_default(Alpine) {
         });
       },
       getNotifications() {
-        if (this.order === "default" && this.stickyAt === "end") {
+        if (this.order === "default") {
           return [...this.notifications, ...this.notificationsSticky];
         }
-        if (this.order === "default" && this.stickyAt === "start") {
-          return [...this.notificationsSticky, ...this.notifications];
-        }
-        if (this.order === "reversed" && this.stickyAt === "end") {
-          return [
-            ...this.notifications.toReversed(),
-            ...this.notificationsSticky.toReversed()
-          ];
-        }
-        if (this.order === "reversed" && this.stickyAt === "start") {
+        if (this.order === "reversed") {
           return [
             ...this.notificationsSticky.toReversed(),
             ...this.notifications.toReversed()

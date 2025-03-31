@@ -72,7 +72,7 @@ function tooltip_default(Alpine) {
           m.tooltip.style.opacity = v ? 0 : 1;
         }
         if (m.transition === "scale-fade") {
-          m.tooltip.style.transform = v ? "scale(0.9)" : "scale(1)";
+          m.tooltip.style.transform = v ? "scale(0.8)" : "scale(1)";
         }
       };
       let defaults = {
