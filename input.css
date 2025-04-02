@@ -2,7 +2,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme {
+@theme inline {
   --color-primary-50: var(--color-violet-50);
   --color-primary-100: var(--color-violet-100);
   --color-primary-200: var(--color-violet-200);
