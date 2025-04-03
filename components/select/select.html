@@ -68,17 +68,16 @@
           <div data-append class="mr-3 empty:hidden"></div>
           <div class="flex items-center gap-x-2">
             <div x-bind="loader">
-              <svg
-                viewBox="25 25 50 50"
-                fill="none"
-                class="spinner-svg h-5 w-5"
-              >
+              <svg viewBox="25 25 50 50" fill="none" class="animate-spinner-rotate h-5 w-5">
                 <circle
                   cx="50"
                   cy="50"
                   r="20"
+                  stroke="currentColor"
                   stroke-width="4"
                   stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  class="animate-spinner-dash"
                 />
               </svg>
             </div>
