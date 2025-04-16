@@ -59,10 +59,11 @@ function input_default(Alpine) {
       },
       input: {
         ":value"() {
-          return this._value;
+          return this._externalValue ?? this._value;
         },
         "@input"() {
           this._value = this.$event.target.value;
+          this.$dispatch("update:value", this._value);
         },
         "x-ref": "input",
         ":placeholder"() {
