@@ -29,7 +29,6 @@
             { text: 'swedish', value: 'swedish' },
             { text: 'norwegian', value: 'norwegian' },
             { text: 'danish', value: 'danish' },
-            { text: 'spanish', value: 'spanish' },
             { text: 'finnish', value: 'finnish' },
             { text: 'thai', value: 'thai' },
         ]}"
@@ -127,7 +126,7 @@
               No items available.
             </div>
           </template>
-          <template x-for="(item, index) in getItems()">
+          <template x-for="(item, index) in getItems()" :key="item.value">
             <button
               x-bind="option"
               class="w-full cursor-pointer scroll-mb-20 scroll-mt-20 px-6 py-4 text-left transition-colors focus:outline-hidden focus:ring-2 ring-inset ring-secondary-400"
