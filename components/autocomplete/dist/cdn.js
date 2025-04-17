@@ -220,8 +220,11 @@
         trigger: {
           "x-ref": "trigger",
           "@mousedown"() {
-            this.isOpen ? this.close() : this.open();
+            if (!this.isOpen) {
+              this.open();
+            }
           },
+          // FIXME: getFirstSelected, hideInput, showInput
           "@focusin"() {
             this.isFocused = true;
             let item = this.selected.size && this.selected.values().next().value;

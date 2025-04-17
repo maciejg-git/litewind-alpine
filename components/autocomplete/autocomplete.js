@@ -215,6 +215,7 @@ export default function (Alpine) {
           if (item) {
             this.selected.delete(item.value);
           }
+          this.updateModel();
           return this.item
         } else {
           if (this.selected.has(this.item.value)) {
@@ -222,8 +223,8 @@ export default function (Alpine) {
           } else {
             this.selected.set(this.item.value, this.item);
           }
+          this.updateModel();
         }
-        this.updateModel();
       },
       updateModel() {
         this._model = this.getSelectedValues();
@@ -234,8 +235,11 @@ export default function (Alpine) {
       trigger: {
         "x-ref": "trigger",
         "@mousedown"() {
-          this.isOpen ? this.close() : this.open();
+          if (!this.isOpen) {
+            this.open();
+          }
         },
+        // FIXME: getFirstSelected, hideInput, showInput
         "@focusin"() {
           this.isFocused = true
           let item = this.selected.size && this.selected.values().next().value;
