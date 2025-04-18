@@ -129,11 +129,15 @@ export default function (Alpine) {
           ["@keydown.backspace"]() {
             if (this.multiple && this.selected.size && this._externalValue === "") {
               let lastSelected = this.getLastSelected()
-              this.selected.delete(lastSelected)
+              this.unselect(lastSelected)
+              this.updateModel()
             }
           },
           "@update:value"() {
             this._externalValue = this.$event.detail
+            if (!this.isOpen) {
+              this.open()
+            }
           }
         });
 
@@ -225,6 +229,9 @@ export default function (Alpine) {
           }
           this.updateModel();
         }
+      },
+      unselect(item) {
+        this.selected.delete(item)
       },
       updateModel() {
         this._model = this.getSelectedValues();
