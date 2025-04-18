@@ -12,8 +12,10 @@
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
   </head>
-  <button x-data @click="$dispatch('open-sidepanel', 'sidepanel')">open</button>
   <body>
+    <div class="text-3xl font-semibold m-4 mb-10">Sidepanel</div>
+
+    <button x-data @click="$dispatch('open-sidepanel', 'sidepanel')">open</button>
     <div x-data="sidepanel" id="sidepanel" x-cloak>
       <template x-if="isModal">
         <div

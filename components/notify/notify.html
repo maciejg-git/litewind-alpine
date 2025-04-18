@@ -13,6 +13,8 @@
     ></script>
   </head>
   <body>
+    <div class="text-3xl font-semibold m-4 mb-10">Notify</div>
+
     <button
       x-data
       @click="$dispatch('show-notify', {text: 'notify', delay: 2000, header: 'notify header'})"

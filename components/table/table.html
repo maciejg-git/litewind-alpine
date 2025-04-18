@@ -14,6 +14,8 @@
     ></script>
   </head>
   <body>
+    <div class="text-3xl font-semibold m-4 mb-10">Table</div>
+
     <input x-data x-model="$store.table.filter" type="text" />
     <span x-data x-text="$store.table.filteredItemsCount"></span>
     <nav x-data="pagination" class="flex w-auto gap-x-2" :data-items-count="$store.table.filteredItemsCount">

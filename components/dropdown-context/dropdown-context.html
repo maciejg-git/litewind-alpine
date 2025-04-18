@@ -16,6 +16,8 @@
     ></script>
   </head>
   <body>
+    <div class="text-3xl font-semibold m-4 mb-10">Dropdown context</div>
+
     <button
       x-data
       @contextmenu.prevent="$dispatch('open-contextmenu', {id: 'context', data: 'data', $event})"

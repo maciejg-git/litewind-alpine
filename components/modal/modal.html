@@ -17,6 +17,8 @@
     ></script>
   </head>
   <body>
+    <div class="text-3xl font-semibold m-4 mb-10">Modal</div>
+
     <button
       x-data
       @click="$dispatch('open-modal', { id: 'modal', options: { text: 'text', classes: ''} })"
