@@ -85,6 +85,7 @@ export default function (Alpine) {
         });
 
         this.selectEl = this.$el;
+        this.inputEl = this.$el.querySelector("[x-bind='input']")
 
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
@@ -206,6 +207,9 @@ export default function (Alpine) {
         }
         this.updateModel();
       },
+      unselect() {
+        this.selected.delete(this.selectedItem.value)
+      },
       updateModel() {
         this._model = this.getSelectedValues();
       },
@@ -242,10 +246,16 @@ export default function (Alpine) {
         "x-show"() {
           return this.isOpen;
         },
+        // prevent focusing option buttons on mousedown
         "@mousedown.prevent"() {},
+        // handle focus of option buttons and input element when navigating
+        // with keyboard
         "@focusout"() {
           if (this.$refs.menu.contains(this.$event.relatedTarget)) {
             return;
+          }
+          if (this.$event.relatedTarget === this.inputEl) {
+            return
           }
           this.close();
           this.$root.querySelector("[x-bind='input']").focus();

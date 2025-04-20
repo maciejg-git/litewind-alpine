@@ -73,6 +73,7 @@ function select_default(Alpine) {
           );
         });
         this.selectEl = this.$el;
+        this.inputEl = this.$el.querySelector("[x-bind='input']");
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
           ["@keydown.prevent.down"]() {
@@ -191,6 +192,9 @@ function select_default(Alpine) {
         }
         this.updateModel();
       },
+      unselect() {
+        this.selected.delete(this.selectedItem.value);
+      },
       updateModel() {
         this._model = this.getSelectedValues();
       },
@@ -227,10 +231,16 @@ function select_default(Alpine) {
         "x-show"() {
           return this.isOpen;
         },
+        // prevent focusing option buttons on mousedown
         "@mousedown.prevent"() {
         },
+        // handle focus of option buttons and input element when navigating
+        // with keyboard
         "@focusout"() {
           if (this.$refs.menu.contains(this.$event.relatedTarget)) {
+            return;
+          }
+          if (this.$event.relatedTarget === this.inputEl) {
             return;
           }
           this.close();
