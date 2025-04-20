@@ -64,6 +64,7 @@ export default function (Alpine) {
       multiple: false,
       itemText: "text",
       itemValue: "value",
+      noFilter: false,
 
       init() {
         this.$nextTick(() => {
@@ -78,6 +79,9 @@ export default function (Alpine) {
             Alpine.bound(this.$el, "data-item-text") ?? this.itemText;
           this.itemValue =
             Alpine.bound(this.$el, "data-item-value") ?? this.itemValue;
+          this.noFilter = JSON.parse(
+            Alpine.bound(this.$el, "data-no-filter") ?? this.noFilter,
+          );
 
           this.floating = useFloating(
             this.$refs.trigger ||
@@ -129,7 +133,7 @@ export default function (Alpine) {
           ["@keydown.backspace"]() {
             if (this.multiple && this.selected.size && this._externalValue === "") {
               let lastSelected = this.getLastSelected()
-              this.unselect(lastSelected)
+              this.selected.delete(lastSelected)
               this.updateModel()
             }
           },
@@ -179,6 +183,9 @@ export default function (Alpine) {
         return Array.from(this.selected.keys()).pop()
       },
       getItems() {
+        if (this.noFilter) {
+          return this._items
+        }
         return this._items.filter((item) => {
           return item.text.indexOf(this._externalValue) !== -1
         });
@@ -230,8 +237,8 @@ export default function (Alpine) {
           this.updateModel();
         }
       },
-      unselect(item) {
-        this.selected.delete(item)
+      unselect() {
+        this.selected.delete(this.selectedItem.value)
       },
       updateModel() {
         this._model = this.getSelectedValues();
@@ -288,10 +295,16 @@ export default function (Alpine) {
         "x-show"() {
           return this.isOpen;
         },
+        // prevent focusing option buttons on mousedown
         "@mousedown.prevent"() {},
+        // handle focus of option buttons and input element when navigating
+        // with keyboard
         "@focusout"() {
           if (this.$refs.menu.contains(this.$event.relatedTarget)) {
             return;
+          }
+          if (this.$event.relatedTarget === this.inputEl) {
+            return
           }
           this.close();
           this.$root.querySelector("[x-bind='input']").focus();

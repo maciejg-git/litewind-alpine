@@ -58,6 +58,7 @@ function autocomplete_default(Alpine) {
       multiple: false,
       itemText: "text",
       itemValue: "value",
+      noFilter: false,
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
@@ -69,6 +70,9 @@ function autocomplete_default(Alpine) {
           );
           this.itemText = Alpine.bound(this.$el, "data-item-text") ?? this.itemText;
           this.itemValue = Alpine.bound(this.$el, "data-item-value") ?? this.itemValue;
+          this.noFilter = JSON.parse(
+            Alpine.bound(this.$el, "data-no-filter") ?? this.noFilter
+          );
           this.floating = useFloating(
             this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"),
             this.$refs.menu,
@@ -117,10 +121,14 @@ function autocomplete_default(Alpine) {
             if (this.multiple && this.selected.size && this._externalValue === "") {
               let lastSelected = this.getLastSelected();
               this.selected.delete(lastSelected);
+              this.updateModel();
             }
           },
           "@update:value"() {
             this._externalValue = this.$event.detail;
+            if (!this.isOpen) {
+              this.open();
+            }
           }
         });
         Alpine.bind(this.$el, aria.main);
@@ -160,6 +168,9 @@ function autocomplete_default(Alpine) {
         return Array.from(this.selected.keys()).pop();
       },
       getItems() {
+        if (this.noFilter) {
+          return this._items;
+        }
         return this._items.filter((item) => {
           return item.text.indexOf(this._externalValue) !== -1;
         });
@@ -200,6 +211,7 @@ function autocomplete_default(Alpine) {
           if (item) {
             this.selected.delete(item.value);
           }
+          this.updateModel();
           return this.item;
         } else {
           if (this.selected.has(this.item.value)) {
@@ -207,8 +219,11 @@ function autocomplete_default(Alpine) {
           } else {
             this.selected.set(this.item.value, this.item);
           }
+          this.updateModel();
         }
-        this.updateModel();
+      },
+      unselect() {
+        this.selected.delete(this.selectedItem.value);
       },
       updateModel() {
         this._model = this.getSelectedValues();
@@ -265,10 +280,16 @@ function autocomplete_default(Alpine) {
         "x-show"() {
           return this.isOpen;
         },
+        // prevent focusing option buttons on mousedown
         "@mousedown.prevent"() {
         },
+        // handle focus of option buttons and input element when navigating
+        // with keyboard
         "@focusout"() {
           if (this.$refs.menu.contains(this.$event.relatedTarget)) {
+            return;
+          }
+          if (this.$event.relatedTarget === this.inputEl) {
             return;
           }
           this.close();

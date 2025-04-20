@@ -59,6 +59,7 @@
         multiple: false,
         itemText: "text",
         itemValue: "value",
+        noFilter: false,
         init() {
           this.$nextTick(() => {
             Alpine2.effect(() => {
@@ -70,6 +71,9 @@
             );
             this.itemText = Alpine2.bound(this.$el, "data-item-text") ?? this.itemText;
             this.itemValue = Alpine2.bound(this.$el, "data-item-value") ?? this.itemValue;
+            this.noFilter = JSON.parse(
+              Alpine2.bound(this.$el, "data-no-filter") ?? this.noFilter
+            );
             this.floating = useFloating(
               this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"),
               this.$refs.menu,
@@ -118,10 +122,14 @@
               if (this.multiple && this.selected.size && this._externalValue === "") {
                 let lastSelected = this.getLastSelected();
                 this.selected.delete(lastSelected);
+                this.updateModel();
               }
             },
             "@update:value"() {
               this._externalValue = this.$event.detail;
+              if (!this.isOpen) {
+                this.open();
+              }
             }
           });
           Alpine2.bind(this.$el, aria.main);
@@ -161,6 +169,9 @@
           return Array.from(this.selected.keys()).pop();
         },
         getItems() {
+          if (this.noFilter) {
+            return this._items;
+          }
           return this._items.filter((item) => {
             return item.text.indexOf(this._externalValue) !== -1;
           });
@@ -201,6 +212,7 @@
             if (item) {
               this.selected.delete(item.value);
             }
+            this.updateModel();
             return this.item;
           } else {
             if (this.selected.has(this.item.value)) {
@@ -208,8 +220,11 @@
             } else {
               this.selected.set(this.item.value, this.item);
             }
+            this.updateModel();
           }
-          this.updateModel();
+        },
+        unselect() {
+          this.selected.delete(this.selectedItem.value);
         },
         updateModel() {
           this._model = this.getSelectedValues();
@@ -266,10 +281,16 @@
           "x-show"() {
             return this.isOpen;
           },
+          // prevent focusing option buttons on mousedown
           "@mousedown.prevent"() {
           },
+          // handle focus of option buttons and input element when navigating
+          // with keyboard
           "@focusout"() {
             if (this.$refs.menu.contains(this.$event.relatedTarget)) {
+              return;
+            }
+            if (this.$event.relatedTarget === this.inputEl) {
               return;
             }
             this.close();
