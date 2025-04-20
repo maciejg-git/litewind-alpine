@@ -33,23 +33,13 @@
             { text: 'danish', value: 'danish' },
             { text: 'finnish', value: 'finnish' },
             { text: 'thai', value: 'thai' },
-        ],
-        selectedItems: [],
-        query(q) {
-          setTimeout(() => {
-            this.selectedItems = this.selectItems.filter((e) => {
-              return (e.text || '').toLowerCase().indexOf((q || '').toLowerCase()) > -1;
-            });
-          }, 500);
-        }}"
-        @update:value="selectedItems = query($event.detail)"
+        ]}"
     >
       <span x-text="model"></span>
         <!-- data-multiple="true" -->
       <div
         x-data="autocomplete"
-        :data-items="selectedItems"
-        data-no-filter="true"
+        :data-items="selectItems"
         x-model="model"
         class="w-[340px]"
       >
@@ -64,7 +54,7 @@
           <div data-icon class="mr-3 empty:hidden"></div>
           <div data-prepend class="mr-3 empty:hidden"></div>
           <div class="mr-3 flex flex-1 flex-wrap">
-            <div x-show="multiple || !isFocused" class="contents">
+            <div x-bind="selectedItems" class="contents">
               <template x-for="selectedItem in getSelected()">
                 <span
                   x-text="selectedItem.text"

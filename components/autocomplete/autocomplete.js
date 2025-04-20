@@ -346,6 +346,11 @@ export default function (Alpine) {
         },
         ...aria.option,
       },
+      selectedItems: {
+        "x-show"() {
+          return this.multiple || !this.isFocused
+        }
+      }
     };
   });
 }  
