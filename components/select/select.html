@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title></title>
     <link href="/output.css" rel="stylesheet" />
-    <script defer type="module" src="/plugins/use-floating/dist/cdn.js"></script>
+    <script
+      defer
+      type="module"
+      src="/plugins/use-floating/dist/cdn.js"
+    ></script>
     <script defer type="module" src="./builds/cdn.js"></script>
     <script defer type="module" src="/components/input/builds/cdn.js"></script>
     <script defer src="/plugins/transition/dist/cdn.js"></script>
@@ -15,25 +19,28 @@
     ></script>
   </head>
   <body>
-    <div class="text-3xl font-semibold m-4 mb-10">Select</div>
+    <div class="m-4 mb-10 text-3xl font-semibold">Select</div>
 
     <div
-      x-data="{model: [], selectItems: [
-            { text: 'spanish', value: 'spanish' },
-            { text: 'french', value: 'french' },
-            { text: 'portuguese', value: 'portuguese' },
-            { text: 'german', value: 'german' },
-            { text: 'japanese', value: 'japanese' },
-            { text: 'korean', value: 'korean' },
-            { text: 'italian', value: 'italian' },
-            { text: 'polish', value: 'polish' },
-            { text: 'greek', value: 'greek'},
-            { text: 'swedish', value: 'swedish' },
-            { text: 'norwegian', value: 'norwegian' },
-            { text: 'danish', value: 'danish' },
-            { text: 'finnish', value: 'finnish' },
-            { text: 'thai', value: 'thai' },
-        ]}"
+      x-data="{
+        model: [], 
+        selectItems: [
+          { text: 'spanish', value: 'spanish' },
+          { text: 'french', value: 'french' },
+          { text: 'portuguese', value: 'portuguese' },
+          { text: 'german', value: 'german' },
+          { text: 'japanese', value: 'japanese' },
+          { text: 'korean', value: 'korean' },
+          { text: 'italian', value: 'italian' },
+          { text: 'polish', value: 'polish' },
+          { text: 'greek', value: 'greek'},
+          { text: 'swedish', value: 'swedish' },
+          { text: 'norwegian', value: 'norwegian' },
+          { text: 'danish', value: 'danish' },
+          { text: 'finnish', value: 'finnish' },
+          { text: 'thai', value: 'thai' },
+        ]
+      }"
     >
       <span x-text="model"></span>
       <div
@@ -46,7 +53,7 @@
           x-bind="trigger"
           x-data="input"
           class="flex flex-1 items-center rounded-sm border px-3 py-2 outline-hidden transition-shadow duration-200 focus-within:ring-3 focus:outline-hidden"
-          class-default="border-gray-300 bg-white focus-within:border-gray-400 focus-within:ring-primary-200 dark:border-dark-600 dark:bg-dark-800 dark:text-text-300 dark:focus-within:ring-primary-300"
+          class-default="focus-within:ring-primary-200 dark:border-dark-600 dark:bg-dark-800 dark:text-text-300 dark:focus-within:ring-primary-300 border-gray-300 bg-white focus-within:border-gray-400"
           class-valid="text-success-600 dark:text-success-600 border-success-300 dark:border-success-400 focus-within:ring-success-200 dark:focus-within:ring-success-300"
           class-invalid="text-danger-600 dark:text-danger-600 border-danger-300 dark:border-danger-400 focus-within:ring-danger-200 dark:focus-within:ring-danger-300"
         >
@@ -69,7 +76,11 @@
           <div data-append class="mr-3 empty:hidden"></div>
           <div class="flex items-center gap-x-2">
             <div x-bind="loader">
-              <svg viewBox="25 25 50 50" fill="none" class="animate-spinner-rotate h-5 w-5">
+              <svg
+                viewBox="25 25 50 50"
+                fill="none"
+                class="animate-spinner-rotate h-5 w-5"
+              >
                 <circle
                   cx="50"
                   cy="50"
@@ -117,21 +128,21 @@
         </div>
         <div
           x-bind="menu"
-          class="oveflow-y-auto z-50 max-h-[400px] overflow-x-hidden rounded-b-md bg-white shadow-md dark:bg-dark-800"
+          class="oveflow-y-auto dark:bg-dark-800 z-50 max-h-[400px] overflow-x-hidden rounded-b-md bg-white shadow-md"
           x-alt-transition='{
-                "enter": ["opacity-0 scale-y-[0.5]", "transition ease-out duration-100 origin-top", "opacity-100"],
-                "leave": ["opacity-100", "transition ease-in duration-100 origin-top", "opacity-0 scale-y-[0.5]"]
-              }'
+            "enter": ["opacity-0 scale-y-[0.5]", "transition ease-out duration-100 origin-top", "opacity-100"],
+            "leave": ["opacity-100", "transition ease-in duration-100 origin-top", "opacity-0 scale-y-[0.5]"]
+          }'
         >
           <template x-if="getItems().length === 0">
-            <div class="px-6 py-4 text-left text-text-800 dark:text-text-300">
+            <div class="text-text-800 dark:text-text-300 px-6 py-4 text-left">
               No items available.
             </div>
           </template>
           <template x-for="(item, index) in getItems()" :key="item.value">
             <button
               x-bind="option"
-              class="w-full cursor-pointer scroll-mb-20 scroll-mt-20 px-6 py-4 text-left transition-colors focus:outline-hidden focus:ring-2 ring-inset ring-secondary-400"
+              class="ring-secondary-400 w-full cursor-pointer scroll-mt-20 scroll-mb-20 px-6 py-4 text-left transition-colors ring-inset focus:ring-2 focus:outline-hidden"
               class-default="text-text-800 hover:bg-secondary-100 dark:text-text-300 dark:hover:bg-dark-600 focus:bg-secondary-200 dark:focus:bg-dark-600"
               class-selected="bg-secondary-200 dark:bg-dark-600 focus:bg-secondary-300 dark:focus:bg-dark-700"
             >
