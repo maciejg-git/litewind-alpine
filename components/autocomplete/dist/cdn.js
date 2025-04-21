@@ -134,9 +134,10 @@
           });
           Alpine2.bind(this.$el, aria.main);
           this.$watch("_model", () => {
+            let selectedCopy = new Map(this.selected);
             this.selected.clear();
             this._model.forEach((value) => {
-              let item = this._items.find((i) => i.value === value);
+              let item = this._items.find((i) => i.value === value) || selectedCopy.get(value);
               if (item) this.selected.set(item.value, item);
             });
           });
@@ -328,6 +329,11 @@
             return this.index;
           },
           ...aria.option
+        },
+        selectedItems: {
+          "x-show"() {
+            return this.multiple || !this.isFocused;
+          }
         }
       };
     });
