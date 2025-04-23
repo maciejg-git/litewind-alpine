@@ -190,7 +190,13 @@ export default function (Alpine) {
         return [...this.selected].map(([k, v]) => v.value);
       },
       select() {
-        if (!this.multiple) {
+        if (this.multiple) {
+          if (this.selected.has(this.item.value)) {
+            this.selected.delete(this.item.value);
+          } else {
+            this.selected.set(this.item.value, this.item);
+          }
+        } else {
           let item = this.selected.size && this.selected.values().next().value;
           if (item.value === this.item.value) {
             return;
@@ -198,12 +204,6 @@ export default function (Alpine) {
           this.selected.set(this.item.value, this.item);
           if (item) {
             this.selected.delete(item.value);
-          }
-        } else {
-          if (this.selected.has(this.item.value)) {
-            this.selected.delete(this.item.value);
-          } else {
-            this.selected.set(this.item.value, this.item);
           }
         }
         this.updateModel();
@@ -261,9 +261,9 @@ export default function (Alpine) {
           this.close();
           this.$root.querySelector("[x-bind='input']").focus();
         },
-        "@scroll"() {
+        "@scroll.debounce"() {
           if (
-            this.$el.offsetHeight + this.$el.scrollTop + 100 >=
+            this.$el.offsetHeight + this.$el.scrollTop >=
             this.$el.scrollHeight
           ) {
             this.$dispatch("scroll-to-bottom");
