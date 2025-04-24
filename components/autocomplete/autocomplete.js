@@ -54,6 +54,7 @@ export default function (Alpine) {
       _externalValue: "",
       selected: new Map(),
       _items: [],
+      _filteredItems: [],
       _model: null,
       highlightedIndex: -1,
       selectEl: null,
@@ -100,7 +101,7 @@ export default function (Alpine) {
             if (!this.isOpen) {
               this.open();
             }
-            if (this.highlightedIndex >= this._items.length - 1) {
+            if (this.highlightedIndex >= this.getItems().length - 1) {
               return;
             }
             this.highlightedIndex++;
@@ -147,6 +148,13 @@ export default function (Alpine) {
 
         Alpine.bind(this.$el, aria.main)
 
+        this.$watch("_externalValue", () => {
+          if (this.noFilter) {
+            return
+          }
+          this._filteredItems = this.filterItems()
+        })
+
         this.$watch("_model", () => {
           let selectedCopy = new Map(this.selected)
           this.selected.clear();
@@ -183,13 +191,16 @@ export default function (Alpine) {
       getLastSelected() {
         return Array.from(this.selected.keys()).pop()
       },
+      filterItems() {
+        return this._items.filter((item) => {
+          return item.text.indexOf(this._externalValue) !== -1
+        });
+      },
       getItems() {
         if (this.noFilter) {
           return this._items
         }
-        return this._items.filter((item) => {
-          return item.text.indexOf(this._externalValue) !== -1
-        });
+        return this._filteredItems
       },
       open() {
         this.floating.startAutoUpdate();
