@@ -59,7 +59,7 @@
         >
           <div data-icon class="mr-3 empty:hidden"></div>
           <div data-prepend class="mr-3 empty:hidden"></div>
-          <div class="mr-3 flex flex-1 flex-wrap">
+          <div class="mr-3 flex flex-1 flex-wrap relative">
             <template x-for="selectedItem in getSelected()">
               <span
                 x-text="selectedItem.text"
@@ -95,7 +95,7 @@
             </div>
             <button
               x-bind="clearButton"
-              @click="clear()"
+              @click="clearSelection()"
               class="flex items-center"
             >
               <svg
@@ -103,7 +103,7 @@
                 width="16"
                 height="16"
                 fill="currentColor"
-                class="h-5 w-5 opacity-70"
+                class="h-5 w-5 opacity-70 pointer-events-none"
                 viewBox="0 0 16 16"
               >
                 <path

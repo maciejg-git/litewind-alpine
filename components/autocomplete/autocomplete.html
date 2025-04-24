@@ -46,6 +46,7 @@
       <div
         x-data="autocomplete"
         :data-items="selectItems"
+        data-clearable
         x-model="model"
         class="w-[340px]"
       >
@@ -59,7 +60,7 @@
         >
           <div data-icon class="mr-3 empty:hidden"></div>
           <div data-prepend class="mr-3 empty:hidden"></div>
-          <div class="mr-3 flex flex-1 flex-wrap">
+          <div class="mr-3 flex flex-1 flex-wrap relative">
             <div x-bind="selectedItems" class="contents">
               <template x-for="selectedItem in getSelected()">
                 <span
@@ -96,7 +97,7 @@
             </div>
             <button
               x-bind="clearButton"
-              @click="clear()"
+              @click="clearSelection()"
               class="flex items-center"
             >
               <svg
@@ -104,7 +105,7 @@
                 width="16"
                 height="16"
                 fill="currentColor"
-                class="h-5 w-5 opacity-70"
+                class="h-5 w-5 opacity-70 pointer-events-none"
                 viewBox="0 0 16 16"
               >
                 <path
@@ -156,24 +157,32 @@
     <div 
       x-data="{ 
         model: [],
+        isLoading: false,
         async query(q) {
-          if (q === '') return example.items;
-          let res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&list=prefixsearch&formatversion=2&origin=*&pssearch=${q}`)
+          if (q === '') {
+            this.filteredItems = []
+            return
+          }
+          this.isLoading = true
+          let res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&list=prefixsearch&formatversion=2&origin=*&pslimit=50&pssearch=${q}`)
           let data = await res.json()
           this.filteredItems = data.query.prefixsearch
+          this.isLoading = false
         },
         filteredItems: [],
       }"
-      @update:value="query($event.detail)"
+      @update:value.debounce="query($event.detail)"
       class="flex flex-col items-center"
     >
       <div
         x-data="autocomplete"
         :data-items="filteredItems"
         data-no-filter
-        data-multiple="true"
+        data-multiple
         data-item-text="title"
         data-item-value="pageid"
+        data-use-loader
+        :data-is-loading="isLoading"
         x-model="model"
         class="w-[340px]"
       >

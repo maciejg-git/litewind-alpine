@@ -241,6 +241,10 @@ export default function (Alpine) {
       unselect() {
         this.selected.delete(this.selectedItem.value)
       },
+      clearSelection() {
+        this.selected.clear();
+        this.updateModel()
+      },
       updateModel() {
         this._model = this.getSelectedValues();
       },
@@ -250,6 +254,10 @@ export default function (Alpine) {
       trigger: {
         "x-ref": "trigger",
         "@mousedown"() {
+          let { target } = this.$event
+          if (target.getAttribute("x-bind") === "clearButton") {
+            return
+          }
           if (!this.isOpen) {
             this.open();
           }
