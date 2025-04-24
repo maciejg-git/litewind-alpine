@@ -1,6 +1,6 @@
 {
   "name": "litewind-alpine",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "",
   "exports": {
     "./breadcrumb.js": "./components/breadcrumb/dist/modules.esm.js",
@@ -26,7 +26,8 @@
     "tailwind": "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch",
     "dev": "npx @11ty/eleventy-dev-server",
     "test": "jest",
-    "build": "node scripts/build.js"
+    "build": "node scripts/build.js",
+    "publish": "npm publish"
   },
   "author": "",
   "license": "ISC",
@@ -38,6 +39,7 @@
     "esbuild": "0.24.2",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^26.1.0",
     "prettier": "^3.4.1",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4.0.17"
