@@ -89,9 +89,10 @@ export default function (Alpine) {
 
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
-          ["@keydown.prevent.down"]() {
+          async ["@keydown.prevent.down"]() {
             if (!this.isOpen) {
               this.open();
+              await this.$nextTick()
             }
             if (this.highlightedIndex >= this._items.length - 1) {
               return;
