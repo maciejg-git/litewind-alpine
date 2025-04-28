@@ -126,8 +126,6 @@ export default function (Alpine) {
           },
         });
 
-        Alpine.bind(this.$el, aria.main)
-
         this.$watch("_model", () => {
           let selectedCopy = new Map(this.selected)
           this.selected.clear();
@@ -136,6 +134,8 @@ export default function (Alpine) {
             if (item) this.selected.set(item.value, item);
           });
         });
+
+        Alpine.bind(this.$el, aria.main)
       },
       transformItems() {
         if (!this.items.length) {
