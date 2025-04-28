@@ -1,6 +1,6 @@
 {
   "name": "litewind-alpine",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "",
   "exports": {
     "./breadcrumb.js": "./components/breadcrumb/dist/modules.esm.js",
@@ -26,8 +26,7 @@
     "tailwind": "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch",
     "dev": "npx @11ty/eleventy-dev-server",
     "test": "jest",
-    "build": "node scripts/build.js",
-    "publish": "npm publish"
+    "build": "node scripts/build.js"
   },
   "author": "",
   "license": "ISC",
