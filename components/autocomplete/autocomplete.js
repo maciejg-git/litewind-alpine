@@ -47,6 +47,18 @@ export default function (Alpine) {
       );
     };
 
+    let highlight = (string, match, classes) => {
+      classes = classes || "match";
+
+      return (string + "").replace(
+        new RegExp(
+          `(${match.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&")})`,
+          "i",
+        ),
+        `<span class='${classes}'>$1</span>`,
+      );
+    }
+
     return {
       isOpen: false,
       floating: null,
@@ -147,8 +159,6 @@ export default function (Alpine) {
           }
         });
 
-        Alpine.bind(this.$el, aria.main)
-
         this.$watch("_externalValue", () => {
           if (this.noFilter) {
             return
@@ -164,6 +174,8 @@ export default function (Alpine) {
             if (item) this.selected.set(item.value, item);
           });
         });
+
+        Alpine.bind(this.$el, aria.main)
       },
       transformItems() {
         if (!this.items.length) {
@@ -199,6 +211,9 @@ export default function (Alpine) {
       },
       getItems() {
         if (this.noFilter) {
+          return this._items
+        }
+        if (this._externalValue === "") {
           return this._items
         }
         return this._filteredItems
@@ -279,7 +294,6 @@ export default function (Alpine) {
           this.isFocused = true
           let item = this.selected.size && this.selected.values().next().value;
           this.inputEl.style.opacity = 1
-          this.inputEl.style.position = "relative"
           if (this.multiple) {
             this._externalValue = ""
             return
@@ -295,7 +309,6 @@ export default function (Alpine) {
           this.close();
           this.isFocused = false
           this.inputEl.style.opacity = 0
-          this.inputEl.style.position = "absolute"
         },
         ":data-clearable"() {
           return Alpine.bound(this.selectEl, "data-clearable");
@@ -370,6 +383,25 @@ export default function (Alpine) {
       selectedItems: {
         "x-show"() {
           return this.multiple || !this.isFocused
+        },
+        ":style"() {
+          if (this.multiple) {
+            return {
+              display: "contents",
+            }
+          } else {
+            return {
+              position: "absolute",
+            }
+          }
+        }
+      },
+      indicator: {
+        "@mousedown"() {
+          if (this.isOpen) {
+            this.close()
+            this.$event.stopPropagation()
+          }
         }
       }
     };
