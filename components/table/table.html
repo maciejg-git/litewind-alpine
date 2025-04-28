@@ -130,7 +130,7 @@
           <tr>
             <template x-for="col in definition">
               <td
-                x-text="row[col.key]"
+                x-text="getCellContent"
                 class="border-t border-gray-300 px-2 py-2 text-text-800 transition-colors duration-200 dark:border-dark-600 dark:text-text-300"
               ></td>
             </template>
