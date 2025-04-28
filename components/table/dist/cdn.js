@@ -20,6 +20,16 @@
         /\w\S*/g,
         (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
       );
+      let highlight = (string, match, classes) => {
+        classes = classes || "match";
+        return (string + "").replace(
+          new RegExp(
+            `(${match.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&")})`,
+            "i"
+          ),
+          `<span class='${classes}'>$1</span>`
+        );
+      };
       let definitionDefaults = {
         sortable: false,
         filterable: true,
@@ -128,6 +138,12 @@
             this.page * this.itemsPerPage
           );
         },
+        getCellContent() {
+          return this.row[this.col.key];
+        },
+        getHighlightedCellContent() {
+          return highlight(this.row[this.col.key], this.filter);
+        },
         isSortable() {
           return this.col.sortable;
         },
@@ -139,16 +155,6 @@
         },
         isSortedDesc() {
           return this.isSorted() && this.sortAsc === -1;
-        },
-        highlight(string, match, classes) {
-          classes = classes || "match";
-          return (string + "").replace(
-            new RegExp(
-              `(${match.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&")})`,
-              "i"
-            ),
-            `<span class='${classes}'>$1</span>`
-          );
         },
         header: {
           "@click"() {

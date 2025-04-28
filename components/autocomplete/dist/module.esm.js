@@ -41,6 +41,16 @@ function autocomplete_default(Alpine) {
         el.offsetTop - el.parentElement.clientHeight / 2 + el.clientHeight / 2
       );
     };
+    let highlight = (string, match, classes) => {
+      classes = classes || "match";
+      return (string + "").replace(
+        new RegExp(
+          `(${match.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&")})`,
+          "i"
+        ),
+        `<span class='${classes}'>$1</span>`
+      );
+    };
     return {
       isOpen: false,
       floating: null,
@@ -48,6 +58,7 @@ function autocomplete_default(Alpine) {
       _externalValue: "",
       selected: /* @__PURE__ */ new Map(),
       _items: [],
+      _filteredItems: [],
       _model: null,
       highlightedIndex: -1,
       selectEl: null,
@@ -83,11 +94,12 @@ function autocomplete_default(Alpine) {
         this.inputEl = this.$el.querySelector("[x-bind='input']");
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
-          ["@keydown.prevent.down"]() {
+          async ["@keydown.prevent.down"]() {
             if (!this.isOpen) {
               this.open();
+              await this.$nextTick();
             }
-            if (this.highlightedIndex >= this._items.length - 1) {
+            if (this.highlightedIndex >= this.getItems().length - 1) {
               return;
             }
             this.highlightedIndex++;
@@ -131,7 +143,12 @@ function autocomplete_default(Alpine) {
             }
           }
         });
-        Alpine.bind(this.$el, aria.main);
+        this.$watch("_externalValue", () => {
+          if (this.noFilter) {
+            return;
+          }
+          this._filteredItems = this.filterItems();
+        });
         this.$watch("_model", () => {
           let selectedCopy = new Map(this.selected);
           this.selected.clear();
@@ -140,6 +157,7 @@ function autocomplete_default(Alpine) {
             if (item) this.selected.set(item.value, item);
           });
         });
+        Alpine.bind(this.$el, aria.main);
       },
       transformItems() {
         if (!this.items.length) {
@@ -168,13 +186,19 @@ function autocomplete_default(Alpine) {
       getLastSelected() {
         return Array.from(this.selected.keys()).pop();
       },
+      filterItems() {
+        return this._items.filter((item) => {
+          return item.text.indexOf(this._externalValue) !== -1;
+        });
+      },
       getItems() {
         if (this.noFilter) {
           return this._items;
         }
-        return this._items.filter((item) => {
-          return item.text.indexOf(this._externalValue) !== -1;
-        });
+        if (this._externalValue === "") {
+          return this._items;
+        }
+        return this._filteredItems;
       },
       open() {
         this.floating.startAutoUpdate();
@@ -203,7 +227,14 @@ function autocomplete_default(Alpine) {
         return [...this.selected].map(([k, v]) => v.value);
       },
       select() {
-        if (!this.multiple) {
+        if (this.multiple) {
+          if (this.selected.has(this.item.value)) {
+            this.selected.delete(this.item.value);
+          } else {
+            this.selected.set(this.item.value, this.item);
+          }
+          this.updateModel();
+        } else {
           let item = this.selected.size && this.selected.values().next().value;
           if (item.value === this.item.value) {
             return this.item;
@@ -214,17 +245,14 @@ function autocomplete_default(Alpine) {
           }
           this.updateModel();
           return this.item;
-        } else {
-          if (this.selected.has(this.item.value)) {
-            this.selected.delete(this.item.value);
-          } else {
-            this.selected.set(this.item.value, this.item);
-          }
-          this.updateModel();
         }
       },
       unselect() {
         this.selected.delete(this.selectedItem.value);
+      },
+      clearSelection() {
+        this.selected.clear();
+        this.updateModel();
       },
       updateModel() {
         this._model = this.getSelectedValues();
@@ -235,6 +263,10 @@ function autocomplete_default(Alpine) {
       trigger: {
         "x-ref": "trigger",
         "@mousedown"() {
+          let { target } = this.$event;
+          if (target.getAttribute("x-bind") === "clearButton") {
+            return;
+          }
           if (!this.isOpen) {
             this.open();
           }
@@ -244,7 +276,6 @@ function autocomplete_default(Alpine) {
           this.isFocused = true;
           let item = this.selected.size && this.selected.values().next().value;
           this.inputEl.style.opacity = 1;
-          this.inputEl.style.position = "relative";
           if (this.multiple) {
             this._externalValue = "";
             return;
@@ -260,7 +291,6 @@ function autocomplete_default(Alpine) {
           this.close();
           this.isFocused = false;
           this.inputEl.style.opacity = 0;
-          this.inputEl.style.position = "absolute";
         },
         ":data-clearable"() {
           return Alpine.bound(this.selectEl, "data-clearable");
@@ -296,8 +326,8 @@ function autocomplete_default(Alpine) {
           this.close();
           this.$root.querySelector("[x-bind='input']").focus();
         },
-        "@scroll"() {
-          if (this.$el.offsetHeight + this.$el.scrollTop + 100 >= this.$el.scrollHeight) {
+        "@scroll.debounce"() {
+          if (this.$el.offsetHeight + this.$el.scrollTop >= this.$el.scrollHeight) {
             this.$dispatch("scroll-to-bottom");
           }
         },
@@ -332,6 +362,25 @@ function autocomplete_default(Alpine) {
       selectedItems: {
         "x-show"() {
           return this.multiple || !this.isFocused;
+        },
+        ":style"() {
+          if (this.multiple) {
+            return {
+              display: "contents"
+            };
+          } else {
+            return {
+              position: "absolute"
+            };
+          }
+        }
+      },
+      indicator: {
+        "@mousedown"() {
+          if (this.isOpen) {
+            this.close();
+            this.$event.stopPropagation();
+          }
         }
       }
     };

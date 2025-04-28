@@ -76,9 +76,10 @@ function select_default(Alpine) {
         this.inputEl = this.$el.querySelector("[x-bind='input']");
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
-          ["@keydown.prevent.down"]() {
+          async ["@keydown.prevent.down"]() {
             if (!this.isOpen) {
               this.open();
+              await this.$nextTick();
             }
             if (this.highlightedIndex >= this._items.length - 1) {
               return;
@@ -111,7 +112,6 @@ function select_default(Alpine) {
             }
           }
         });
-        Alpine.bind(this.$el, aria.main);
         this.$watch("_model", () => {
           let selectedCopy = new Map(this.selected);
           this.selected.clear();
@@ -120,6 +120,7 @@ function select_default(Alpine) {
             if (item) this.selected.set(item.value, item);
           });
         });
+        Alpine.bind(this.$el, aria.main);
       },
       transformItems() {
         if (!this.items.length) {
@@ -175,7 +176,13 @@ function select_default(Alpine) {
         return [...this.selected].map(([k, v]) => v.value);
       },
       select() {
-        if (!this.multiple) {
+        if (this.multiple) {
+          if (this.selected.has(this.item.value)) {
+            this.selected.delete(this.item.value);
+          } else {
+            this.selected.set(this.item.value, this.item);
+          }
+        } else {
           let item = this.selected.size && this.selected.values().next().value;
           if (item.value === this.item.value) {
             return;
@@ -184,17 +191,15 @@ function select_default(Alpine) {
           if (item) {
             this.selected.delete(item.value);
           }
-        } else {
-          if (this.selected.has(this.item.value)) {
-            this.selected.delete(this.item.value);
-          } else {
-            this.selected.set(this.item.value, this.item);
-          }
         }
         this.updateModel();
       },
       unselect() {
         this.selected.delete(this.selectedItem.value);
+      },
+      clearSelection() {
+        this.selected.clear();
+        this.updateModel();
       },
       updateModel() {
         this._model = this.getSelectedValues();
@@ -205,6 +210,10 @@ function select_default(Alpine) {
       trigger: {
         "x-ref": "trigger",
         "@mousedown"() {
+          let { target } = this.$event;
+          if (target.getAttribute("x-bind") === "clearButton") {
+            return;
+          }
           this.isOpen ? this.close() : this.open();
         },
         "@focusout"() {
@@ -247,8 +256,8 @@ function select_default(Alpine) {
           this.close();
           this.$root.querySelector("[x-bind='input']").focus();
         },
-        "@scroll"() {
-          if (this.$el.offsetHeight + this.$el.scrollTop + 100 >= this.$el.scrollHeight) {
+        "@scroll.debounce"() {
+          if (this.$el.offsetHeight + this.$el.scrollTop >= this.$el.scrollHeight) {
             this.$dispatch("scroll-to-bottom");
           }
         },
