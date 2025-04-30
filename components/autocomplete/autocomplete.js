@@ -78,6 +78,7 @@ export default function (Alpine) {
       itemText: "text",
       itemValue: "value",
       noFilter: false,
+      noEmptyOpen: false,
 
       init() {
         this.$nextTick(() => {
@@ -95,6 +96,9 @@ export default function (Alpine) {
           this.noFilter = JSON.parse(
             Alpine.bound(this.$el, "data-no-filter") ?? this.noFilter,
           );
+          this.noEmptyOpen = JSON.parse(
+            Alpine.bound(this.$el, "data-no-empty-open") ?? this.noEmptyOpen,
+          );
 
           this.floating = useFloating(
             this.$refs.trigger ||
@@ -110,7 +114,7 @@ export default function (Alpine) {
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
           async ["@keydown.prevent.down"]() {
-            if (!this.isOpen) {
+            if (!this.isOpen && this.canOpenEmptyMenu()) {
               this.open();
               await this.$nextTick()
             }
@@ -153,9 +157,6 @@ export default function (Alpine) {
           },
           "@update:value"() {
             this._externalValue = this.$event.detail
-            if (!this.isOpen) {
-              this.open()
-            }
           }
         });
 
@@ -164,6 +165,12 @@ export default function (Alpine) {
             return
           }
           this._filteredItems = this.filterItems()
+        })
+
+        this.$watch("items", () => {
+          if (!this.isOpen && this.isFocused) {
+            this.open()
+          }
         })
 
         this.$watch("_model", () => {
@@ -217,6 +224,9 @@ export default function (Alpine) {
           return this._items
         }
         return this._filteredItems
+      },
+      canOpenEmptyMenu() {
+        return !this.noEmptyOpen || this.getItems().length
       },
       open() {
         this.floating.startAutoUpdate();
@@ -278,6 +288,9 @@ export default function (Alpine) {
       isItemSelected() {
         return this.selected.has(this.item.value);
       },
+      getHighlightedItemText() {
+        return highlight(this.item.text, this._externalValue)
+      },
       trigger: {
         "x-ref": "trigger",
         "@mousedown"() {
@@ -285,7 +298,7 @@ export default function (Alpine) {
           if (target.getAttribute("x-bind") === "clearButton") {
             return
           }
-          if (!this.isOpen) {
+          if (!this.isOpen && this.canOpenEmptyMenu()) {
             this.open();
           }
         },
