@@ -410,7 +410,7 @@ export default function (Alpine) {
         }
       },
       indicator: {
-        "@mousedown"() {
+        "@mousedown.prevent"() {
           if (this.isOpen) {
             this.close()
             this.$event.stopPropagation()
