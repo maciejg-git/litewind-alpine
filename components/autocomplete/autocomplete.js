@@ -165,6 +165,9 @@ export default function (Alpine) {
             return
           }
           this._filteredItems = this.filterItems()
+          if (!this.isOpen && this.canOpenEmptyMenu()) {
+            this.open()
+          }
         })
 
         this.$watch("items", () => {
