@@ -78,6 +78,59 @@
             <div x-bind="message" x-text="m" class="text-sm" class-valid="text-success-600 dark:text-success-500" class-invalid="text-danger-600 dark:text-danger-500"></div>
           </template>
         </div>
+        <div
+          x-data="input"
+          x-model="model"
+          class="flex flex-1 items-center px-3 py-2 border-0 border-b-2 focus-within:ring-0 px-0.5 bg-transparent"
+          class-default="border-secondary-400 dark:text-dark-300 dark:border-dark-500"
+          class-valid="text-success-600 border-success-300 dark:text-success-600 dark:border-success-400"
+          class-invalid="text-danger-600 border-danger-300 dark:text-danger-600 dark:border-danger-400"
+        >
+          <div data-icon class="mr-3 empty:hidden"></div>
+          <div data-prepend class="mr-3 empty:hidden"></div>
+          <div class="mr-3 flex flex-1 flex-wrap">
+            <input
+              x-bind="input"
+              type="text"
+              class="w-full min-w-0 flex-1 border-0 bg-transparent p-0 outline-hidden focus:min-w-[64px] focus:outline-hidden"
+            />
+          </div>
+          <div data-append class="mr-3 empty:hidden"></div>
+          <div class="flex items-center gap-x-2">
+            <div x-bind="loader">
+              <svg viewBox="25 25 50 50" fill="none" class="animate-spinner-rotate h-5 w-5">
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="20"
+                  stroke="currentColor"
+                  stroke-width="4"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  class="animate-spinner-dash"
+                />
+              </svg>
+            </div>
+            <button
+              x-bind="clearButton"
+              @click="clear()"
+              class="flex items-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="h-5 w-5 opacity-70"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </body>
