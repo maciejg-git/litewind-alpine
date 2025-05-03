@@ -16,7 +16,7 @@
 
     <div
       x-data="alert"
-      class="flex items-center rounded-md border p-5"
+      class="flex items-start rounded-md border p-5"
       class-info="text-text-700 dark:text-info-200 bg-info-200/20 dark:bg-info-500/50 border-info-400 dark:border-info-500"
       class-warn="text-text-700 dark:text-warn-200 bg-warn-400/20 dark:bg-warn-500/50 border-warn-400 dark:border-warn-500"
       class-danger="text-text-700 dark:text-danger-200 bg-danger-300/20 dark:bg-danger-500/50 border-danger-400 dark:border-danger-500"
@@ -37,7 +37,15 @@
           />
         </svg>
       </div>
-      <div>Alert</div>
+      <div>
+        <div class="font-semibold">Header</div>
+        <div>
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry's standard dummy text
+          ever since the 1500s, when an unknown printer took a galley of
+          type and scrambled it to make a type specimen book.
+        </div>
+      </div>
       <button x-bind="closeButton" class="ml-auto">
         <svg
           xmlns="http://www.w3.org/2000/svg"
