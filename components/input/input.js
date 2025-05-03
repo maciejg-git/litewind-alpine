@@ -63,9 +63,12 @@ export default function (Alpine) {
         this._value = "";
       },
       input: {
+        // the _externalValue allows components that use input to update its value
         ":value"() {
           return this._externalValue ?? this._value
         },
+        // the update:value events allows updating _externalValue in the components
+        // that use input
         "@input"() {
           this._value = this.$event.target.value
           this.$dispatch("update:value", this._value)

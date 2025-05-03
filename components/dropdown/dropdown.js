@@ -86,6 +86,8 @@ export default function (Alpine) {
             return { ...acc, [v]: this[v]}
           })
 
+          // the x-bind='trigger' is necessary for components that use
+          // other components as triggers
           this.floating = useFloating(
             this.$refs.trigger ||
               this.$root.querySelector("[x-bind='trigger']"),
