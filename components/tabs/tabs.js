@@ -44,6 +44,9 @@ export default function (Alpine) {
         "@click"() {
           this.selectTab();
         },
+        "@focusin"() {
+          this.$el.scrollIntoView({ behavior: "smooth" })
+        },
         "x-effect"() {
           this.$el.dataset.selected = this.isSelected();
         },
