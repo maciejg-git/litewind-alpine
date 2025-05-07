@@ -85,6 +85,7 @@ export default function (Alpine) {
           Alpine.effect(() => {
             this.items = Alpine.bound(this.$el, "data-items") ?? this.items;
             this.transformItems();
+            this.highlightedIndex = -1
           });
           this.multiple = JSON.parse(
             Alpine.bound(this.$el, "data-multiple") ?? this.multiple,
