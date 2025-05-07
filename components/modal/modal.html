@@ -95,6 +95,9 @@
         </div>
       </div>
     </div>
+
+    <!-- image modal -->
+
     <div
       x-data="{images: ['mononoke033.jpg', 'mononoke035.jpg', 'IMG_2648.jpg', 'IMG_2657.jpg'], currentImage: 0}"
     >
@@ -146,7 +149,7 @@
                   </svg>
                 </button>
                 <div
-                  class="absolute bottom-0 flex w-full justify-center gap-x-4 overflow-x-auto p-2"
+                  class="absolute bottom-0 flex w-full justify-center-safe gap-x-4 overflow-x-auto p-2 max-w-full"
                 >
                   <template x-for="(image, index) in images">
                     <img
