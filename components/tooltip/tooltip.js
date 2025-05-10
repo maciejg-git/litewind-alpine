@@ -32,7 +32,11 @@ export default function (Alpine) {
 
         if (typeof el._v_tooltip.func === "function") {
           el._v_tooltip.func((v) => {
-            el._v_tooltip.tooltip.innerText = v;
+            if (el._v_tooltip.html) {
+              el._v_tooltip.tooltip.innerHTML = v;
+            } else {
+              el._v_tooltip.tooltip.innerText = v;
+            }
           });
         }
 
@@ -139,6 +143,9 @@ export default function (Alpine) {
           if (i === "func") {
             return ["func", true];
           }
+          if (i === "html") {
+            return ["html", true];
+          }
           if (i === "fade" || i === "scale-fade") {
             return ["transition", i]
           }
@@ -169,7 +176,11 @@ export default function (Alpine) {
         ...options,
       };
 
-      el._v_tooltip.tooltip.innerText = !options.func ? expression : "";
+      if (options.html) {
+        el._v_tooltip.tooltip.innerHTML = !options.func ? expression : "";
+      } else {
+        el._v_tooltip.tooltip.innerText = !options.func ? expression : "";
+      }
 
       addTransition(el._v_tooltip, true)
 
