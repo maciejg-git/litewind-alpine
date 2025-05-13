@@ -71,11 +71,13 @@
         itemText: "text",
         itemValue: "value",
         noFilter: false,
+        noEmptyOpen: false,
         init() {
           this.$nextTick(() => {
             Alpine2.effect(() => {
               this.items = Alpine2.bound(this.$el, "data-items") ?? this.items;
               this.transformItems();
+              this.highlightedIndex = -1;
             });
             this.multiple = JSON.parse(
               Alpine2.bound(this.$el, "data-multiple") ?? this.multiple
@@ -84,6 +86,9 @@
             this.itemValue = Alpine2.bound(this.$el, "data-item-value") ?? this.itemValue;
             this.noFilter = JSON.parse(
               Alpine2.bound(this.$el, "data-no-filter") ?? this.noFilter
+            );
+            this.noEmptyOpen = JSON.parse(
+              Alpine2.bound(this.$el, "data-no-empty-open") ?? this.noEmptyOpen
             );
             this.floating = useFloating(
               this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"),
@@ -96,7 +101,7 @@
           Alpine2.bind(this.$el, {
             ["x-modelable"]: "_model",
             async ["@keydown.prevent.down"]() {
-              if (!this.isOpen) {
+              if (!this.isOpen && this.canOpenEmptyMenu()) {
                 this.open();
                 await this.$nextTick();
               }
@@ -139,9 +144,6 @@
             },
             "@update:value"() {
               this._externalValue = this.$event.detail;
-              if (!this.isOpen) {
-                this.open();
-              }
             }
           });
           this.$watch("_externalValue", () => {
@@ -149,6 +151,14 @@
               return;
             }
             this._filteredItems = this.filterItems();
+            if (!this.isOpen && this.canOpenEmptyMenu()) {
+              this.open();
+            }
+          });
+          this.$watch("items", () => {
+            if (!this.isOpen && this.isFocused) {
+              this.open();
+            }
           });
           this.$watch("_model", () => {
             let selectedCopy = new Map(this.selected);
@@ -200,6 +210,9 @@
             return this._items;
           }
           return this._filteredItems;
+        },
+        canOpenEmptyMenu() {
+          return !this.noEmptyOpen || this.getItems().length;
         },
         open() {
           this.floating.startAutoUpdate();
@@ -261,6 +274,9 @@
         isItemSelected() {
           return this.selected.has(this.item.value);
         },
+        getHighlightedItemText() {
+          return highlight(this.item.text, this._externalValue);
+        },
         trigger: {
           "x-ref": "trigger",
           "@mousedown"() {
@@ -268,7 +284,7 @@
             if (target.getAttribute("x-bind") === "clearButton") {
               return;
             }
-            if (!this.isOpen) {
+            if (!this.isOpen && this.canOpenEmptyMenu()) {
               this.open();
             }
           },
@@ -377,7 +393,7 @@
           }
         },
         indicator: {
-          "@mousedown"() {
+          "@mousedown.prevent"() {
             if (this.isOpen) {
               this.close();
               this.$event.stopPropagation();

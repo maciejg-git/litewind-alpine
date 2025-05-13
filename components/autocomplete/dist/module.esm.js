@@ -70,11 +70,13 @@ function autocomplete_default(Alpine) {
       itemText: "text",
       itemValue: "value",
       noFilter: false,
+      noEmptyOpen: false,
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
             this.items = Alpine.bound(this.$el, "data-items") ?? this.items;
             this.transformItems();
+            this.highlightedIndex = -1;
           });
           this.multiple = JSON.parse(
             Alpine.bound(this.$el, "data-multiple") ?? this.multiple
@@ -83,6 +85,9 @@ function autocomplete_default(Alpine) {
           this.itemValue = Alpine.bound(this.$el, "data-item-value") ?? this.itemValue;
           this.noFilter = JSON.parse(
             Alpine.bound(this.$el, "data-no-filter") ?? this.noFilter
+          );
+          this.noEmptyOpen = JSON.parse(
+            Alpine.bound(this.$el, "data-no-empty-open") ?? this.noEmptyOpen
           );
           this.floating = useFloating(
             this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"),
@@ -95,7 +100,7 @@ function autocomplete_default(Alpine) {
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
           async ["@keydown.prevent.down"]() {
-            if (!this.isOpen) {
+            if (!this.isOpen && this.canOpenEmptyMenu()) {
               this.open();
               await this.$nextTick();
             }
@@ -138,9 +143,6 @@ function autocomplete_default(Alpine) {
           },
           "@update:value"() {
             this._externalValue = this.$event.detail;
-            if (!this.isOpen) {
-              this.open();
-            }
           }
         });
         this.$watch("_externalValue", () => {
@@ -148,6 +150,14 @@ function autocomplete_default(Alpine) {
             return;
           }
           this._filteredItems = this.filterItems();
+          if (!this.isOpen && this.canOpenEmptyMenu()) {
+            this.open();
+          }
+        });
+        this.$watch("items", () => {
+          if (!this.isOpen && this.isFocused) {
+            this.open();
+          }
         });
         this.$watch("_model", () => {
           let selectedCopy = new Map(this.selected);
@@ -199,6 +209,9 @@ function autocomplete_default(Alpine) {
           return this._items;
         }
         return this._filteredItems;
+      },
+      canOpenEmptyMenu() {
+        return !this.noEmptyOpen || this.getItems().length;
       },
       open() {
         this.floating.startAutoUpdate();
@@ -260,6 +273,9 @@ function autocomplete_default(Alpine) {
       isItemSelected() {
         return this.selected.has(this.item.value);
       },
+      getHighlightedItemText() {
+        return highlight(this.item.text, this._externalValue);
+      },
       trigger: {
         "x-ref": "trigger",
         "@mousedown"() {
@@ -267,7 +283,7 @@ function autocomplete_default(Alpine) {
           if (target.getAttribute("x-bind") === "clearButton") {
             return;
           }
-          if (!this.isOpen) {
+          if (!this.isOpen && this.canOpenEmptyMenu()) {
             this.open();
           }
         },
@@ -376,7 +392,7 @@ function autocomplete_default(Alpine) {
         }
       },
       indicator: {
-        "@mousedown"() {
+        "@mousedown.prevent"() {
           if (this.isOpen) {
             this.close();
             this.$event.stopPropagation();

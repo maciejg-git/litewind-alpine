@@ -48,6 +48,7 @@
         locale: "en-GB",
         primaryKey: "",
         onFilter: null,
+        isLoading: false,
         init() {
           this.$nextTick(() => {
             Alpine2.effect(() => {
@@ -76,7 +77,22 @@
                 Alpine2.bound(this.$el, "data-page") ?? this.page
               );
             });
+            Alpine2.effect(() => {
+              this.isLoading = JSON.parse(
+                Alpine2.bound(this.$el, "data-is-loading") ?? this.isLoading
+              );
+            });
             this.primaryKey = Alpine2.bound(this.$el, "data-primary-key") ?? this.primaryKey;
+            Alpine2.bind(this.$el, {
+              ":class"() {
+                let classes = this.$el.attributes;
+                let c = "";
+                if (this.isLoading) {
+                  c = classes["class-loading"]?.textContent || "";
+                }
+                return c;
+              }
+            });
           });
         },
         // generate definition array from the first record of items array

@@ -199,6 +199,9 @@ function dropdown_default(Alpine) {
           this.close();
         },
         "@click"() {
+          if (this.$event.target === this.$refs.menu) {
+            return;
+          }
           if (this.autoClose && this.$el.contains(this.$event.target)) {
             this.close();
           }

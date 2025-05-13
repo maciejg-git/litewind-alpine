@@ -18,12 +18,22 @@
       };
       return {
         selectedTab: "",
+        transition: "",
         init() {
           this.selectedTab = Alpine2.bound(this.$el, "data-selected-tab") ?? this.selectedTab;
           this.$nextTick(() => {
             Alpine2.effect(() => {
               this.selectedTab = Alpine2.bound(this.$el, "data-selected-tab") ?? this.selectedTab;
             });
+            this.transition = Alpine2.bound(this.$el, "data-transition") ?? this.transition;
+            if (this.transition) {
+              let tabs = this.$el.querySelectorAll("[data-tab]");
+              tabs.forEach((tab) => {
+                Alpine2.bind(tab, {
+                  "x-alt-transition": this.transition
+                });
+              });
+            }
           });
         },
         selectTab() {
@@ -41,6 +51,9 @@
         label: {
           "@click"() {
             this.selectTab();
+          },
+          "@focusin"() {
+            this.$el.scrollIntoView({ behavior: "smooth", block: "nearest" });
           },
           "x-effect"() {
             this.$el.dataset.selected = this.isSelected();

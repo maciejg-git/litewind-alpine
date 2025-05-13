@@ -23,7 +23,11 @@ function tooltip_default(Alpine) {
         }
         if (typeof el2._v_tooltip.func === "function") {
           el2._v_tooltip.func((v) => {
-            el2._v_tooltip.tooltip.innerText = v;
+            if (el2._v_tooltip.html) {
+              el2._v_tooltip.tooltip.innerHTML = v;
+            } else {
+              el2._v_tooltip.tooltip.innerText = v;
+            }
           });
         }
         tooltip.timer = setTimeout(() => {
@@ -110,6 +114,9 @@ function tooltip_default(Alpine) {
           if (i === "func") {
             return ["func", true];
           }
+          if (i === "html") {
+            return ["html", true];
+          }
           if (i === "fade" || i === "scale-fade") {
             return ["transition", i];
           }
@@ -134,7 +141,11 @@ function tooltip_default(Alpine) {
         destroyFloating: null,
         ...options
       };
-      el._v_tooltip.tooltip.innerText = !options.func ? expression : "";
+      if (options.html) {
+        el._v_tooltip.tooltip.innerHTML = !options.func ? expression : "";
+      } else {
+        el._v_tooltip.tooltip.innerText = !options.func ? expression : "";
+      }
       addTransition(el._v_tooltip, true);
       floating = useFloating(el, el._v_tooltip.wrapper, el._v_tooltip);
       el.addEventListener("mouseenter", show);

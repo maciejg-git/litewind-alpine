@@ -47,6 +47,7 @@ function table_default(Alpine) {
       locale: "en-GB",
       primaryKey: "",
       onFilter: null,
+      isLoading: false,
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
@@ -75,7 +76,22 @@ function table_default(Alpine) {
               Alpine.bound(this.$el, "data-page") ?? this.page
             );
           });
+          Alpine.effect(() => {
+            this.isLoading = JSON.parse(
+              Alpine.bound(this.$el, "data-is-loading") ?? this.isLoading
+            );
+          });
           this.primaryKey = Alpine.bound(this.$el, "data-primary-key") ?? this.primaryKey;
+          Alpine.bind(this.$el, {
+            ":class"() {
+              let classes = this.$el.attributes;
+              let c = "";
+              if (this.isLoading) {
+                c = classes["class-loading"]?.textContent || "";
+              }
+              return c;
+            }
+          });
         });
       },
       // generate definition array from the first record of items array
