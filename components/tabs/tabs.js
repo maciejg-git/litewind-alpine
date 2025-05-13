@@ -17,6 +17,7 @@ export default function (Alpine) {
 
     return {
       selectedTab: "",
+      transition: "",
 
       init() {
         this.selectedTab =
@@ -26,6 +27,16 @@ export default function (Alpine) {
             this.selectedTab =
               Alpine.bound(this.$el, "data-selected-tab") ?? this.selectedTab;
           });
+          this.transition = Alpine.bound(this.$el, "data-transition") ?? this.transition
+
+          if (this.transition) {
+            let tabs = this.$el.querySelectorAll("[data-tab]")
+            tabs.forEach((tab) => {
+              Alpine.bind(tab, {
+                "x-alt-transition": this.transition
+              })
+            })
+          }
         });
       },
       selectTab() {
