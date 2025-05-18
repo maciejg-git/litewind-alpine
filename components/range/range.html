@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="/output.css" rel="stylesheet" />
+    <script defer type="module" src="./builds/cdn.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    <div class="m-4 mb-10 text-3xl font-semibold">Range</div>
+  
+    <div class="w-[400px] ml-10">
+      <div
+        x-data="range"
+        class="flex h-5 items-center relative"
+      >
+        <div class="h-2 w-full rounded-full bg-secondary-100 dark:bg-dark-800"></div>
+        <div class="absolute bg-gray-400 h-2" x-bind="trackFill"></div>
+        <div class="absolute w-5 h-5 bg-gray-400 rounded-full pointer-events-none outline-hidden focus:ring-4 ring-primary-400/50 shadow-md" x-bind="sliderMin" tabindex="0"></div>
+        <div class="absolute w-5 h-5 bg-gray-400 rounded-full pointer-events-none outline-hidden focus:ring-4 ring-primary-400/50 shadow-md" x-bind="sliderMax" tabindex="0"></div>
+      </div>
+    </div>
+  </body>
+</html>
