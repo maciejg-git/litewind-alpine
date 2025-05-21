@@ -18,13 +18,14 @@ export default function (Alpine) {
       _lastX: 0,
       _valueX: 0,
       _currentX: 0,
+      _range: 0,
+      _steps: 0,
+      _maxValue: 0,
+      // props
       _min: 0,
       _max: 100,
-      _range: 0,
       _step: 1,
-      _steps: 0,
       _fixedMin: false,
-      _maxValue: 0,
 
       init() {
         this._onMousemove = this.handleMousmove.bind(this)
@@ -65,12 +66,10 @@ export default function (Alpine) {
         window.addEventListener("mousemove", this._onMousemove)
         this._lastX = this.$event.pageX
         this._valueX = this.$event.offsetX
+        this._currentX = 0
       },
       handleMouseup() {
         window.removeEventListener("mousemove", this._onMousemove)
-        this._lastX = 0
-        this._currentX = 0
-        this._valueX = 0
       },
       handleMousmove(event) {
         let movementX = event.pageX - this._lastX
@@ -86,11 +85,7 @@ export default function (Alpine) {
         }
         let dist1 = Math.abs(value - this._slider1.value)
         let dist2 = Math.abs(value - this._slider2.value)
-        if (dist1 < dist2) {
-          return this._slider1
-        } else {
-          return this._slider2
-        }
+        return dist1 < dist2 ? this._slider1 : this._slider2
       },
       getValue1() {
         return (this._slider1.value * this._range) + this._min
@@ -99,7 +94,7 @@ export default function (Alpine) {
         return (this._slider2.value * this._range) + this._min
       },
       getSteps() {
-        return Math.floor(this._steps)
+        return Math.floor(this._steps) + 1
       },
       trackFill: {
         ":style"() {
@@ -131,6 +126,14 @@ export default function (Alpine) {
           }
         },
         "x-ref": "slider2",
+      },
+      step: {
+        ":style"() {
+          return {
+            left: (((this._step / this._range) * 100) * this.index) + "%",
+            transform: "translateX(-50%)",
+          }
+        }
       }
     }
   })

@@ -17,13 +17,21 @@
     <div class="w-[400px] ml-10">
       <div
         x-data="range"
+        data-step="10"
         class="flex h-5 items-center relative"
       >
-        <div class="h-2 w-full rounded-full bg-secondary-100 dark:bg-dark-800">
-          <div class="relative bg-gray-400 h-full pointer-events-none" x-bind="trackFill"></div>
+        <div class="h-2 w-full rounded-full bg-secondary-300 dark:bg-dark-800 flex items-center pointer-events-none">
+          <div class="relative bg-gray-500 h-full" x-bind="trackFill"></div>
+          <template x-for="(s, index) in getSteps">
+            <div class="absolute w-1 h-1 rounded-full bg-gray-600" x-bind="step"></div>
+          </template>
         </div>
-        <div class="absolute w-5 h-5 bg-gray-400 rounded-full pointer-events-none outline-hidden focus:ring-4 ring-primary-400/50 shadow-md" x-bind="slider1" tabindex="0"></div>
-        <div class="absolute w-5 h-5 bg-gray-400 rounded-full pointer-events-none outline-hidden focus:ring-4 ring-primary-400/50 shadow-md" x-bind="slider2" tabindex="0"></div>
+        <div class="absolute w-5 h-5 bg-gray-500 rounded-full pointer-events-none outline-hidden focus:ring-4 ring-primary-400/50 shadow-md" x-bind="slider1" tabindex="0">
+          <div class="absolute bottom-6 px-2 py-0.5 bg-gray-500 text-white rounded-md text-sm -translate-x-1/2 left-1/2" x-text="getValue1"></div>
+        </div>
+        <div class="absolute w-5 h-5 bg-gray-500 rounded-full pointer-events-none outline-hidden focus:ring-4 ring-primary-400/50 shadow-md" x-bind="slider2" tabindex="0">
+          <div class="absolute bottom-6 px-2 py-0.5 bg-gray-500 text-white rounded-md text-sm -translate-x-1/2 left-1/2" x-text="getValue2"></div>
+        </div>
       </div>
     </div>
   </body>
