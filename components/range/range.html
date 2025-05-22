@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title></title>
     <link href="/output.css" rel="stylesheet" />
     <script defer type="module" src="./builds/cdn.js"></script>
@@ -13,24 +13,51 @@
   </head>
   <body>
     <div class="m-4 mb-10 text-3xl font-semibold">Range</div>
-  
-    <div class="w-[400px] ml-10">
+
+    <div class="ml-10 w-[400px]">
       <div
         x-data="range"
         data-step="10"
-        class="flex h-5 items-center relative"
+        data-show-steps
+        class="relative flex h-5 w-full items-center"
       >
-        <div class="h-2 w-full rounded-full bg-secondary-300 dark:bg-dark-800 flex items-center pointer-events-none">
-          <div class="relative bg-gray-500 h-full" x-bind="trackFill"></div>
-          <template x-for="(s, index) in getSteps">
-            <div class="absolute w-1 h-1 rounded-full bg-gray-600" x-bind="step"></div>
+        <div
+          class="pointer-events-none flex h-2 w-full items-center rounded-full bg-secondary-300 dark:bg-dark-700"
+        >
+          <div
+            class="relative h-full bg-gray-500 dark:bg-gray-300"
+            x-bind="trackFill"
+          ></div>
+          <template x-if="_showSteps">
+            <template x-for="(s, index) in getSteps">
+              <div
+                class="absolute h-1 w-1 rounded-full"
+                class-filled="bg-gray-100 dark:bg-gray-600"
+                class-default="bg-gray-600 dark:bg-gray-400"
+                x-bind="step"
+              ></div>
+            </template>
           </template>
         </div>
-        <div class="absolute w-5 h-5 bg-gray-500 rounded-full pointer-events-none outline-hidden focus:ring-4 ring-primary-400/50 shadow-md" x-bind="slider1" tabindex="0">
-          <div class="absolute bottom-6 px-2 py-0.5 bg-gray-500 text-white rounded-md text-sm -translate-x-1/2 left-1/2" x-text="getValue1"></div>
+        <div
+          class="pointer-events-none absolute h-5 w-5 rounded-full bg-gray-500 shadow-md ring-primary-400/50 outline-hidden focus:ring-4 dark:bg-gray-300"
+          x-bind="slider1"
+          tabindex="0"
+        >
+          <div
+            class="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-md bg-gray-500 px-2 py-0.5 text-sm text-white"
+            x-bind="label1"
+          ></div>
         </div>
-        <div class="absolute w-5 h-5 bg-gray-500 rounded-full pointer-events-none outline-hidden focus:ring-4 ring-primary-400/50 shadow-md" x-bind="slider2" tabindex="0">
-          <div class="absolute bottom-6 px-2 py-0.5 bg-gray-500 text-white rounded-md text-sm -translate-x-1/2 left-1/2" x-text="getValue2"></div>
+        <div
+          class="pointer-events-none absolute h-5 w-5 rounded-full bg-gray-500 shadow-md ring-primary-400/50 outline-hidden focus:ring-4 dark:bg-gray-300"
+          x-bind="slider2"
+          tabindex="0"
+        >
+          <div
+            class="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-md bg-gray-500 px-2 py-0.5 text-sm text-white"
+            x-bind="label2"
+          ></div>
         </div>
       </div>
     </div>

@@ -26,6 +26,8 @@ export default function (Alpine) {
       _max: 100,
       _step: 1,
       _fixedMin: false,
+      _showSteps: false,
+      _showLabels: false,
 
       init() {
         this._onMousemove = this.handleMousmove.bind(this)
@@ -42,6 +44,12 @@ export default function (Alpine) {
           )
           this._fixedMin = JSON.parse(
             Alpine.bound(this.$el, "data-fixed-min") ?? this._fixedMin
+          )
+          this._showSteps = JSON.parse(
+            Alpine.bound(this.$el, "data-show-steps") ?? this._showSteps
+          )
+          this._showLabels = JSON.parse(
+            Alpine.bound(this.$el, "data-show-labels") ?? this._showLabels
           )
 
           this._range = this._max - this._min
@@ -127,12 +135,43 @@ export default function (Alpine) {
         },
         "x-ref": "slider2",
       },
+      label1: {
+        "x-show"() {
+          return this._showLabels
+        },
+        "x-text"() {
+          return this.getValue1()
+        }
+      },
+      label2: {
+        "x-show"() {
+          return this._showLabels
+        },
+        "x-text"() {
+          return this.getValue2()
+        }
+      },
       step: {
         ":style"() {
           return {
             left: (((this._step / this._range) * 100) * this.index) + "%",
             transform: "translateX(-50%)",
           }
+        },
+        ":class"() {
+          let step = (this._step / this._range) * this.index
+          let min = Math.min(this._slider1.value, this._slider2.value)
+          let max = Math.max(this._slider1.value, this._slider2.value)
+
+          let classes = this.$el.attributes
+          let c = ""
+          if (step >= min && step <= max) {
+            c = (classes["class-filled"]?.textContent || "")
+          } else {
+            c = (classes["class-default"]?.textContent || "")
+          }
+
+          return c
         }
       }
     }
