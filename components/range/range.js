@@ -15,12 +15,11 @@ export default function (Alpine) {
       },
       _currentSlider: null,
       _onMousemove: null,
-      _lastX: 0,
-      _valueX: 0,
-      _currentX: 0,
+      _throttledOnMouseMove: null,
       _range: 0,
       _steps: 0,
       _maxValue: 0,
+      _model: [],
       // props
       _min: 0,
       _max: 100,
@@ -31,6 +30,7 @@ export default function (Alpine) {
 
       init() {
         this._onMousemove = this.handleMousmove.bind(this)
+        this._throttledOnMouseMove = Alpine.throttle(this._onMousemove, 50)
 
         this.$nextTick(() => {
           this._min = parseFloat(
@@ -58,6 +58,7 @@ export default function (Alpine) {
         })
 
         Alpine.bind(this.$el, {
+          "x-modelable": "_model",
           "@mousedown.prevent"() {
             this.handleMousedown()
           },
@@ -67,25 +68,33 @@ export default function (Alpine) {
         })
       },
       handleMousedown() {
-        let value = this.$event.offsetX / this.$el.clientWidth
+        let { x, width } = this.$el.getBoundingClientRect()
+        window.addEventListener("mousemove", this._throttledOnMouseMove)
+        if (this.$event.target === this.$refs.slider1) {
+          this._currentSlider = this._slider1
+          this.$refs.slider1.focus()
+          return
+        }
+        if (this.$event.target === this.$refs.slider2) {
+          this._currentSlider = this._slider2
+          this.$refs.slider2.focus()
+          return
+        }
+        let value = (this.$event.clientX - x) / width
         this._currentSlider = this.getClosestSlider(value)
         this.$refs[this._currentSlider.name].focus()
         this._currentSlider.value = getStep(value, this._steps)
-        window.addEventListener("mousemove", this._onMousemove)
-        this._lastX = this.$event.pageX
-        this._valueX = this.$event.offsetX
-        this._currentX = 0
+        this.updateModel()
       },
       handleMouseup() {
-        window.removeEventListener("mousemove", this._onMousemove)
+        window.removeEventListener("mousemove", this._throttledOnMouseMove)
       },
       handleMousmove(event) {
-        let movementX = event.pageX - this._lastX
-        this._currentX = this._currentX + movementX
-        this._lastX = event.pageX
-        let value = (this._currentX + this._valueX) / this.$el.clientWidth
+        let { x, width } = this.$el.getBoundingClientRect()
+        let value = (event.clientX - x) / width
         value = getStep(value, this._steps)
         this._currentSlider.value = clamp(value, 0, this._maxValue)
+        this.updateModel()
       },
       getClosestSlider(value) {
         if (this._fixedMin) {
@@ -103,6 +112,13 @@ export default function (Alpine) {
       },
       getSteps() {
         return Math.floor(this._steps) + 1
+      },
+      updateModel() {
+        this._model[0] = this.getValue1()
+        this._model[1] = this.getValue2()
+        if (this._model[0] > this._model[1]) {
+          this._model.reverse()
+        }
       },
       trackFill: {
         ":style"() {
