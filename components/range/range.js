@@ -1,4 +1,31 @@
 export default function (Alpine) {
+  let aria = {
+    slider1: {
+      role: "slider",
+      ":aria-valuemin"() {
+        return this._min
+      },
+      ":aria-valuemax"() {
+        return this._max
+      },
+      ":aria-valuenow"() {
+        return this.getValue1()
+      }
+    },
+    slider2: {
+      role: "slider",
+      ":aria-valuemin"() {
+        return this._min
+      },
+      ":aria-valuemax"() {
+        return this._max
+      },
+      ":aria-valuenow"() {
+        return this.getValue2()
+      }
+    }
+  }
+
   let clamp = (value, min, max) => value <= min ? min : value >= max ? max : value
 
   let getStep = (value, steps) => Math.round(value * steps) * (1 / steps)
@@ -20,6 +47,7 @@ export default function (Alpine) {
       _steps: 0,
       _maxValue: 0,
       _model: [],
+      _stepPrecision: 0,
       // props
       _min: 0,
       _max: 100,
@@ -55,6 +83,11 @@ export default function (Alpine) {
           this._range = this._max - this._min
           this._steps = this._range / this._step
           this._maxValue = (Math.floor(this._steps) * this._step) / this._range
+          let step = this._step.toString().split(".")
+          this._stepPrecision = step[1] && step[1].length || 0
+
+          this.$watch("_model", this.onModelUpdate.bind(this))
+          this.onModelUpdate()
         })
 
         Alpine.bind(this.$el, {
@@ -93,7 +126,18 @@ export default function (Alpine) {
         let { x, width } = this.$el.getBoundingClientRect()
         let value = (event.clientX - x) / width
         value = getStep(value, this._steps)
-        this._currentSlider.value = clamp(value, 0, this._maxValue)
+        value = clamp(value, 0, this._maxValue)
+        if (value > this._slider2.value && this._currentSlider === this._slider1) {
+          this._currentSlider = this._slider2
+          this._slider1.value = this._slider2.value
+          this.$refs.slider2.focus()
+        }
+        if (value < this._slider1.value && this._currentSlider === this._slider2) {
+          this._currentSlider = this._slider1
+          this._slider2.value = this._slider1.value
+          this.$refs.slider1.focus()
+        }
+        this._currentSlider.value = value
         this.updateModel()
       },
       getClosestSlider(value) {
@@ -114,11 +158,20 @@ export default function (Alpine) {
         return Math.floor(this._steps) + 1
       },
       updateModel() {
-        this._model[0] = this.getValue1()
-        this._model[1] = this.getValue2()
-        if (this._model[0] > this._model[1]) {
-          this._model.reverse()
+        let value1 = this.getValue1().toFixed(this._stepPrecision)
+        let value2 = this.getValue2().toFixed(this._stepPrecision)
+        this._model[0] = parseFloat(value1)
+        this._model[1] = parseFloat(value2)
+      },
+      onModelUpdate() {
+        if (this._model.length !== 2) {
+          return
         }
+        let minOffset = this._min / this._range
+        let value1 = (this._model[0] / this._range) - minOffset
+        let value2 = (this._model[1] / this._range) - minOffset
+        this._slider1.value = getStep(value1, this._steps)
+        this._slider2.value = getStep(value2, this._steps)
       },
       trackFill: {
         ":style"() {
@@ -141,6 +194,7 @@ export default function (Alpine) {
           }
         },
         "x-ref": "slider1",
+        ...aria.slider1,
       },
       slider2: {
         ":style"() {
@@ -150,13 +204,14 @@ export default function (Alpine) {
           }
         },
         "x-ref": "slider2",
+        ...aria.slider2,
       },
       label1: {
         "x-show"() {
           return this._showLabels
         },
         "x-text"() {
-          return this.getValue1()
+          return this.getValue1().toFixed(this._stepPrecision)
         }
       },
       label2: {
@@ -164,7 +219,7 @@ export default function (Alpine) {
           return this._showLabels
         },
         "x-text"() {
-          return this.getValue2()
+          return this.getValue2().toFixed(this._stepPrecision)
         }
       },
       step: {

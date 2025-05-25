@@ -15,11 +15,13 @@
     <div class="m-4 mb-10 text-3xl font-semibold">Range</div>
 
     <div x-data="{ model: [] }" class="ml-10 w-[400px]">
+      <button @click="model[1] = model[1] + 10">add</button>
       <span x-text="model"></span>
       <div
         x-data="range"
         data-step="10"
         data-show-steps
+        data-show-labels
         x-model="model"
         class="relative flex h-5 w-full items-center"
       >
