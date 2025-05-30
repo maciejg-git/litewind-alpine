@@ -91,11 +91,18 @@
             },
             "@mouseup.window"() {
               this.handleMouseup();
+            },
+            "@touchstart.passive"() {
+              this.handleMousedown();
+            },
+            "@touchend"() {
+              this.handleMouseup();
             }
           });
         },
         handleMousedown() {
           window.addEventListener("mousemove", this._throttledOnMouseMove);
+          window.addEventListener("touchmove", this._throttledOnMouseMove);
           if (this.$event.target === this.$refs.sliderMin) {
             this._currentSlider = this._sliderMin;
             this.$refs.sliderMin.focus();
@@ -115,10 +122,12 @@
         },
         handleMouseup() {
           window.removeEventListener("mousemove", this._throttledOnMouseMove);
+          window.removeEventListener("touchmove", this._throttledOnMouseMove);
         },
         handleMousmove(event) {
           let { x, width } = this.$el.getBoundingClientRect();
-          let value = (event.clientX - x) / width;
+          let { clientX } = event.type === "touchmove" ? event.touches[0] : event;
+          let value = (clientX - x) / width;
           value = getStep(value, this._steps);
           value = clamp(value, 0, this._maxValue);
           if (value > this._sliderMax.value && this._currentSlider === this._sliderMin) {
@@ -159,10 +168,12 @@
             return;
           }
           let minOffset = this._min / this._range;
-          let min = this._model[0] / this._range - minOffset;
-          let max = this._model[1] / this._range - minOffset;
-          this._sliderMin.value = getStep(min, this._steps);
-          this._sliderMax.value = getStep(max, this._steps);
+          let minValue = this._model[0] / this._range - minOffset;
+          let maxValue = this._model[1] / this._range - minOffset;
+          minValue = clamp(minValue, 0, this._maxValue);
+          maxValue = clamp(maxValue, 0, this._maxValue);
+          this._sliderMin.value = getStep(minValue, this._steps);
+          this._sliderMax.value = getStep(maxValue, this._steps);
         },
         trackFill: {
           ":style"() {
