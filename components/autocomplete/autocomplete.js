@@ -115,7 +115,7 @@ export default function (Alpine) {
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
           async ["@keydown.prevent.down"]() {
-            if (!this.isOpen && this.canOpenEmptyMenu()) {
+            if (this.canOpenEmptyMenu()) {
               this.open();
               await this.$nextTick()
             }
@@ -158,6 +158,9 @@ export default function (Alpine) {
           },
           "@update:value"() {
             this._externalValue = this.$event.detail
+            if (this.canOpenEmptyMenu()) {
+              this.open()
+            }
           }
         });
 
@@ -166,15 +169,10 @@ export default function (Alpine) {
             return
           }
           this._filteredItems = this.filterItems()
-          if (!this.isOpen && this.canOpenEmptyMenu()) {
-            this.open()
-          }
         })
 
         this.$watch("items", () => {
-          if (!this.isOpen && this.isFocused) {
-            this.open()
-          }
+          this.open()
         })
 
         this.$watch("_model", () => {
@@ -233,6 +231,9 @@ export default function (Alpine) {
         return !this.noEmptyOpen || this.getItems().length
       },
       open() {
+        if (this.isOpen || !this.isFocused) {
+          return
+        }
         this.floating.startAutoUpdate();
         this.isOpen = true;
         if (this.selected.size) this.scrollToFirstSelected();
@@ -302,7 +303,7 @@ export default function (Alpine) {
           if (target.getAttribute("x-bind") === "clearButton") {
             return
           }
-          if (!this.isOpen && this.canOpenEmptyMenu()) {
+          if (this.canOpenEmptyMenu()) {
             this.open();
           }
         },
@@ -373,10 +374,21 @@ export default function (Alpine) {
       option: {
         "@click"() {
           let item = this.select();
+
           if (!this.multiple) {
             this._externalValue = item.text
           }
+
           if (!this.multiple) this.close();
+        },
+        "@keydown.prevent.enter"() {
+          let item = this.select();
+
+          if (!this.multiple) {
+            this._externalValue = item.text
+          }
+
+          this.close();
         },
         ":class"() {
           let classes = this.$el.attributes;
