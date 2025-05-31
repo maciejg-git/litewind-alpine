@@ -48,6 +48,7 @@ export default function (Alpine) {
       _maxValue: 0,
       _model: [],
       _stepPrecision: 0,
+      _isFocused: false,
       // props
       _min: 0,
       _max: 100,
@@ -55,6 +56,7 @@ export default function (Alpine) {
       _fixedMin: false,
       _showSteps: false,
       _showLabels: false,
+      _showLabelsOnFocus: false,
 
       init() {
         this._onMousemove = this.handleMousmove.bind(this)
@@ -76,9 +78,10 @@ export default function (Alpine) {
           this._showSteps = JSON.parse(
             Alpine.bound(this.$el, "data-show-steps") ?? this._showSteps
           )
-          this._showLabels = JSON.parse(
-            Alpine.bound(this.$el, "data-show-labels") ?? this._showLabels
-          )
+          let showLabels = Alpine.bound(this.$el, "data-show-labels") ?? this._showLabels
+          showLabels = showLabels === "true" ? true : showLabels === "false" ? false : showLabels
+          this._showLabelsOnFocus = showLabels === "focus"
+          this._showLabels = showLabels && !this._showLabelsOnFocus
 
           this._range = this._max - this._min
           this._steps = this._range / this._step
@@ -103,6 +106,12 @@ export default function (Alpine) {
           },
           "@touchend"() {
             this.handleMouseup()
+          },
+          "@focusin"() {
+            this._isFocused = true
+          },
+          "@focusout"() {
+            this._isFocused = false
           }
         })
       },
@@ -221,7 +230,7 @@ export default function (Alpine) {
       },
       labelMin: {
         "x-show"() {
-          return this._showLabels
+          return this._showLabels || (this._showLabelsOnFocus && this._isFocused)
         },
         "x-text"() {
           return this.getValueMin().toFixed(this._stepPrecision)
@@ -229,7 +238,7 @@ export default function (Alpine) {
       },
       labelMax: {
         "x-show"() {
-          return this._showLabels
+          return this._showLabels || (this._showLabelsOnFocus && this._isFocused)
         },
         "x-text"() {
           return this.getValueMax().toFixed(this._stepPrecision)
