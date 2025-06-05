@@ -268,6 +268,10 @@ function select_default(Alpine) {
           this.select();
           if (!this.multiple) this.close();
         },
+        "@keydown.prevent.enter"() {
+          this.select();
+          this.close();
+        },
         ":class"() {
           let classes = this.$el.attributes;
           let c = "";
