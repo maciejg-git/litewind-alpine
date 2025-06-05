@@ -64,7 +64,7 @@
             >
               Lorem Ipsum is simply dummy text
               <template x-if="closable">
-                <button @click="close()">
+                <button @click="close()" class="hover:bg-gray-100 rounded-md p-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -163,7 +163,7 @@
                 </div>
                 <button
                   @click="currentImage = currentImage - 1 < 0 ? images.length - 1 : currentImage - 1"
-                  class="absolute left-5 top-1/2 -translate-y-1/2 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-80"
+                  class="absolute left-5 top-1/2 -translate-y-1/2 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-80 hover:opacity-100 hover:scale-120"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -178,7 +178,7 @@
                 </button>
                 <button
                   @click="currentImage = currentImage + 1 > images.length - 1 ? 0 : currentImage + 1"
-                  class="absolute right-5 top-1/2 -translate-y-1/2 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-80"
+                  class="absolute right-5 top-1/2 -translate-y-1/2 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-80 hover:opacity-100 hover:scale-120"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
