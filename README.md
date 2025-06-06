@@ -7,7 +7,7 @@ Litewind is a component framework for Alpine and Tailwind.
 
 [Documentation and examples](https://litewind-alpine.netlify.app/documentation/introduction/)
 
-## Components
+## Alpine components
 
 - Accordion
 - Alert
@@ -25,10 +25,17 @@ Litewind is a component framework for Alpine and Tailwind.
 - Tabs
 - Tooltips
 
+## Components
+
+- Chip
+- Spinner
+
 ## Form components
 
+- Autocomplete
 - Form text
 - Input
+- Range slider
 - Select
 - Switch
 - Textarea
