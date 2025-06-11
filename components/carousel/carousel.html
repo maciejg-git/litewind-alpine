@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="/output.css" rel="stylesheet" />
+    <script defer type="module" src="./builds/cdn.js"></script>
+    <script defer src="/plugins/transition/dist/cdn.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    <div class="m-4 mb-10 text-3xl font-semibold">Carousel</div>
+  
+    <div class="w-[500px]">
+      <div x-data="carousel" :data-items="['mononoke033.jpg', 'mononoke035.jpg']" class="relative">
+        <template x-for="(i, index) in getItems">
+          <div x-bind="item" x-alt-transition='{
+            "enter": ["opacity-0", "transition duration-500", "opacity-100"],
+            "leave": ["opacity-100", "transition duration-500 absolute top-0", "opacity-0"]
+          }'>
+            <img :src="'./' + i" alt="">
+          </div>
+        </template>
+        <button class="absolute left-4 top-1/2 rounded-full p-2 bg-gray-200" @click="showPrev">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-4 h-4">
+            <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/>
+          </svg>
+        </button>
+        <button class="absolute right-4 top-1/2 rounded-full p-2 bg-gray-200" @click="showNext">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-4 h-4">
+            <path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/>
+          </svg>
+        </button>
+        <div class="absolute left-1/2 bottom-2 flex gap-x-1 bg-gray-400 px-2 py-1 rounded-md">
+          <template x-for="(i, index) in getItems">
+            <div class="w-2 h-2 rounded-full bg-gray-200" @click="setCurrent"></div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
