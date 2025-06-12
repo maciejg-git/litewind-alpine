@@ -29,10 +29,10 @@
       </template>
       <aside
         x-bind="sidepanel"
-        class="fixed right-0 top-0 z-30 flex h-full w-[350px] flex-col bg-secondary-100 px-6 text-left shadow-lg shadow-black/40 dark:bg-dark-700 dark:text-text-300"
+        class="fixed right-0 data-left:left-0 top-0 z-30 flex h-full w-[350px] flex-col bg-secondary-100 px-6 text-left shadow-lg shadow-black/40 dark:bg-dark-700 dark:text-text-300"
         x-alt-transition='{
-                "enter": ["opacity-0 translate-x-40", "transition ease-out duration-100", "opacity-100"],
-                "leave": ["opacity-100", "transition ease-in duration-100", "opacity-0 translate-x-40"]
+                "enter": ["opacity-0 translate-x-40 data-left:-translate-x-40", "transition ease-out duration-100", "opacity-100"],
+                "leave": ["opacity-100", "transition ease-in duration-100", "opacity-0 translate-x-40 data-left:-translate-x-40"]
               }'
       >
         <div class="flex w-full items-center justify-between">
