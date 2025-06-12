@@ -5,10 +5,14 @@ function sidepanel_default(Alpine) {
       isOpen: false,
       // props
       isModal: false,
+      _isLeft: false,
       init() {
         this.$nextTick(() => {
           this.isModal = JSON.parse(
             Alpine.bound(this.$el, "data-modal") ?? this.isModal
+          );
+          this._isLeft = JSON.parse(
+            Alpine.bound(this.$el, "data-left") ?? this._isLeft
           );
         });
         Alpine.bind(this.$el, {
@@ -35,6 +39,12 @@ function sidepanel_default(Alpine) {
       sidepanel: {
         "x-show"() {
           return this.isOpen;
+        },
+        ":data-right"() {
+          return !this._isLeft;
+        },
+        ":data-left"() {
+          return this._isLeft;
         }
       },
       backdrop: {

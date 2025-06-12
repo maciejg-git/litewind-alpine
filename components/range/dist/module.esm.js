@@ -94,7 +94,7 @@ function range_default(Alpine) {
           "@mouseup.window"() {
             this.handleMouseup();
           },
-          "@touchstart.passive"() {
+          "@touchstart.prevent"() {
             this.handleMousedown();
           },
           "@touchend"() {
@@ -122,7 +122,8 @@ function range_default(Alpine) {
           return;
         }
         let { x, width } = this.$el.getBoundingClientRect();
-        let value = (this.$event.clientX - x) / width;
+        let { clientX } = this.$event.type === "touchstart" ? this.$event.touches[0] : this.$event;
+        let value = (clientX - x) / width;
         this._currentSlider = this._fixedMin && this._sliderMax || this.getClosestSlider(value);
         this.$refs[this._currentSlider.name].focus();
         this._currentSlider.value = getStep(value, this._steps);
