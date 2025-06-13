@@ -1,12 +1,15 @@
 export default function (Alpine) {
   window.Alpine.directive(
     "alt-transition",
-    (el, { value, expression }, { evaluate }) => {
+    (el, { value, modifiers, expression }, { evaluate }) => {
       let t;
-      if (typeof expression === "string") {
-        t = JSON.parse(expression);
-      } else if (typeof expression === "object") {
-        t = expression;
+      let mods = {
+        json: modifiers.includes("json")
+      }
+      if (mods.json) {
+        t = JSON.parse(expression)
+      } else {
+        t = evaluate(expression)
       }
       let transition = {};
       if (t.enter[1]) transition["x-transition:enter"] = t.enter[1];
