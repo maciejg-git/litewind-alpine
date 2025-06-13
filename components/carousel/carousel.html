@@ -15,29 +15,29 @@
   <body>
     <div class="m-4 mb-10 text-3xl font-semibold">Carousel</div>
   
-    <div class="w-[500px]">
+    <div class="w-[1000px]">
       <div x-data="carousel" :data-items="['mononoke033.jpg', 'mononoke035.jpg']" class="relative">
         <template x-for="(i, index) in getItems">
           <div x-bind="item" x-alt-transition='{
-            "enter": ["opacity-0", "transition duration-500", "opacity-100"],
-            "leave": ["opacity-100", "transition duration-500 absolute top-0", "opacity-0"]
+            "enter": ["opacity-0", "transition ease-in-out duration-500", "opacity-100"],
+            "leave": ["opacity-100", "transition ease-in-out duration-500 absolute top-0", "opacity-0"]
           }'>
             <img :src="'./' + i" alt="">
           </div>
         </template>
-        <button class="absolute left-4 top-1/2 rounded-full p-2 bg-gray-200" @click="showPrev">
+        <button class="absolute left-4 top-1/2 rounded-full p-3 bg-gray-200/80 -translate-y-1/2" @click="showPrev">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-4 h-4">
             <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/>
           </svg>
         </button>
-        <button class="absolute right-4 top-1/2 rounded-full p-2 bg-gray-200" @click="showNext">
+        <button class="absolute right-4 top-1/2 rounded-full p-3 bg-gray-200/80 -translate-y-1/2" @click="showNext">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-4 h-4">
             <path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/>
           </svg>
         </button>
-        <div class="absolute left-1/2 bottom-2 flex gap-x-1 bg-gray-400 px-2 py-1 rounded-md">
+        <div class="absolute left-1/2 bottom-4 flex gap-x-4 bg-gray-400 px-2 py-2 rounded-full -translate-x-1/2">
           <template x-for="(i, index) in getItems">
-            <div class="w-2 h-2 rounded-full bg-gray-200" @click="setCurrent"></div>
+            <div x-bind="indicator" class="w-3 h-3 rounded-full bg-gray-200"></div>
           </template>
         </div>
       </div>

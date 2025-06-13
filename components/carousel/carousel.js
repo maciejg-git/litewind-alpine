@@ -3,6 +3,7 @@ export default function (Alpine) {
     return {
       _items: [],
       _currentIndex: 0,
+      _direction: false,
       init() {
         this.$nextTick(() => {
           this._items = Alpine.bound(this.$el, "data-items") ?? this._items
@@ -16,12 +17,14 @@ export default function (Alpine) {
         if (this._currentIndex >= this._items.length) {
           this._currentIndex = 0
         }
+        this._direction = true
       },
       showPrev() {
         this._currentIndex--
         if (this._currentIndex < 0) {
           this._currentIndex = this._items.length - 1
         }
+        this._direction = false
       },
       setCurrent() {
         this._currentIndex = this.index
@@ -29,6 +32,14 @@ export default function (Alpine) {
       item: {
         "x-show"() {
           return this.index === this._currentIndex
+        },
+        ":data-direction"() {
+          return this._direction
+        }
+      },
+      indicator: {
+        "@click"() {
+          this.setCurrent()
         }
       }
     }
