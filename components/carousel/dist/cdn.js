@@ -1,13 +1,55 @@
 (() => {
-  // components/template/template.js
-  function template_default(Alpine2) {
-    Alpine2.data("template", () => {
-      return {};
+  // components/carousel/carousel.js
+  function carousel_default(Alpine2) {
+    Alpine2.data("carousel", () => {
+      return {
+        _items: [],
+        _currentIndex: 0,
+        _direction: false,
+        init() {
+          this.$nextTick(() => {
+            this._items = Alpine2.bound(this.$el, "data-items") ?? this._items;
+          });
+        },
+        getItems() {
+          return this._items;
+        },
+        showNext() {
+          this._currentIndex++;
+          if (this._currentIndex >= this._items.length) {
+            this._currentIndex = 0;
+          }
+          this._direction = true;
+        },
+        showPrev() {
+          this._currentIndex--;
+          if (this._currentIndex < 0) {
+            this._currentIndex = this._items.length - 1;
+          }
+          this._direction = false;
+        },
+        setCurrent() {
+          this._currentIndex = this.index;
+        },
+        item: {
+          "x-show"() {
+            return this.index === this._currentIndex;
+          },
+          ":data-direction"() {
+            return this._direction;
+          }
+        },
+        indicator: {
+          "@click"() {
+            this.setCurrent();
+          }
+        }
+      };
     });
   }
 
-  // components/template/builds/cdn.js
+  // components/carousel/builds/cdn.js
   document.addEventListener("alpine:init", () => {
-    Alpine.plugin(template_default);
+    Alpine.plugin(carousel_default);
   });
 })();
