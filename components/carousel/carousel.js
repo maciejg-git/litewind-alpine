@@ -40,6 +40,17 @@ export default function (Alpine) {
       indicator: {
         "@click"() {
           this.setCurrent()
+        },
+        ":class"() {
+          let classes = this.$el.attributes
+          let c = ""
+          if (this.index === this._currentIndex) {
+            c = classes["class-current"]?.textContent || ""
+          } else {
+            c = classes["class-default"]?.textContent || ""
+          }
+
+          return c
         }
       }
     }
