@@ -19,7 +19,7 @@
       <div
         x-data="carousel"
         :data-items="['mononoke033.jpg', 'mononoke035.jpg']"
-        class="relative overflow-hidden"
+        class="relative overflow-hidden flex items-center justify-center"
       >
         <template x-for="(i, index) in getItems">
           <div
@@ -34,7 +34,7 @@
         </template>
         <button
           class="absolute top-1/2 left-4 -translate-y-1/2 rounded-full bg-gray-200/80 p-3 text-black hover:bg-gray-200"
-          @click="showPrev"
+          x-bind="prevButton"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +49,7 @@
         </button>
         <button
           class="absolute top-1/2 right-4 -translate-y-1/2 rounded-full bg-gray-200/80 p-3 text-black hover:bg-gray-200"
-          @click="showNext"
+          x-bind="nextButton"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

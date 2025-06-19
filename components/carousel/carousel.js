@@ -13,11 +13,6 @@ export default function (Alpine) {
         this.$nextTick(() => {
           Alpine.effect(() => {
             this._items = Alpine.bound(this.$el, "data-items") ?? this._items;
-            this._currentIndex = 0;
-            if (this._autoPlay) {
-              this.stopAutoPlay();
-              this.startAutoPlay();
-            }
           });
           let autoPlayDelay = Alpine.bound(this.$el, "data-auto-play") ?? false;
           this._autoPlayDelay =
@@ -30,6 +25,13 @@ export default function (Alpine) {
           if (this._autoPlay) {
             this.startAutoPlay();
           }
+
+          this.$watch('_items', () => {
+            this._currentIndex = 0
+            if (this._autoPlay) {
+              this.restartAutoPlay()
+            }
+          })
         });
       },
       getItems() {
@@ -60,6 +62,10 @@ export default function (Alpine) {
       stopAutoPlay() {
         clearInterval(this._timer);
       },
+      restartAutoPlay() {
+        this.stopAutoPlay()
+        this.startAutoPlay()
+      },
       item: {
         "x-show"() {
           return this.index === this._currentIndex;
@@ -68,9 +74,29 @@ export default function (Alpine) {
           return this._direction;
         },
       },
+      prevButton: {
+        "@click"() {
+          this.showPrev()
+          if (this._autoPlay) {
+            this.restartAutoPlay()
+          }
+        }
+      },
+      nextButton: {
+        "@click"() {
+          this.showNext()
+          if (this._autoPlay) {
+            this.restartAutoPlay()
+          }
+        }
+      },
       indicator: {
         "@click"() {
+          let currentIndex = this._currentIndex
           this.setCurrent();
+          if (currentIndex !== this._currentIndex && this._autoPlay) {
+            this.restartAutoPlay()
+          }
         },
         ":class"() {
           let classes = this.$el.attributes;
