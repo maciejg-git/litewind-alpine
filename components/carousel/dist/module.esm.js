@@ -2,12 +2,30 @@
 function carousel_default(Alpine) {
   Alpine.data("carousel", () => {
     return {
-      _items: [],
       _currentIndex: 0,
       _direction: false,
+      _timer: null,
+      // props
+      _items: [],
+      _autoPlay: false,
+      _autoPlayDelay: 5e3,
       init() {
         this.$nextTick(() => {
-          this._items = Alpine.bound(this.$el, "data-items") ?? this._items;
+          Alpine.effect(() => {
+            this._items = Alpine.bound(this.$el, "data-items") ?? this._items;
+          });
+          let autoPlayDelay = Alpine.bound(this.$el, "data-auto-play") ?? false;
+          this._autoPlayDelay = autoPlayDelay === true ? this._autoPlayDelay : autoPlayDelay === false ? 0 : parseInt(autoPlayDelay);
+          this._autoPlay = !!this._autoPlayDelay;
+          if (this._autoPlay) {
+            this.startAutoPlay();
+          }
+          this.$watch("_items", () => {
+            this._currentIndex = 0;
+            if (this._autoPlay) {
+              this.restartAutoPlay();
+            }
+          });
         });
       },
       getItems() {
@@ -30,6 +48,18 @@ function carousel_default(Alpine) {
       setCurrent() {
         this._currentIndex = this.index;
       },
+      startAutoPlay() {
+        this._timer = setInterval(() => {
+          this.showNext();
+        }, this._autoPlayDelay);
+      },
+      stopAutoPlay() {
+        clearInterval(this._timer);
+      },
+      restartAutoPlay() {
+        this.stopAutoPlay();
+        this.startAutoPlay();
+      },
       item: {
         "x-show"() {
           return this.index === this._currentIndex;
@@ -38,9 +68,39 @@ function carousel_default(Alpine) {
           return this._direction;
         }
       },
+      prevButton: {
+        "@click"() {
+          this.showPrev();
+          if (this._autoPlay) {
+            this.restartAutoPlay();
+          }
+        }
+      },
+      nextButton: {
+        "@click"() {
+          this.showNext();
+          if (this._autoPlay) {
+            this.restartAutoPlay();
+          }
+        }
+      },
       indicator: {
         "@click"() {
+          let currentIndex = this._currentIndex;
           this.setCurrent();
+          if (currentIndex !== this._currentIndex && this._autoPlay) {
+            this.restartAutoPlay();
+          }
+        },
+        ":class"() {
+          let classes = this.$el.attributes;
+          let c = "";
+          if (this.index === this._currentIndex) {
+            c = classes["class-current"]?.textContent || "";
+          } else {
+            c = classes["class-default"]?.textContent || "";
+          }
+          return c;
         }
       }
     };
