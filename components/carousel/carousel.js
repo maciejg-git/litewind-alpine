@@ -8,12 +8,14 @@ export default function (Alpine) {
       _items: [],
       _autoPlay: false,
       _autoPlayDelay: 5000,
+      _noFirstAndLastButton: false,
 
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
             this._items = Alpine.bound(this.$el, "data-items") ?? this._items;
           });
+          this._noFirstAndLastButton = Alpine.bound(this.$el, "data-no-first-and-last-button") ?? this._noFirstAndLastButton
           let autoPlayDelay = Alpine.bound(this.$el, "data-auto-play") ?? false;
           this._autoPlayDelay =
             autoPlayDelay === true
@@ -52,6 +54,7 @@ export default function (Alpine) {
         this._direction = false;
       },
       setCurrent() {
+        this._direction = this._currentIndex < this.index
         this._currentIndex = this.index;
       },
       startAutoPlay() {
@@ -70,11 +73,17 @@ export default function (Alpine) {
         "x-show"() {
           return this.index === this._currentIndex;
         },
-        ":data-direction"() {
-          return this._direction;
+        ":data-next"() {
+          return this._direction
         },
+        ":data-prev"() {
+          return !this._direction
+        }
       },
       prevButton: {
+        "x-show"() {
+          return !this._noFirstAndLastButton || this._currentIndex != 0
+        },
         "@click"() {
           this.showPrev()
           if (this._autoPlay) {
@@ -83,6 +92,9 @@ export default function (Alpine) {
         }
       },
       nextButton: {
+        "x-show"() {
+          return !this._noFirstAndLastButton || this._currentIndex != this._items.length - 1
+        },
         "@click"() {
           this.showNext()
           if (this._autoPlay) {
