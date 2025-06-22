@@ -19,9 +19,9 @@
       <div
         x-data="carousel"
         :data-items="['mononoke033.jpg', 'mononoke035.jpg']"
-        class="relative overflow-hidden flex items-center justify-center"
+        class="relative flex items-center justify-center overflow-hidden"
       >
-        <template x-for="(i, index) in getItems">
+        <template x-for="(i, index) in getItems" :key="i">
           <div
             x-bind="item"
             x-alt-transition='{
@@ -30,6 +30,10 @@
             }'
           >
             <img :src="'./' + i" alt="" />
+            <div
+              data-text
+              class="absolute bottom-14 left-1/2 -translate-x-1/2 empty:hidden"
+            ></div>
           </div>
         </template>
         <button
