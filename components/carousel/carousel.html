@@ -21,7 +21,7 @@
         :data-items="['mononoke033.jpg', 'mononoke035.jpg']"
         class="relative flex items-center justify-center overflow-hidden"
       >
-        <template x-for="(i, index) in getItems" :key="i">
+        <template x-for="(i, index) in getItems">
           <div
             x-bind="item"
             x-alt-transition='{
