@@ -7,7 +7,7 @@ export default function (Alpine) {
       // props
       _items: [],
       _autoPlay: false,
-      _autoPlayDelay: 5000,
+      _autoPlayDelay: 0,
       _noFirstAndLastButton: false,
 
       init() {
@@ -15,25 +15,24 @@ export default function (Alpine) {
           Alpine.effect(() => {
             this._items = Alpine.bound(this.$el, "data-items") ?? this._items;
           });
-          this._noFirstAndLastButton = Alpine.bound(this.$el, "data-no-first-and-last-button") ?? this._noFirstAndLastButton
-          let autoPlayDelay = Alpine.bound(this.$el, "data-auto-play") ?? false;
-          this._autoPlayDelay =
-            autoPlayDelay === true
-              ? this._autoPlayDelay
-              : autoPlayDelay === false
-                ? 0
-                : parseInt(autoPlayDelay);
+          this._noFirstAndLastButton = JSON.parse(
+            Alpine.bound(this.$el, "data-no-first-and-last-button") ??
+              this._noFirstAndLastButton,
+          );
+          this._autoPlayDelay = parseInt(
+            Alpine.bound(this.$el, "data-auto-play") ?? 0,
+          );
           this._autoPlay = !!this._autoPlayDelay;
           if (this._autoPlay) {
             this.startAutoPlay();
           }
 
-          this.$watch('_items', () => {
-            this._currentIndex = 0
+          this.$watch("_items", () => {
+            this._currentIndex = 0;
             if (this._autoPlay) {
-              this.restartAutoPlay()
+              this.restartAutoPlay();
             }
-          })
+          });
         });
       },
       getItems() {
@@ -54,7 +53,7 @@ export default function (Alpine) {
         this._direction = false;
       },
       setCurrent() {
-        this._direction = this._currentIndex < this.index
+        this._direction = this._currentIndex < this.index;
         this._currentIndex = this.index;
       },
       startAutoPlay() {
@@ -66,48 +65,51 @@ export default function (Alpine) {
         clearInterval(this._timer);
       },
       restartAutoPlay() {
-        this.stopAutoPlay()
-        this.startAutoPlay()
+        this.stopAutoPlay();
+        this.startAutoPlay();
       },
       item: {
         "x-show"() {
           return this.index === this._currentIndex;
         },
         ":data-next"() {
-          return this._direction
+          return this._direction;
         },
         ":data-prev"() {
-          return !this._direction
-        }
+          return !this._direction;
+        },
       },
       prevButton: {
         "x-show"() {
-          return !this._noFirstAndLastButton || this._currentIndex != 0
+          return !this._noFirstAndLastButton || this._currentIndex != 0;
         },
         "@click"() {
-          this.showPrev()
+          this.showPrev();
           if (this._autoPlay) {
-            this.restartAutoPlay()
+            this.restartAutoPlay();
           }
-        }
+        },
       },
       nextButton: {
         "x-show"() {
-          return !this._noFirstAndLastButton || this._currentIndex != this._items.length - 1
+          return (
+            !this._noFirstAndLastButton ||
+            this._currentIndex != this._items.length - 1
+          );
         },
         "@click"() {
-          this.showNext()
+          this.showNext();
           if (this._autoPlay) {
-            this.restartAutoPlay()
+            this.restartAutoPlay();
           }
-        }
+        },
       },
       indicator: {
         "@click"() {
-          let currentIndex = this._currentIndex
+          let currentIndex = this._currentIndex;
           this.setCurrent();
           if (currentIndex !== this._currentIndex && this._autoPlay) {
-            this.restartAutoPlay()
+            this.restartAutoPlay();
           }
         },
         ":class"() {
