@@ -11,7 +11,7 @@
         trigger: {
           role: "combobox",
           ":aria-expanded"() {
-            return this.isOpen;
+            return this._isOpen;
           },
           ":aria-controls"() {
             return this.$id("select-aria");
@@ -26,7 +26,7 @@
         option: {
           role: "option",
           ":aria-selected"() {
-            return this.selected.has(this.item.value) ? "true" : "false";
+            return this._selected.has(this.item.value) ? "true" : "false";
           }
         }
       };
@@ -43,51 +43,51 @@
         );
       };
       return {
-        isOpen: false,
-        floating: null,
+        _isOpen: false,
+        _floating: null,
         _value: "",
-        selected: /* @__PURE__ */ new Map(),
-        _items: [],
+        _selected: /* @__PURE__ */ new Map(),
+        _selectItems: [],
         _model: null,
-        highlightedIndex: -1,
-        selectEl: null,
+        _highlightedIndex: -1,
+        _selectEl: null,
         // props
-        items: [],
-        multiple: false,
-        itemText: "text",
-        itemValue: "value",
+        _items: [],
+        _multiple: false,
+        _itemText: "text",
+        _itemValue: "value",
         init() {
           this.$nextTick(() => {
             Alpine2.effect(() => {
-              this.items = Alpine2.bound(this.$el, "data-items") ?? this.items;
+              this._items = Alpine2.bound(this.$el, "data-items") ?? this._items;
               this.transformItems();
             });
-            this.multiple = JSON.parse(
-              Alpine2.bound(this.$el, "data-multiple") ?? this.multiple
+            this._multiple = JSON.parse(
+              Alpine2.bound(this.$el, "data-multiple") ?? this._multiple
             );
-            this.itemText = Alpine2.bound(this.$el, "data-item-text") ?? this.itemText;
-            this.itemValue = Alpine2.bound(this.$el, "data-item-value") ?? this.itemValue;
-            this.floating = useFloating(
+            this._itemText = Alpine2.bound(this.$el, "data-item-text") ?? this._itemText;
+            this._itemValue = Alpine2.bound(this.$el, "data-item-value") ?? this._itemValue;
+            this._floating = useFloating(
               this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"),
               this.$refs.menu,
               { resize: true }
             );
           });
-          this.selectEl = this.$el;
+          this._selectEl = this.$el;
           this.inputEl = this.$el.querySelector("[x-bind='input']");
           Alpine2.bind(this.$el, {
             ["x-modelable"]: "_model",
             async ["@keydown.prevent.down"]() {
-              if (!this.isOpen) {
+              if (!this._isOpen) {
                 this.open();
                 await this.$nextTick();
               }
-              if (this.highlightedIndex >= this._items.length - 1) {
+              if (this._highlightedIndex >= this._selectItems.length - 1) {
                 return;
               }
-              this.highlightedIndex++;
+              this._highlightedIndex++;
               let el = this.$refs.menu.querySelector(
-                `[data-index="${this.highlightedIndex}"]`
+                `[data-index="${this._highlightedIndex}"]`
               );
               el.focus({ preventScroll: true });
               if (isElementOverflowingBottom(el) || isElementOveflowingTop(el)) {
@@ -95,12 +95,12 @@
               }
             },
             ["@keydown.prevent.up"]() {
-              if (this.highlightedIndex <= 0) {
+              if (this._highlightedIndex <= 0) {
                 return;
               }
-              this.highlightedIndex--;
+              this._highlightedIndex--;
               let el = this.$refs.menu.querySelector(
-                `[data-index="${this.highlightedIndex}"]`
+                `[data-index="${this._highlightedIndex}"]`
               );
               el.focus({ preventScroll: true });
               if (isElementOveflowingTop(el) || isElementOverflowingBottom(el)) {
@@ -108,28 +108,28 @@
               }
             },
             ["@keydown.prevent.escape"]() {
-              if (this.isOpen) {
+              if (this._isOpen) {
                 this.close();
               }
             }
           });
           this.$watch("_model", () => {
-            let selectedCopy = new Map(this.selected);
-            this.selected.clear();
+            let selectedCopy = new Map(this._selected);
+            this._selected.clear();
             this._model.forEach((value) => {
-              let item = this._items.find((i) => i.value === value) || selectedCopy.get(value);
-              if (item) this.selected.set(item.value, item);
+              let item = this._selectItems.find((i) => i.value === value) || selectedCopy.get(value);
+              if (item) this._selected.set(item.value, item);
             });
           });
           Alpine2.bind(this.$el, aria.main);
         },
         transformItems() {
-          if (!this.items.length) {
-            this._items = [];
+          if (!this._items.length) {
+            this._selectItems = [];
             return;
           }
-          if (typeof this.items[0] === "string") {
-            this._items = this.items.map((i) => {
+          if (typeof this._items[0] === "string") {
+            this._selectItems = this._items.map((i) => {
               return {
                 text: i,
                 value: i,
@@ -137,25 +137,25 @@
               };
             });
           }
-          if (typeof this.items[0] === "object") {
-            this._items = this.items.map((i) => {
+          if (typeof this._items[0] === "object") {
+            this._selectItems = this._items.map((i) => {
               return {
-                text: i[this.itemText],
-                value: i[this.itemValue],
+                text: i[this._itemText],
+                value: i[this._itemValue],
                 origin: i
               };
             });
           }
         },
         getItems() {
-          return this._items;
+          return this._selectItems;
         },
         open() {
-          this.floating.startAutoUpdate();
-          this.isOpen = true;
-          if (this.selected.size) this.scrollToFirstSelected();
+          this._floating.startAutoUpdate();
+          this._isOpen = true;
+          if (this._selected.size) this.scrollToFirstSelected();
           else this.$refs.menu.scrollTo(0, 0);
-          this.highlightedIndex = -1;
+          this._highlightedIndex = -1;
           this.$dispatch("open-selectmenu");
         },
         scrollToFirstSelected() {
@@ -167,46 +167,46 @@
           }
         },
         close() {
-          this.floating.destroy();
-          this.isOpen = false;
+          this._floating.destroy();
+          this._isOpen = false;
         },
         getSelected() {
-          return [...this.selected].map(([k, v]) => v);
+          return [...this._selected].map(([k, v]) => v);
         },
         getSelectedValues() {
-          return [...this.selected].map(([k, v]) => v.value);
+          return [...this._selected].map(([k, v]) => v.value);
         },
         select() {
-          if (this.multiple) {
-            if (this.selected.has(this.item.value)) {
-              this.selected.delete(this.item.value);
+          if (this._multiple) {
+            if (this._selected.has(this.item.value)) {
+              this._selected.delete(this.item.value);
             } else {
-              this.selected.set(this.item.value, this.item);
+              this._selected.set(this.item.value, this.item);
             }
           } else {
-            let item = this.selected.size && this.selected.values().next().value;
+            let item = this._selected.size && this._selected.values().next().value;
             if (item.value === this.item.value) {
               return;
             }
-            this.selected.set(this.item.value, this.item);
+            this._selected.set(this.item.value, this.item);
             if (item) {
-              this.selected.delete(item.value);
+              this._selected.delete(item.value);
             }
           }
           this.updateModel();
         },
         unselect() {
-          this.selected.delete(this.selectedItem.value);
+          this._selected.delete(this.selectedItem.value);
         },
         clearSelection() {
-          this.selected.clear();
+          this._selected.clear();
           this.updateModel();
         },
         updateModel() {
           this._model = this.getSelectedValues();
         },
         isItemSelected() {
-          return this.selected.has(this.item.value);
+          return this._selected.has(this.item.value);
         },
         trigger: {
           "x-ref": "trigger",
@@ -215,7 +215,7 @@
             if (target.getAttribute("x-bind") === "clearButton") {
               return;
             }
-            this.isOpen ? this.close() : this.open();
+            this._isOpen ? this.close() : this.open();
           },
           "@focusout"() {
             if (this.$refs.menu.contains(this.$event.relatedTarget)) {
@@ -224,23 +224,23 @@
             this.close();
           },
           ":data-clearable"() {
-            return Alpine2.bound(this.selectEl, "data-clearable");
+            return Alpine2.bound(this._selectEl, "data-clearable");
           },
           ":data-use-loader"() {
-            return Alpine2.bound(this.selectEl, "data-use-loader");
+            return Alpine2.bound(this._selectEl, "data-use-loader");
           },
           ":data-is-loading"() {
-            return Alpine2.bound(this.selectEl, "data-is-loading");
+            return Alpine2.bound(this._selectEl, "data-is-loading");
           },
           ":data-placeholder"() {
-            return Alpine2.bound(this.selectEl, "data-placeholder");
+            return Alpine2.bound(this._selectEl, "data-placeholder");
           },
           ...aria.trigger
         },
         menu: {
           "x-ref": "menu",
           "x-show"() {
-            return this.isOpen;
+            return this._isOpen;
           },
           // prevent focusing option buttons on mousedown
           "@mousedown.prevent"() {
@@ -267,7 +267,7 @@
         option: {
           "@click"() {
             this.select();
-            if (!this.multiple) this.close();
+            if (!this._multiple) this.close();
           },
           "@keydown.prevent.enter"() {
             this.select();
@@ -276,7 +276,7 @@
           ":class"() {
             let classes = this.$el.attributes;
             let c = "";
-            if (this.selected.has(this.item.value)) {
+            if (this._selected.has(this.item.value)) {
               c += (classes["class-selected"]?.textContent || "") + " ";
             } else {
               c += (classes["class-default"]?.textContent || "") + " ";
@@ -284,7 +284,7 @@
             return c;
           },
           ":data-selected"() {
-            return this.selected.has(this.item.value);
+            return this._selected.has(this.item.value);
           },
           ":data-index"() {
             return this.index;

@@ -8,14 +8,19 @@ function carousel_default(Alpine) {
       // props
       _items: [],
       _autoPlay: false,
-      _autoPlayDelay: 5e3,
+      _autoPlayDelay: 0,
+      _noFirstAndLastButton: false,
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
             this._items = Alpine.bound(this.$el, "data-items") ?? this._items;
           });
-          let autoPlayDelay = Alpine.bound(this.$el, "data-auto-play") ?? false;
-          this._autoPlayDelay = autoPlayDelay === true ? this._autoPlayDelay : autoPlayDelay === false ? 0 : parseInt(autoPlayDelay);
+          this._noFirstAndLastButton = JSON.parse(
+            Alpine.bound(this.$el, "data-no-first-and-last-button") ?? this._noFirstAndLastButton
+          );
+          this._autoPlayDelay = parseInt(
+            Alpine.bound(this.$el, "data-auto-play") ?? 0
+          );
           this._autoPlay = !!this._autoPlayDelay;
           if (this._autoPlay) {
             this.startAutoPlay();
@@ -46,6 +51,7 @@ function carousel_default(Alpine) {
         this._direction = false;
       },
       setCurrent() {
+        this._direction = this._currentIndex < this.index;
         this._currentIndex = this.index;
       },
       startAutoPlay() {
@@ -64,11 +70,17 @@ function carousel_default(Alpine) {
         "x-show"() {
           return this.index === this._currentIndex;
         },
-        ":data-direction"() {
+        ":data-next"() {
           return this._direction;
+        },
+        ":data-prev"() {
+          return !this._direction;
         }
       },
       prevButton: {
+        "x-show"() {
+          return !this._noFirstAndLastButton || this._currentIndex != 0;
+        },
         "@click"() {
           this.showPrev();
           if (this._autoPlay) {
@@ -77,6 +89,9 @@ function carousel_default(Alpine) {
         }
       },
       nextButton: {
+        "x-show"() {
+          return !this._noFirstAndLastButton || this._currentIndex != this._items.length - 1;
+        },
         "@click"() {
           this.showNext();
           if (this._autoPlay) {

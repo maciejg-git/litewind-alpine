@@ -5,7 +5,7 @@
       let aria = {
         menu: {
           ":role"() {
-            return this.role;
+            return this._role;
           },
           tabindex: 0
         },
@@ -24,98 +24,98 @@
         "inline"
       ];
       return {
-        isOpen: false,
-        floating: null,
+        _isOpen: false,
+        _floating: null,
         contextData: {},
-        menuItems: null,
-        focusedMenuItemIndex: -1,
+        _menuItems: null,
+        _focusedMenuItemIndex: -1,
         // props
-        autoClose: true,
-        placement: "bottom-start",
-        offsetX: 0,
-        offsetY: 0,
-        flip: false,
-        autoPlacement: false,
-        role: "",
+        _autoClose: true,
+        _placement: "bottom-start",
+        _offsetX: 0,
+        _offsetY: 0,
+        _flip: false,
+        _autoPlacement: false,
+        _role: "",
         init() {
           this.$nextTick(() => {
-            this.autoClose = JSON.parse(
-              Alpine2.bound(this.$el, "data-auto-close") ?? this.autoClose
+            this._autoClose = JSON.parse(
+              Alpine2.bound(this.$el, "data-auto-close") ?? this._autoClose
             );
-            this.placement = Alpine2.bound(this.$el, "data-placement") ?? this.placement;
-            this.offsetX = parseInt(
-              Alpine2.bound(this.$el, "data-offset-x") ?? this.offsetX
+            this._placement = Alpine2.bound(this.$el, "data-placement") ?? this._placement;
+            this._offsetX = parseInt(
+              Alpine2.bound(this.$el, "data-offset-x") ?? this._offsetX
             );
-            this.offsetY = parseInt(
-              Alpine2.bound(this.$el, "data-offset-y") ?? this.offsetY
+            this._offsetY = parseInt(
+              Alpine2.bound(this.$el, "data-offset-y") ?? this._offsetY
             );
-            this.flip = JSON.parse(
-              Alpine2.bound(this.$el, "data-flip") ?? this.flip
+            this._flip = JSON.parse(
+              Alpine2.bound(this.$el, "data-flip") ?? this._flip
             );
-            this.autoPlacement = JSON.parse(
-              Alpine2.bound(this.$el, "data-auto-placement") ?? this.autoPlacement
+            this._autoPlacement = JSON.parse(
+              Alpine2.bound(this.$el, "data-auto-placement") ?? this._autoPlacement
             );
             let role = Alpine2.bound(this.$el, "data-role");
-            this.role = ariaRoles.includes(role) ? role : null;
+            this._role = ariaRoles.includes(role) ? role : null;
             let options = floatingUIoptions.reduce((acc, v) => {
               return { ...acc, [v]: this[v] };
             });
-            this.floating = useFloating(null, this.$refs.menu, options);
+            this._floating = useFloating(null, this.$refs.menu, options);
           });
           Alpine2.bind(this.$el, {
             ["@keydown.escape.window.prevent"]() {
               this.close();
             },
             ["@keydown.down.prevent"]() {
-              if (!this.menuItems.length) {
+              if (!this._menuItems.length) {
                 return;
               }
               this.$nextTick(() => {
-                if (this.focusedMenuItemIndex < this.menuItems.length - 1) {
-                  this.focusedMenuItemIndex++;
+                if (this._focusedMenuItemIndex < this._menuItems.length - 1) {
+                  this._focusedMenuItemIndex++;
                 }
-                let el = this.menuItems[this.focusedMenuItemIndex];
+                let el = this._menuItems[this._focusedMenuItemIndex];
                 el.focus();
               });
             },
             ["@keydown.up.prevent"]() {
-              if (!this.menuItems.length) {
+              if (!this._menuItems.length) {
                 return;
               }
-              if (this.focusedMenuItemIndex === -1) {
-                this.focusedMenuItemIndex = this.menuItems.length;
+              if (this._focusedMenuItemIndex === -1) {
+                this._focusedMenuItemIndex = this._menuItems.length;
               }
               this.$nextTick(() => {
-                if (this.focusedMenuItemIndex > 0) {
-                  this.focusedMenuItemIndex--;
+                if (this._focusedMenuItemIndex > 0) {
+                  this._focusedMenuItemIndex--;
                 }
-                let el = this.menuItems[this.focusedMenuItemIndex];
+                let el = this._menuItems[this._focusedMenuItemIndex];
                 el.focus();
               });
             }
           });
         },
         open() {
-          this.floating.startAutoUpdate();
-          this.isOpen = true;
-          this.menuItems = this.$refs.menu.querySelectorAll("[role='menuitem']");
+          this._floating.startAutoUpdate();
+          this._isOpen = true;
+          this._menuItems = this.$refs.menu.querySelectorAll("[role='menuitem']");
           this.$nextTick(() => this.$refs.menu.focus());
         },
         close() {
-          this.floating.destroy();
-          this.isOpen = false;
-          this.focusedMenuItemIndex = -1;
+          this._floating.destroy();
+          this._isOpen = false;
+          this._focusedMenuItemIndex = -1;
         },
         menu: {
           "x-show"() {
-            return this.isOpen;
+            return this._isOpen;
           },
           "@open-contextmenu.window"() {
             if (this.$event.detail.id !== this.$root.id) {
               return;
             }
             let mouseEvent = this.$event.detail.$event;
-            this.floating.updateVirtualElement(mouseEvent);
+            this._floating.updateVirtualElement(mouseEvent);
             this.contextData = this.$event.detail.data;
             this.open();
           },
@@ -124,7 +124,7 @@
             this.close();
           },
           "@click"() {
-            if (this.autoClose && this.$el.contains(this.$event.target)) {
+            if (this._autoClose && this.$el.contains(this.$event.target)) {
               this.close();
             }
           },

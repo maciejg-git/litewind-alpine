@@ -6,11 +6,11 @@
         _value: "",
         validateValue: "_value",
         // props
-        placeholder: "",
+        _placeholder: "",
         init() {
           this.$nextTick(() => {
             Alpine2.effect(() => {
-              this.placeholder = Alpine2.bound(this.$el, "data-placeholder") ?? this.placeholder;
+              this._placeholder = Alpine2.bound(this.$el, "data-placeholder") ?? this._placeholder;
             });
             Alpine2.bind(this.$el, {
               ":class"() {
@@ -43,7 +43,7 @@
           },
           "x-ref": "textarea",
           ":placeholder"() {
-            return this.placeholder;
+            return this._placeholder;
           },
           "@blur"() {
             if (typeof this.touch === "function") this.touch();

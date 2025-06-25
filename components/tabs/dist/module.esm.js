@@ -16,20 +16,20 @@ function tabs_default(Alpine) {
       }
     };
     return {
-      selectedTab: "",
-      transition: "",
+      _selectedTab: "",
+      _transition: "",
       init() {
-        this.selectedTab = Alpine.bound(this.$el, "data-selected-tab") ?? this.selectedTab;
+        this._selectedTab = Alpine.bound(this.$el, "data-selected-tab") ?? this._selectedTab;
         this.$nextTick(() => {
           Alpine.effect(() => {
-            this.selectedTab = Alpine.bound(this.$el, "data-selected-tab") ?? this.selectedTab;
+            this._selectedTab = Alpine.bound(this.$el, "data-selected-tab") ?? this._selectedTab;
           });
-          this.transition = Alpine.bound(this.$el, "data-transition") ?? this.transition;
-          if (this.transition) {
+          this._transition = Alpine.bound(this.$el, "data-transition") ?? this._transition;
+          if (this._transition) {
             let tabs = this.$el.querySelectorAll("[data-tab]");
             tabs.forEach((tab) => {
               Alpine.bind(tab, {
-                "x-alt-transition": this.transition
+                "x-alt-transition": this._transition
               });
             });
           }
@@ -38,11 +38,11 @@ function tabs_default(Alpine) {
       selectTab() {
         let target = this.$event.target;
         let tab = target.dataset.tab;
-        this.selectedTab = tab;
+        this._selectedTab = tab;
       },
       isSelected() {
         let tab = this.$el.dataset.tab;
-        return this.selectedTab === tab;
+        return this._selectedTab === tab;
       },
       tabBar: {
         ...aria.tabBar

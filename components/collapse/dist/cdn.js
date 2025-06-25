@@ -10,7 +10,7 @@
         },
         trigger: {
           ":aria-expanded"() {
-            return this.isOpen;
+            return this._isOpen;
           },
           ":aria-controls"() {
             return this.$id("collapse-aria");
@@ -23,28 +23,28 @@
         }
       };
       return {
-        isOpen: false,
-        id: null,
+        _isOpen: false,
+        _id: null,
         init() {
-          this.id = this.$id("collapse");
-          if (this.isAccordion) {
-            this.$watch("isOpen", () => {
+          this._id = this.$id("collapse");
+          if (this._isAccordion) {
+            this.$watch("_isOpen", () => {
               this.updateAccordion(this);
             });
           }
           Alpine2.bind(this.$el, aria.main);
         },
         open() {
-          this.isOpen = true;
+          this._isOpen = true;
         },
         close() {
-          this.isOpen = false;
+          this._isOpen = false;
         },
         toggle() {
-          this.isOpen = !this.isOpen;
+          this._isOpen = !this._isOpen;
         },
         destroy() {
-          if (this.isAccordion) {
+          if (this._isAccordion) {
             this.removeCollapseFromAccordion(this);
           }
         },
@@ -56,7 +56,7 @@
         },
         content: {
           "x-show"() {
-            return this.isOpen;
+            return this._isOpen;
           },
           ...aria.content
         }
@@ -64,24 +64,24 @@
     });
     Alpine2.data("accordion", () => {
       return {
-        active: null,
-        isAccordion: true,
+        _active: null,
+        _isAccordion: true,
         updateAccordion(collapse) {
-          if (collapse.isOpen) {
-            if (this.active) {
-              this.active.close();
+          if (collapse._isOpen) {
+            if (this._active) {
+              this._active.close();
             }
-            this.active = collapse;
+            this._active = collapse;
             return;
           }
-          if (this.active.id === collapse.id) {
-            this.active = null;
+          if (this._active._id === collapse._id) {
+            this._active = null;
           }
         },
         removeCollapseFromAccordion(collapse) {
-          if (this.active.id === collapse.id) {
-            this.active.close();
-            this.active = null;
+          if (this._active._id === collapse._id) {
+            this._active.close();
+            this._active = null;
           }
         }
       };

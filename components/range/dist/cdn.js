@@ -54,7 +54,7 @@
         _step: 1,
         _fixedMin: false,
         _showSteps: false,
-        _showLabels: false,
+        _showLabelsAlways: false,
         _showLabelsOnFocus: false,
         init() {
           this._onMousemove = this.handleMousmove.bind(this);
@@ -75,10 +75,9 @@
             this._showSteps = JSON.parse(
               Alpine2.bound(this.$el, "data-show-steps") ?? this._showSteps
             );
-            let showLabels = Alpine2.bound(this.$el, "data-show-labels") ?? this._showLabels;
-            showLabels = showLabels === "true" ? true : showLabels === "false" ? false : showLabels;
+            let showLabels = Alpine2.bound(this.$el, "data-show-labels") ?? false;
+            this._showLabelsAlways = showLabels === "always" || showLabels === true;
             this._showLabelsOnFocus = showLabels === "focus";
-            this._showLabels = showLabels && !this._showLabelsOnFocus;
             this._range = this._max - this._min;
             this._steps = this._range / this._step;
             this._maxValue = Math.floor(this._steps) * this._step / this._range;
@@ -218,7 +217,7 @@
         },
         labelMin: {
           "x-show"() {
-            return this._showLabels || this._showLabelsOnFocus && this._isFocused;
+            return this._showLabelsAlways || this._showLabelsOnFocus && this._isFocused;
           },
           "x-text"() {
             return this.getValueMin().toFixed(this._stepPrecision);
@@ -226,7 +225,7 @@
         },
         labelMax: {
           "x-show"() {
-            return this._showLabels || this._showLabelsOnFocus && this._isFocused;
+            return this._showLabelsAlways || this._showLabelsOnFocus && this._isFocused;
           },
           "x-text"() {
             return this.getValueMax().toFixed(this._stepPrecision);

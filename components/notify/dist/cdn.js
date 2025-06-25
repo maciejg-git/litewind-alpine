@@ -6,35 +6,35 @@
         role: "status"
       };
       return {
-        notifications: [],
-        notifyId: 1e3,
-        buffer: [],
-        notificationsSticky: [],
+        _notifications: [],
+        _notifyId: 1e3,
+        _buffer: [],
+        _notificationsSticky: [],
         // props
-        order: "default",
-        maxNotifications: 0,
-        delay: 1e4,
-        dismissable: true,
-        static: false,
-        variant: "info",
-        options: {},
+        _order: "default",
+        _maxNotifications: 0,
+        _delay: 1e4,
+        _dismissable: true,
+        _static: false,
+        _variant: "info",
+        _options: {},
         init() {
           this.$nextTick(() => {
-            this.order = Alpine2.bound(this.$el, "data-order") ?? this.order;
-            this.maxNotifications = parseInt(
-              Alpine2.bound(this.$el, "data-max-notifications") ?? this.maxNotifications
+            this._order = Alpine2.bound(this.$el, "data-order") ?? this._order;
+            this._maxNotifications = parseInt(
+              Alpine2.bound(this.$el, "data-max-notifications") ?? this._maxNotifications
             );
-            this.delay = parseInt(
-              Alpine2.bound(this.$el, "data-delay") ?? this.delay
+            this._delay = parseInt(
+              Alpine2.bound(this.$el, "data-delay") ?? this._delay
             );
-            this.dismissable = JSON.parse(
-              Alpine2.bound(this.$el, "data-dismissable") ?? this.dismissable
+            this._dismissable = JSON.parse(
+              Alpine2.bound(this.$el, "data-dismissable") ?? this._dismissable
             );
-            this.static = JSON.parse(
-              Alpine2.bound(this.$el, "data-static") ?? this.static
+            this._static = JSON.parse(
+              Alpine2.bound(this.$el, "data-static") ?? this._static
             );
-            this.variant = Alpine2.bound(this.$el, "data-variant") ?? this.variant;
-            this.options = Alpine2.bound(this.$el, "data-options") ?? this.options;
+            this._variant = Alpine2.bound(this.$el, "data-variant") ?? this._variant;
+            this._options = Alpine2.bound(this.$el, "data-options") ?? this._options;
           });
           Alpine2.bind(this.$el, {
             "@show-notify.window"() {
@@ -55,23 +55,23 @@
           });
         },
         getNotifications() {
-          if (this.order === "default") {
-            return [...this.notifications, ...this.notificationsSticky];
+          if (this._order === "default") {
+            return [...this._notifications, ...this._notificationsSticky];
           }
-          if (this.order === "reversed") {
+          if (this._order === "reversed") {
             return [
-              ...this.notificationsSticky.toReversed(),
-              ...this.notifications.toReversed()
+              ...this._notificationsSticky.toReversed(),
+              ...this._notifications.toReversed()
             ];
           }
         },
         handleContainerMouseEnter() {
-          this.notifications.forEach((notification) => {
+          this._notifications.forEach((notification) => {
             notification.pauseTimer();
           });
         },
         handleContainerMouseLeave() {
-          this.notifications.forEach((notification) => {
+          this._notifications.forEach((notification) => {
             notification.restartTimer();
           });
         },
@@ -83,19 +83,19 @@
           }
         },
         removeById(id) {
-          let index = this.notifications.findIndex((i) => id === i.notifyId);
-          this.notifications.splice(index, 1);
-          if (this.buffer.length) {
-            let notify = this.buffer.shift();
+          let index = this._notifications.findIndex((i) => id === i.notifyId);
+          this._notifications.splice(index, 1);
+          if (this._buffer.length) {
+            let notify = this._buffer.shift();
             notify.restartTimer();
-            this.notifications.push(notify);
+            this._notifications.push(notify);
           }
         },
         removeStickyById(id) {
-          let index = this.notificationsSticky.findIndex(
+          let index = this._notificationsSticky.findIndex(
             (i) => id === i.notifyId
           );
-          this.notificationsSticky.splice(index, 1);
+          this._notificationsSticky.splice(index, 1);
         },
         close() {
           this.notify.isVisible.value = false;
@@ -104,13 +104,13 @@
           let newNotify = {
             header: notify?.header || "",
             text: notify?.text || "",
-            delay: notify?.delay ?? this.delay,
-            dismissable: notify?.dismissable ?? this.dismissable,
-            static: notify?.static ?? this.static,
+            delay: notify?.delay ?? this._delay,
+            dismissable: notify?.dismissable ?? this._dismissable,
+            static: notify?.static ?? this._static,
             sticky: notify?.sticky ?? false,
-            variant: notify?.variant ?? this.variant,
-            options: notify?.options ?? this.options ?? null,
-            notifyId: this.notifyId,
+            variant: notify?.variant ?? this._variant,
+            options: notify?.options ?? this._options ?? null,
+            notifyId: this._notifyId,
             isVisible: Alpine2.reactive({ value: false }),
             timer: null
           };
@@ -126,18 +126,18 @@
               clearTimeout(this.timer);
             }
           };
-          this.notifyId++;
+          this._notifyId++;
           if (newNotify.sticky) {
             newNotify.restartTimer();
-            this.notificationsSticky.push(newNotify);
+            this._notificationsSticky.push(newNotify);
             return;
           }
-          if (this.maxNotifications > 0 && this.notifications.length >= this.maxNotifications) {
-            this.buffer.push(newNotify);
+          if (this._maxNotifications > 0 && this._notifications.length >= this._maxNotifications) {
+            this._buffer.push(newNotify);
             return;
           }
           newNotify.restartTimer();
-          this.notifications.push(newNotify);
+          this._notifications.push(newNotify);
         },
         notification: {
           // notifications start hidden and are displayed in the nextTick to allow transitions

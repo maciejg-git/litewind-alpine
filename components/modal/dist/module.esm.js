@@ -8,21 +8,21 @@ function modal_default(Alpine) {
       }
     };
     return {
-      isOpen: false,
+      _isOpen: false,
       options: {},
       // props
-      static: false,
-      closable: true,
+      _static: false,
+      _closable: true,
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
-            this.static = JSON.parse(
-              Alpine.bound(this.$el, "data-static") ?? this.static
+            this._static = JSON.parse(
+              Alpine.bound(this.$el, "data-static") ?? this._static
             );
           });
           Alpine.effect(() => {
-            this.closable = JSON.parse(
-              Alpine.bound(this.$el, "data-closable") ?? this.closable
+            this._closable = JSON.parse(
+              Alpine.bound(this.$el, "data-closable") ?? this._closable
             );
           });
         });
@@ -45,19 +45,19 @@ function modal_default(Alpine) {
       },
       open() {
         this.removeScrollbar();
-        this.isOpen = true;
+        this._isOpen = true;
       },
       close() {
         this.resetScrollbar();
-        this.isOpen = false;
+        this._isOpen = false;
       },
       closeNotStatic() {
-        if (this.static) return;
+        if (this._static) return;
         this.close();
       },
       container: {
         "x-show"() {
-          return this.isOpen;
+          return this._isOpen;
         },
         "@open-modal.window"() {
           let id = this.$event.detail.id || this.$event.detail;
@@ -67,21 +67,21 @@ function modal_default(Alpine) {
           }
         },
         "@keydown.escape"() {
-          if (this.static) return;
+          if (this._static) return;
           this.close();
         }
       },
       positioner: {},
       content: {
         "x-show"() {
-          return this.isOpen;
+          return this._isOpen;
         },
         "@click.stop"() {
         }
       },
       backdrop: {
         "x-show"() {
-          return this.isOpen;
+          return this._isOpen;
         }
       }
     };

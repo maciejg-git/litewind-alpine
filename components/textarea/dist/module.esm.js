@@ -5,11 +5,11 @@ function textarea_default(Alpine) {
       _value: "",
       validateValue: "_value",
       // props
-      placeholder: "",
+      _placeholder: "",
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
-            this.placeholder = Alpine.bound(this.$el, "data-placeholder") ?? this.placeholder;
+            this._placeholder = Alpine.bound(this.$el, "data-placeholder") ?? this._placeholder;
           });
           Alpine.bind(this.$el, {
             ":class"() {
@@ -42,7 +42,7 @@ function textarea_default(Alpine) {
         },
         "x-ref": "textarea",
         ":placeholder"() {
-          return this.placeholder;
+          return this._placeholder;
         },
         "@blur"() {
           if (typeof this.touch === "function") this.touch();

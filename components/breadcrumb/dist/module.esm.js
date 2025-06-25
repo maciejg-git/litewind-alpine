@@ -3,15 +3,15 @@ function breadcrumb_default(Alpine) {
   Alpine.data("breadcrumb", () => {
     return {
       // props
-      items: [],
-      divider: "/",
+      _items: [],
+      _divider: "/",
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
-            this.items = Alpine.bound(this.$el, "data-items") ?? this.items;
+            this._items = Alpine.bound(this.$el, "data-items") ?? this._items;
           });
         });
-        this.divider = Alpine.bound(this.$el, "data-divider") ?? this.divider;
+        this._divider = Alpine.bound(this.$el, "data-divider") ?? this._divider;
       }
     };
   });

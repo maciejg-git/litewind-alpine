@@ -4,15 +4,15 @@
     Alpine2.data("breadcrumb", () => {
       return {
         // props
-        items: [],
-        divider: "/",
+        _items: [],
+        _divider: "/",
         init() {
           this.$nextTick(() => {
             Alpine2.effect(() => {
-              this.items = Alpine2.bound(this.$el, "data-items") ?? this.items;
+              this._items = Alpine2.bound(this.$el, "data-items") ?? this._items;
             });
           });
-          this.divider = Alpine2.bound(this.$el, "data-divider") ?? this.divider;
+          this._divider = Alpine2.bound(this.$el, "data-divider") ?? this._divider;
         }
       };
     });

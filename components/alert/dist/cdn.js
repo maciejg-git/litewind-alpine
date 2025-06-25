@@ -5,36 +5,36 @@
       let aria = {
         main: {
           ":role"() {
-            return this.role;
+            return this._role;
           }
         }
       };
       return {
-        isVisible: true,
+        _isVisible: true,
         // props
-        variant: "info",
-        closable: false,
-        role: "status",
+        _variant: "info",
+        _closable: false,
+        _role: "status",
         init() {
           this.$nextTick(() => {
             Alpine2.effect(() => {
-              this.variant = Alpine2.bound(this.$el, "data-variant") ?? this.variant;
+              this._variant = Alpine2.bound(this.$el, "data-variant") ?? this._variant;
             });
-            this.closable = JSON.parse(
-              Alpine2.bound(this.$el, "data-closable") ?? this.closable
+            this._closable = JSON.parse(
+              Alpine2.bound(this.$el, "data-closable") ?? this._closable
             );
-            this.role = Alpine2.bound(this.$el, "data-role") ?? this.role;
+            this._role = Alpine2.bound(this.$el, "data-role") ?? this._role;
             Alpine2.bind(this.$el, {
               ":class"() {
                 let classes = this.$el.attributes;
                 let c = "";
-                if (this.variant === "info") {
+                if (this._variant === "info") {
                   c = classes["class-info"]?.textContent || "";
-                } else if (this.variant === "warn") {
+                } else if (this._variant === "warn") {
                   c = classes["class-warn"]?.textContent || "";
-                } else if (this.variant === "danger") {
+                } else if (this._variant === "danger") {
                   c = classes["class-danger"]?.textContent || "";
-                } else if (this.variant === "success") {
+                } else if (this._variant === "success") {
                   c = classes["class-success"]?.textContent || "";
                 }
                 return c;
@@ -43,20 +43,20 @@
           });
           Alpine2.bind(this.$el, {
             "x-show"() {
-              return this.isVisible;
+              return this._isVisible;
             }
           });
           Alpine2.bind(this.$el, aria.main);
         },
         open() {
-          this.isVisible = true;
+          this._isVisible = true;
         },
         close() {
-          this.isVisible = false;
+          this._isVisible = false;
         },
         closeButton: {
           "x-show"() {
-            return this.closable;
+            return this._closable;
           },
           "@click"() {
             this.close();
