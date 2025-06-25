@@ -4,30 +4,30 @@ export default function (Alpine) {
       _value: "",
       validateValue: "_value",
       // props
-      useLoader: false,
-      isLoading: false,
-      placeholder: "",
-      clearable: false,
+      _useLoader: false,
+      _isLoading: false,
+      _placeholder: "",
+      _clearable: false,
 
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
-            this.clearable = JSON.parse(
-              Alpine.bound(this.$el, "data-clearable") ?? this.clearable,
+            this._clearable = JSON.parse(
+              Alpine.bound(this.$el, "data-clearable") ?? this._clearable,
             );
           });
           Alpine.effect(() => {
-            this.useLoader = JSON.parse(
-              Alpine.bound(this.$el, "data-use-loader") ?? this.useLoader,
+            this._useLoader = JSON.parse(
+              Alpine.bound(this.$el, "data-use-loader") ?? this._useLoader,
             );
           });
           Alpine.effect(() => {
-            this.isLoading = JSON.parse(
+            this._isLoading = JSON.parse(
               Alpine.bound(this.$el, "data-is-loading") ?? false,
             );
           });
           Alpine.effect(() => {
-            this.placeholder = Alpine.bound(this.$el, "data-placeholder") ?? "";
+            this._placeholder = Alpine.bound(this.$el, "data-placeholder") ?? "";
           });
 
           Alpine.bind(this.$el, {
@@ -75,7 +75,7 @@ export default function (Alpine) {
         },
         "x-ref": "input",
         ":placeholder"() {
-          return this.placeholder;
+          return this._placeholder;
         },
         "@blur"() {
           if (typeof this.touch === "function") this.touch();
@@ -83,12 +83,12 @@ export default function (Alpine) {
       },
       loader: {
         "x-show"() {
-          return this.useLoader && this.isLoading;
+          return this._useLoader && this._isLoading;
         },
       },
       clearButton: {
         "x-show"() {
-          return this.clearable;
+          return this._clearable;
         },
       },
     };

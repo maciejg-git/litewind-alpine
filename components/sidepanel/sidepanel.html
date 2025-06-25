@@ -17,7 +17,7 @@
 
     <button x-data @click="$dispatch('open-sidepanel', 'sidepanel')">open</button>
     <div x-data="sidepanel" id="sidepanel" x-cloak>
-      <template x-if="isModal">
+      <template x-if="_isModal">
         <div
           x-bind="backdrop"
           x-alt-transition='{

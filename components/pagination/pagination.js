@@ -23,47 +23,47 @@ export default function (Alpine) {
     };
 
     return {
-      currentPage: 1,
+      _currentPage: 1,
       // props
-      itemsCount: 0,
-      itemsPerPage: 10,
-      maxPages: 7,
+      _itemsCount: 0,
+      _itemsPerPage: 10,
+      _maxPages: 7,
 
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
-            this.itemsCount = parseInt(
-              Alpine.bound(this.$el, "data-items-count") ?? this.itemsCount,
+            this._itemsCount = parseInt(
+              Alpine.bound(this.$el, "data-items-count") ?? this._itemsCount,
             );
           });
           Alpine.effect(() => {
-            this.itemsPerPage = parseInt(
+            this._itemsPerPage = parseInt(
               Alpine.bound(this.$el, "data-items-per-page") ??
-                this.itemsPerPage,
+                this._itemsPerPage,
             );
           });
           Alpine.effect(() => {
-            this.maxPages = parseInt(
-              Alpine.bound(this.$el, "data-max-pages") ?? this.maxPages,
+            this._maxPages = parseInt(
+              Alpine.bound(this.$el, "data-max-pages") ?? this._maxPages,
             );
           });
         });
 
         Alpine.bind(this.$el, {
-          ["x-modelable"]: "currentPage",
+          ["x-modelable"]: "_currentPage",
         });
         Alpine.bind(this.$el, aria.main)
       },
       getPagesCount() {
-        if (this.itemsPerPage <= 0 || this.itemsCount <= 0) return 1;
-        return Math.ceil(this.itemsCount / this.itemsPerPage);
+        if (this._itemsPerPage <= 0 || this._itemsCount <= 0) return 1;
+        return Math.ceil(this._itemsCount / this._itemsPerPage);
       },
       getMaxPagesCount() {
-        return Math.min(this.getPagesCount(), Math.max(this.maxPages, 3));
+        return Math.min(this.getPagesCount(), Math.max(this._maxPages, 3));
       },
       getPages() {
         let maxPages = this.getMaxPagesCount();
-        let first = this.currentPage - Math.ceil(maxPages / 2) + 1;
+        let first = this._currentPage - Math.ceil(maxPages / 2) + 1;
         let pagesCount = this.getPagesCount();
         first = clamp(first, 1, pagesCount - maxPages + 1);
         let p = getNumberRange(first, maxPages);
@@ -80,20 +80,20 @@ export default function (Alpine) {
         return p;
       },
       isSelected() {
-        return this.currentPage === this.page;
+        return this._currentPage === this.page;
       },
       handleClickPrev() {
-        let p = this.currentPage - 1;
-        this.currentPage = p <= 1 ? 1 : p;
+        let p = this._currentPage - 1;
+        this._currentPage = p <= 1 ? 1 : p;
       },
       handleClickNext() {
-        let p = this.currentPage + 1;
+        let p = this._currentPage + 1;
         let pagesCount = this.getPagesCount();
-        this.currentPage = p >= pagesCount ? pagesCount : p;
+        this._currentPage = p >= pagesCount ? pagesCount : p;
       },
       handleClickPage() {
         if (this.page === "...") return;
-        this.currentPage = this.page;
+        this._currentPage = this.page;
       },
       prevButton: {
         "@click"() {

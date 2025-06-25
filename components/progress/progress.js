@@ -12,17 +12,17 @@ export default function (Alpine) {
     return {
       _value: 0,
       // props
-      interactive: false,
+      _interactive: false,
 
       init() {
-        this.interactive = JSON.parse(
-          Alpine.bound(this.$el, "data-interactive") ?? this.interactive,
+        this._interactive = JSON.parse(
+          Alpine.bound(this.$el, "data-interactive") ?? this._interactive,
         );
 
         Alpine.bind(this.$el, {
           "x-modelable": "_value",
           "@click"() {
-            if (!this.interactive) return;
+            if (!this._interactive) return;
             let ev = this.$event;
             let x = (ev.x - ev.target.offsetLeft) / ev.target.clientWidth;
             this.$dispatch("progress-clicked", x);

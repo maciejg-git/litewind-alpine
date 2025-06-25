@@ -14,7 +14,7 @@ export default function (Alpine) {
           return this.$id("dropdown-aria")
         },
         ":aria-haspopup"() {
-          return this.role
+          return this._role
         }
       },
       menu: {
@@ -22,7 +22,7 @@ export default function (Alpine) {
           return this.$id("dropdown-aria")
         },
         ":role"() {
-          return this.role
+          return this._role
         }
       },
       menuItem: {
@@ -43,44 +43,44 @@ export default function (Alpine) {
     ];
 
     return {
-      isOpen: false,
-      floating: null,
-      hideTimeout: null,
-      menuItemsElements: null,
-      focusedMenuItemIndex: -1,
+      _isOpen: false,
+      _floating: null,
+      _hideTimeout: null,
+      _menuItemsElements: null,
+      _focusedMenuItemIndex: -1,
       // props
-      triggerEv: "click",
-      autoClose: true,
-      placement: "bottom-start",
-      offsetX: 0,
-      offsetY: 0,
-      flip: false,
-      autoPlacement: false,
-      role: "",
+      _triggerEv: "click",
+      _autoClose: true,
+      _placement: "bottom-start",
+      _offsetX: 0,
+      _offsetY: 0,
+      _flip: false,
+      _autoPlacement: false,
+      _role: "",
 
       init() {
         this.$nextTick(() => {
-          this.triggerEv =
-            Alpine.bound(this.$el, "data-trigger-event") ?? this.triggerEv;
-          this.autoClose = JSON.parse(
-            Alpine.bound(this.$el, "data-auto-close") ?? this.autoClose,
+          this._triggerEv =
+            Alpine.bound(this.$el, "data-trigger-event") ?? this._triggerEv;
+          this._autoClose = JSON.parse(
+            Alpine.bound(this.$el, "data-auto-close") ?? this._autoClose,
           );
-          this.placement =
-            Alpine.bound(this.$el, "data-placement") ?? this.placement;
-          this.offsetX = parseInt(
-            Alpine.bound(this.$el, "data-offset-x") ?? this.offsetX,
+          this._placement =
+            Alpine.bound(this.$el, "data-placement") ?? this._placement;
+          this._offsetX = parseInt(
+            Alpine.bound(this.$el, "data-offset-x") ?? this._offsetX,
           );
-          this.offsetY = parseInt(
-            Alpine.bound(this.$el, "data-offset-y") ?? this.offsetY,
+          this._offsetY = parseInt(
+            Alpine.bound(this.$el, "data-offset-y") ?? this._offsetY,
           );
-          this.flip = JSON.parse(
-            Alpine.bound(this.$el, "data-flip") ?? this.flip,
+          this._flip = JSON.parse(
+            Alpine.bound(this.$el, "data-flip") ?? this._flip,
           );
-          this.autoPlacement = JSON.parse(
-            Alpine.bound(this.$el, "data-auto-placement") ?? this.autoPlacement,
+          this._autoPlacement = JSON.parse(
+            Alpine.bound(this.$el, "data-auto-placement") ?? this._autoPlacement,
           );
           let role = Alpine.bound(this.$el, "data-role")
-          this.role = ariaRoles.includes(role) ? role : null
+          this._role = ariaRoles.includes(role) ? role : null
 
           let options = floatingUIoptions.reduce((acc, v) => {
             return { ...acc, [v]: this[v]}
@@ -88,7 +88,7 @@ export default function (Alpine) {
 
           // the x-bind='trigger' is necessary for components that use
           // other components as triggers
-          this.floating = useFloating(
+          this._floating = useFloating(
             this.$refs.trigger ||
               this.$root.querySelector("[x-bind='trigger']"),
             this.$refs.menu,
@@ -96,12 +96,12 @@ export default function (Alpine) {
           );
 
           let t = {};
-          if (this.triggerEv === "click") {
+          if (this._triggerEv === "click") {
             t["@click"] = function () {
               this.toggle();
             };
           }
-          if (this.triggerEv === "hover") {
+          if (this._triggerEv === "hover") {
             t["@mouseenter"] = function () {
               this.open();
             };
@@ -121,35 +121,35 @@ export default function (Alpine) {
             this.close();
           },
           ["@keydown.down.prevent"]() {
-            if (!this.isOpen) {
+            if (!this._isOpen) {
               this.open()
             }
-            if (!this.menuItemsElements.length) {
+            if (!this._menuItemsElements.length) {
               return
             }
             this.$nextTick(() => {
-              if (this.focusedMenuItemIndex < this.menuItemsElements.length - 1) {
-                this.focusedMenuItemIndex++
+              if (this._focusedMenuItemIndex < this._menuItemsElements.length - 1) {
+                this._focusedMenuItemIndex++
               }
-              let el = this.menuItemsElements[this.focusedMenuItemIndex]
+              let el = this._menuItemsElements[this._focusedMenuItemIndex]
               el.focus()
             })
           },
           ["@keydown.up.prevent"]() {
-            if (!this.isOpen) {
+            if (!this._isOpen) {
               this.open()
             }
-            if (!this.menuItemsElements.length) {
+            if (!this._menuItemsElements.length) {
               return
             }
-            if (this.focusedMenuItemIndex === -1) {
-              this.focusedMenuItemIndex = this.menuItemsElements.length
+            if (this._focusedMenuItemIndex === -1) {
+              this._focusedMenuItemIndex = this._menuItemsElements.length
             }
             this.$nextTick(() => {
-              if (this.focusedMenuItemIndex > 0) {
-                this.focusedMenuItemIndex--
+              if (this._focusedMenuItemIndex > 0) {
+                this._focusedMenuItemIndex--
               }
-              let el = this.menuItemsElements[this.focusedMenuItemIndex]
+              let el = this._menuItemsElements[this._focusedMenuItemIndex]
               el.focus()
             })
           }
@@ -159,40 +159,40 @@ export default function (Alpine) {
       },
       scheduleHide() {
         return setTimeout(() => {
-          this.floating.destroy();
-          this.isOpen = false;
+          this._floating.destroy();
+          this._isOpen = false;
         }, 100);
       },
       open() {
-        if (this.triggerEv === "hover") {
-          clearTimeout(this.hideTimeout);
+        if (this._triggerEv === "hover") {
+          clearTimeout(this._hideTimeout);
         }
-        this.floating.startAutoUpdate();
-        this.isOpen = true;
-        this.menuItemsElements = this.$refs.menu.querySelectorAll("[role='menuitem']")
+        this._floating.startAutoUpdate();
+        this._isOpen = true;
+        this._menuItemsElements = this.$refs.menu.querySelectorAll("[role='menuitem']")
       },
       close() {
-        if (!this.isOpen) return;
-        if (this.triggerEv === "hover") {
-          this.hideTimeout = this.scheduleHide();
+        if (!this._isOpen) return;
+        if (this._triggerEv === "hover") {
+          this._hideTimeout = this.scheduleHide();
           return;
         }
-        this.floating.destroy();
-        this.isOpen = false;
-        this.focusedMenuItemIndex = -1
+        this._floating.destroy();
+        this._isOpen = false;
+        this._focusedMenuItemIndex = -1
       },
       preventHiding() {
-        if (this.triggerEv === "hover") {
-          clearTimeout(this.hideTimeout);
+        if (this._triggerEv === "hover") {
+          clearTimeout(this._hideTimeout);
         }
       },
       allowHiding() {
-        if (this.triggerEv === "hover") {
-          this.hideTimeout = this.scheduleHide();
+        if (this._triggerEv === "hover") {
+          this._hideTimeout = this.scheduleHide();
         }
       },
       toggle() {
-        this.isOpen ? this.close() : this.open();
+        this._isOpen ? this.close() : this.open();
       },
       trigger: {
         "x-ref": "trigger",
@@ -200,7 +200,7 @@ export default function (Alpine) {
       },
       menu: {
         "x-show"() {
-          return this.isOpen;
+          return this._isOpen;
         },
         "x-ref": "menu",
         "@mouseenter"() {
@@ -216,7 +216,7 @@ export default function (Alpine) {
           if (this.$event.target === this.$refs.menu) {
             return
           }
-          if (this.autoClose && this.$el.contains(this.$event.target)) {
+          if (this._autoClose && this.$el.contains(this.$event.target)) {
             this.close();
           }
         },
