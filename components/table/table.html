@@ -78,7 +78,7 @@
     >
       <thead>
         <tr>
-          <template x-for="col in definition">
+          <template x-for="col in _definition">
             <td
               x-bind="header"
               class="border-b border-gray-300 px-2 py-2 font-semibold text-text-800 dark:border-dark-600 dark:text-text-300"
@@ -127,9 +127,9 @@
         </tr>
       </thead>
       <tbody>
-        <template x-for="row in getDataPaginated" :key="row[primaryKey]">
+        <template x-for="row in getDataPaginated" :key="row[_primaryKey]">
           <tr>
-            <template x-for="col in definition">
+            <template x-for="col in _definition">
               <td
                 x-text="getCellContent"
                 class="border-t border-gray-300 px-2 py-2 text-text-800 transition-colors duration-200 dark:border-dark-600 dark:text-text-300"
