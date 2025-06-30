@@ -10,7 +10,7 @@ function autocomplete_default(Alpine) {
       trigger: {
         role: "combobox",
         ":aria-expanded"() {
-          return this.isOpen;
+          return this._isOpen;
         },
         ":aria-controls"() {
           return this.$id("select-aria");
@@ -25,7 +25,7 @@ function autocomplete_default(Alpine) {
       option: {
         role: "option",
         ":aria-selected"() {
-          return this.selected.has(this.item.value) ? "true" : "false";
+          return this._selected.has(this.item.value) ? "true" : "false";
         }
       }
     };
@@ -52,51 +52,51 @@ function autocomplete_default(Alpine) {
       );
     };
     return {
-      isOpen: false,
-      floating: null,
+      _isOpen: false,
+      _floating: null,
       _value: "",
       _externalValue: "",
-      selected: /* @__PURE__ */ new Map(),
-      _items: [],
+      _selected: /* @__PURE__ */ new Map(),
+      _selectItems: [],
       _filteredItems: [],
       _model: null,
-      highlightedIndex: -1,
-      selectEl: null,
-      isFocused: false,
-      inputEl: null,
+      _highlightedIndex: -1,
+      _selectEl: null,
+      _isFocused: false,
+      _inputEl: null,
       // props
-      items: [],
-      multiple: false,
-      itemText: "text",
-      itemValue: "value",
-      noFilter: false,
-      noEmptyOpen: false,
+      _items: [],
+      _multiple: false,
+      _itemText: "text",
+      _itemValue: "value",
+      _noFilter: false,
+      _noEmptyOpen: false,
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
-            this.items = Alpine.bound(this.$el, "data-items") ?? this.items;
+            this._items = Alpine.bound(this.$el, "data-items") ?? this._items;
             this.transformItems();
-            this.highlightedIndex = -1;
+            this._highlightedIndex = -1;
           });
-          this.multiple = JSON.parse(
-            Alpine.bound(this.$el, "data-multiple") ?? this.multiple
+          this._multiple = JSON.parse(
+            Alpine.bound(this.$el, "data-multiple") ?? this._multiple
           );
-          this.itemText = Alpine.bound(this.$el, "data-item-text") ?? this.itemText;
-          this.itemValue = Alpine.bound(this.$el, "data-item-value") ?? this.itemValue;
-          this.noFilter = JSON.parse(
-            Alpine.bound(this.$el, "data-no-filter") ?? this.noFilter
+          this._itemText = Alpine.bound(this.$el, "data-item-text") ?? this._itemText;
+          this._itemValue = Alpine.bound(this.$el, "data-item-value") ?? this._itemValue;
+          this._noFilter = JSON.parse(
+            Alpine.bound(this.$el, "data-no-filter") ?? this._noFilter
           );
-          this.noEmptyOpen = JSON.parse(
-            Alpine.bound(this.$el, "data-no-empty-open") ?? this.noEmptyOpen
+          this._noEmptyOpen = JSON.parse(
+            Alpine.bound(this.$el, "data-no-empty-open") ?? this._noEmptyOpen
           );
-          this.floating = useFloating(
+          this._floating = useFloating(
             this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"),
             this.$refs.menu,
             { resize: true }
           );
         });
-        this.selectEl = this.$el;
-        this.inputEl = this.$el.querySelector("[x-bind='input']");
+        this._selectEl = this.$el;
+        this._inputEl = this.$el.querySelector("[x-bind='input']");
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
           async ["@keydown.prevent.down"]() {
@@ -104,12 +104,12 @@ function autocomplete_default(Alpine) {
               this.open();
               await this.$nextTick();
             }
-            if (this.highlightedIndex >= this.getItems().length - 1) {
+            if (this._highlightedIndex >= this.getItems().length - 1) {
               return;
             }
-            this.highlightedIndex++;
+            this._highlightedIndex++;
             let el = this.$refs.menu.querySelector(
-              `[data-index="${this.highlightedIndex}"]`
+              `[data-index="${this._highlightedIndex}"]`
             );
             el.focus({ preventScroll: true });
             if (isElementOverflowingBottom(el) || isElementOveflowingTop(el)) {
@@ -117,12 +117,12 @@ function autocomplete_default(Alpine) {
             }
           },
           ["@keydown.prevent.up"]() {
-            if (this.highlightedIndex <= 0) {
+            if (this._highlightedIndex <= 0) {
               return;
             }
-            this.highlightedIndex--;
+            this._highlightedIndex--;
             let el = this.$refs.menu.querySelector(
-              `[data-index="${this.highlightedIndex}"]`
+              `[data-index="${this._highlightedIndex}"]`
             );
             el.focus({ preventScroll: true });
             if (isElementOveflowingTop(el) || isElementOverflowingBottom(el)) {
@@ -130,14 +130,14 @@ function autocomplete_default(Alpine) {
             }
           },
           ["@keydown.prevent.escape"]() {
-            if (this.isOpen) {
+            if (this._isOpen) {
               this.close();
             }
           },
           ["@keydown.backspace"]() {
-            if (this.multiple && this.selected.size && this._externalValue === "") {
+            if (this._multiple && this._selected.size && this._externalValue === "") {
               let lastSelected = this.getLastSelected();
-              this.selected.delete(lastSelected);
+              this._selected.delete(lastSelected);
               this.updateModel();
             }
           },
@@ -149,31 +149,31 @@ function autocomplete_default(Alpine) {
           }
         });
         this.$watch("_externalValue", () => {
-          if (this.noFilter) {
+          if (this._noFilter) {
             return;
           }
           this._filteredItems = this.filterItems();
         });
-        this.$watch("items", () => {
+        this.$watch("_items", () => {
           this.open();
         });
         this.$watch("_model", () => {
-          let selectedCopy = new Map(this.selected);
-          this.selected.clear();
+          let selectedCopy = new Map(this._selected);
+          this._selected.clear();
           this._model.forEach((value) => {
-            let item = this._items.find((i) => i.value === value) || selectedCopy.get(value);
-            if (item) this.selected.set(item.value, item);
+            let item = this._selectItems.find((i) => i.value === value) || selectedCopy.get(value);
+            if (item) this._selected.set(item.value, item);
           });
         });
         Alpine.bind(this.$el, aria.main);
       },
       transformItems() {
-        if (!this.items.length) {
-          this._items = [];
+        if (!this._items.length) {
+          this._selectItems = [];
           return;
         }
-        if (typeof this.items[0] === "string") {
-          this._items = this.items.map((i) => {
+        if (typeof this._items[0] === "string") {
+          this._selectItems = this._items.map((i) => {
             return {
               text: i,
               value: i,
@@ -181,45 +181,45 @@ function autocomplete_default(Alpine) {
             };
           });
         }
-        if (typeof this.items[0] === "object") {
-          this._items = this.items.map((i) => {
+        if (typeof this._items[0] === "object") {
+          this._selectItems = this._items.map((i) => {
             return {
-              text: i[this.itemText],
-              value: i[this.itemValue],
+              text: i[this._itemText],
+              value: i[this._itemValue],
               origin: i
             };
           });
         }
       },
       getLastSelected() {
-        return Array.from(this.selected.keys()).pop();
+        return Array.from(this._selected.keys()).pop();
       },
       filterItems() {
-        return this._items.filter((item) => {
+        return this._selectItems.filter((item) => {
           return item.text.indexOf(this._externalValue) !== -1;
         });
       },
       getItems() {
-        if (this.noFilter) {
-          return this._items;
+        if (this._noFilter) {
+          return this._selectItems;
         }
         if (this._externalValue === "") {
-          return this._items;
+          return this._selectItems;
         }
         return this._filteredItems;
       },
       canOpenEmptyMenu() {
-        return !this.noEmptyOpen || this.getItems().length;
+        return !this._noEmptyOpen || this.getItems().length;
       },
       open() {
-        if (this.isOpen || !this.isFocused) {
+        if (this._isOpen || !this._isFocused) {
           return;
         }
-        this.floating.startAutoUpdate();
-        this.isOpen = true;
-        if (this.selected.size) this.scrollToFirstSelected();
+        this._floating.startAutoUpdate();
+        this._isOpen = true;
+        if (this._selected.size) this.scrollToFirstSelected();
         else this.$refs.menu.scrollTo(0, 0);
-        this.highlightedIndex = -1;
+        this._highlightedIndex = -1;
         this.$dispatch("open-selectmenu");
       },
       scrollToFirstSelected() {
@@ -231,48 +231,48 @@ function autocomplete_default(Alpine) {
         }
       },
       close() {
-        this.floating.destroy();
-        this.isOpen = false;
+        this._floating.destroy();
+        this._isOpen = false;
       },
       getSelected() {
-        return [...this.selected].map(([k, v]) => v);
+        return [...this._selected].map(([k, v]) => v);
       },
       getSelectedValues() {
-        return [...this.selected].map(([k, v]) => v.value);
+        return [...this._selected].map(([k, v]) => v.value);
       },
       select() {
-        if (this.multiple) {
-          if (this.selected.has(this.item.value)) {
-            this.selected.delete(this.item.value);
+        if (this._multiple) {
+          if (this._selected.has(this.item.value)) {
+            this._selected.delete(this.item.value);
           } else {
-            this.selected.set(this.item.value, this.item);
+            this._selected.set(this.item.value, this.item);
           }
           this.updateModel();
         } else {
-          let item = this.selected.size && this.selected.values().next().value;
+          let item = this._selected.size && this._selected.values().next().value;
           if (item.value === this.item.value) {
             return this.item;
           }
-          this.selected.set(this.item.value, this.item);
+          this._selected.set(this.item.value, this.item);
           if (item) {
-            this.selected.delete(item.value);
+            this._selected.delete(item.value);
           }
           this.updateModel();
           return this.item;
         }
       },
       unselect() {
-        this.selected.delete(this.selectedItem.value);
+        this._selected.delete(this.selectedItem.value);
       },
       clearSelection() {
-        this.selected.clear();
+        this._selected.clear();
         this.updateModel();
       },
       updateModel() {
         this._model = this.getSelectedValues();
       },
       isItemSelected() {
-        return this.selected.has(this.item.value);
+        return this._selected.has(this.item.value);
       },
       getHighlightedItemText() {
         return highlight(this.item.text, this._externalValue);
@@ -290,10 +290,10 @@ function autocomplete_default(Alpine) {
         },
         // FIXME: getFirstSelected, hideInput, showInput
         "@focusin"() {
-          this.isFocused = true;
-          let item = this.selected.size && this.selected.values().next().value;
-          this.inputEl.style.opacity = 1;
-          if (this.multiple) {
+          this._isFocused = true;
+          let item = this._selected.size && this._selected.values().next().value;
+          this._inputEl.style.opacity = 1;
+          if (this._multiple) {
             this._externalValue = "";
             return;
           }
@@ -306,27 +306,27 @@ function autocomplete_default(Alpine) {
             return;
           }
           this.close();
-          this.isFocused = false;
-          this.inputEl.style.opacity = 0;
+          this._isFocused = false;
+          this._inputEl.style.opacity = 0;
         },
         ":data-clearable"() {
-          return Alpine.bound(this.selectEl, "data-clearable");
+          return Alpine.bound(this._selectEl, "data-clearable");
         },
         ":data-use-loader"() {
-          return Alpine.bound(this.selectEl, "data-use-loader");
+          return Alpine.bound(this._selectEl, "data-use-loader");
         },
         ":data-is-loading"() {
-          return Alpine.bound(this.selectEl, "data-is-loading");
+          return Alpine.bound(this._selectEl, "data-is-loading");
         },
         ":data-placeholder"() {
-          return Alpine.bound(this.selectEl, "data-placeholder");
+          return Alpine.bound(this._selectEl, "data-placeholder");
         },
         ...aria.trigger
       },
       menu: {
         "x-ref": "menu",
         "x-show"() {
-          return this.isOpen;
+          return this._isOpen;
         },
         // prevent focusing option buttons on mousedown
         "@mousedown.prevent"() {
@@ -337,7 +337,7 @@ function autocomplete_default(Alpine) {
           if (this.$refs.menu.contains(this.$event.relatedTarget)) {
             return;
           }
-          if (this.$event.relatedTarget === this.inputEl) {
+          if (this.$event.relatedTarget === this._inputEl) {
             return;
           }
           this.close();
@@ -353,14 +353,14 @@ function autocomplete_default(Alpine) {
       option: {
         "@click"() {
           let item = this.select();
-          if (!this.multiple) {
+          if (!this._multiple) {
             this._externalValue = item.text;
           }
-          if (!this.multiple) this.close();
+          if (!this._multiple) this.close();
         },
         "@keydown.prevent.enter"() {
           let item = this.select();
-          if (!this.multiple) {
+          if (!this._multiple) {
             this._externalValue = item.text;
           }
           this.close();
@@ -368,7 +368,7 @@ function autocomplete_default(Alpine) {
         ":class"() {
           let classes = this.$el.attributes;
           let c = "";
-          if (this.selected.has(this.item.value)) {
+          if (this._selected.has(this.item.value)) {
             c += (classes["class-selected"]?.textContent || "") + " ";
           } else {
             c += (classes["class-default"]?.textContent || "") + " ";
@@ -376,7 +376,7 @@ function autocomplete_default(Alpine) {
           return c;
         },
         ":data-selected"() {
-          return this.selected.has(this.item.value);
+          return this._selected.has(this.item.value);
         },
         ":data-index"() {
           return this.index;
@@ -385,10 +385,10 @@ function autocomplete_default(Alpine) {
       },
       selectedItems: {
         "x-show"() {
-          return this.multiple || !this.isFocused;
+          return this._multiple || !this._isFocused;
         },
         ":style"() {
-          if (this.multiple) {
+          if (this._multiple) {
             return {
               display: "contents"
             };
@@ -401,7 +401,7 @@ function autocomplete_default(Alpine) {
       },
       indicator: {
         "@mousedown.prevent"() {
-          if (this.isOpen) {
+          if (this._isOpen) {
             this.close();
             this.$event.stopPropagation();
           }

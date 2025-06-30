@@ -35,58 +35,58 @@ function table_default(Alpine) {
       visible: true
     };
     return {
-      sortKey: "",
-      sortAsc: 1,
-      data: [],
+      _sortKey: "",
+      _sortAsc: 1,
+      _data: [],
       // props
-      tableData: [],
-      definition: [],
-      filter: "",
-      page: 1,
-      itemsPerPage: 0,
-      locale: "en-GB",
-      primaryKey: "",
-      onFilter: null,
-      isLoading: false,
+      _tableData: [],
+      _definition: [],
+      _filter: "",
+      _page: 1,
+      _itemsPerPage: 0,
+      _locale: "en-GB",
+      _primaryKey: "",
+      _onFilter: null,
+      _isLoading: false,
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
-            let data = Alpine.bound(this.$el, "data-items") ?? this.data;
-            this.tableData = [...data];
-            this.definition = this.getDefinition();
+            let data = Alpine.bound(this.$el, "data-items") ?? this._data;
+            this._tableData = [...data];
+            this._definition = this.getDefinition();
           });
           Alpine.effect(() => {
-            this.filter = Alpine.bound(this.$el, "data-filter") ?? this.filter;
-            this.page = 1;
+            this._filter = Alpine.bound(this.$el, "data-filter") ?? this._filter;
+            this._page = 1;
           });
           Alpine.effect(() => {
-            this.itemsPerPage = parseInt(
-              Alpine.bound(this.$el, "data-items-per-page") ?? this.itemsPerPage
+            this._itemsPerPage = parseInt(
+              Alpine.bound(this.$el, "data-items-per-page") ?? this._itemsPerPage
             );
-            this.page = 1;
+            this._page = 1;
           });
           Alpine.effect(() => {
-            this.locale = Alpine.bound(this.$el, "data-locale") ?? this.locale;
+            this._locale = Alpine.bound(this.$el, "data-locale") ?? this._locale;
           });
           Alpine.effect(() => {
-            this.onFilter = Alpine.bound(this.$el, "data-on-filter") ?? this.onFilter;
+            this._onFilter = Alpine.bound(this.$el, "data-on-filter") ?? this._onFilter;
           });
           Alpine.effect(() => {
-            this.page = parseInt(
-              Alpine.bound(this.$el, "data-page") ?? this.page
-            );
-          });
-          Alpine.effect(() => {
-            this.isLoading = JSON.parse(
-              Alpine.bound(this.$el, "data-is-loading") ?? this.isLoading
+            this._page = parseInt(
+              Alpine.bound(this.$el, "data-page") ?? this._page
             );
           });
-          this.primaryKey = Alpine.bound(this.$el, "data-primary-key") ?? this.primaryKey;
+          Alpine.effect(() => {
+            this._isLoading = JSON.parse(
+              Alpine.bound(this.$el, "data-is-loading") ?? this._isLoading
+            );
+          });
+          this._primaryKey = Alpine.bound(this.$el, "data-primary-key") ?? this._primaryKey;
           Alpine.bind(this.$el, {
             ":class"() {
               let classes = this.$el.attributes;
               let c = "";
-              if (this.isLoading) {
+              if (this._isLoading) {
                 c = classes["class-loading"]?.textContent || "";
               }
               return c;
@@ -96,8 +96,8 @@ function table_default(Alpine) {
       },
       // generate definition array from the first record of items array
       generateDefinitionFromData() {
-        if (!this.tableData || !this.tableData.length) return [];
-        return Object.keys(this.tableData[0]).map((item) => {
+        if (!this._tableData || !this._tableData.length) return [];
+        return Object.keys(this._tableData[0]).map((item) => {
           return { key: item };
         });
       },
@@ -118,19 +118,19 @@ function table_default(Alpine) {
         });
       },
       getDataSorted() {
-        if (!this.sortKey) return this.tableData;
-        let compare2 = new Intl.Collator(this.locale).compare;
-        return this.tableData.sort(
-          (a, b) => itemCompare(a[this.sortKey], b[this.sortKey], this.sortAsc, compare2)
+        if (!this._sortKey) return this._tableData;
+        let compare2 = new Intl.Collator(this._locale).compare;
+        return this._tableData.sort(
+          (a, b) => itemCompare(a[this._sortKey], b[this._sortKey], this._sortAsc, compare2)
         );
       },
       getFilterableKeys() {
-        return this.definition.filter((k) => k.filterable !== false && k.visible !== false).map((k) => k.key);
+        return this._definition.filter((k) => k.filterable !== false && k.visible !== false).map((k) => k.key);
       },
       getDataFiltered() {
-        if (!this.filter) return this.getDataSorted();
+        if (!this._filter) return this.getDataSorted();
         let filter = new RegExp(
-          this.filter.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&"),
+          this._filter.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&"),
           "i"
         );
         let filterableKeys = this.getFilterableKeys();
@@ -143,39 +143,39 @@ function table_default(Alpine) {
       },
       getDataPaginated() {
         let filteredData = this.getDataFiltered();
-        if (typeof this.onFilter === "function") {
-          this.onFilter(filteredData);
+        if (typeof this._onFilter === "function") {
+          this._onFilter(filteredData);
         }
         this.$dispatch("update:items-filtered", filteredData);
-        if (!this.itemsPerPage) return filteredData;
+        if (!this._itemsPerPage) return filteredData;
         return filteredData.slice(
-          (this.page - 1) * this.itemsPerPage,
-          this.page * this.itemsPerPage
+          (this._page - 1) * this._itemsPerPage,
+          this._page * this._itemsPerPage
         );
       },
       getCellContent() {
         return this.row[this.col.key];
       },
       getHighlightedCellContent() {
-        return highlight(this.row[this.col.key], this.filter);
+        return highlight(this.row[this.col.key], this._filter);
       },
       isSortable() {
         return this.col.sortable;
       },
       isSorted() {
-        return this.sortKey === this.col.key;
+        return this._sortKey === this.col.key;
       },
       isSortedAsc() {
-        return this.isSorted() && this.sortAsc === 1;
+        return this.isSorted() && this._sortAsc === 1;
       },
       isSortedDesc() {
-        return this.isSorted() && this.sortAsc === -1;
+        return this.isSorted() && this._sortAsc === -1;
       },
       header: {
         "@click"() {
           if (!this.isSortable()) return;
-          this.sortAsc = this.sortKey === this.col.key ? -this.sortAsc : 1;
-          this.sortKey = this.col.key;
+          this._sortAsc = this._sortKey === this.col.key ? -this._sortAsc : 1;
+          this._sortKey = this.col.key;
         },
         ":class"() {
           return this.isSortable() ? "cursor-pointer" : "";
