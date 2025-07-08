@@ -266,7 +266,9 @@ export default function (Alpine) {
         }
         if (this._range) {
           this.addRange();
-          this._model = this._selectedRange.map((d) => this.dateToModel(d));
+          if (this._rangeState === rangeSelectionStates.TO_SELECTED) {
+            this._model = this._selectedRange.map((d) => this.dateToModel(d));
+          }
           return;
         }
         this._selectedSingle = this.d;
