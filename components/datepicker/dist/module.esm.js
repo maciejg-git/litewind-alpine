@@ -23,11 +23,9 @@ function datepicker_default(Alpine) {
         console.warn(err);
       }
     };
-    let rangeSelectionStates = {
-      UNSELECTED: 0,
-      FROM_SELECTED: 1,
-      TO_SELECTED: 2
-    };
+    const UNSELECTED = 0;
+    const FROM_SELECTED = 1;
+    const TO_SELECTED = 2;
     return {
       _today: /* @__PURE__ */ new Date(),
       _month: null,
@@ -79,13 +77,13 @@ function datepicker_default(Alpine) {
             if (this._model?.length === 2) {
               if (this._model.every((d) => dateRegexp.test(d))) {
                 this._selectedRange = this._model.map((d) => new Date(d));
-                this._rangeState = rangeSelectionStates.TO_SELECTED;
+                this._rangeState = TO_SELECTED;
               }
               return;
             }
             if (this._model?.length === 0) {
               this._selectedRange = [];
-              this._rangeState = rangeSelectionStates.UNSELECTED;
+              this._rangeState = UNSELECTED;
             }
             return;
           }
@@ -177,17 +175,17 @@ function datepicker_default(Alpine) {
         this._selectedSingle = "";
         this._selectedRange = [];
         this._model = "";
-        this._rangeState = rangeSelectionStates.UNSELECTED;
+        this._rangeState = UNSELECTED;
         this._mouseOverDate = null;
       },
       addRange() {
-        if (this._rangeState === rangeSelectionStates.TO_SELECTED) {
+        if (this._rangeState === TO_SELECTED) {
           this._selectedRange = [];
-          this._rangeState = rangeSelectionStates.UNSELECTED;
+          this._rangeState = UNSELECTED;
         }
         this._selectedRange[this._rangeState] = this.d;
         this._rangeState++;
-        if (this._rangeState === rangeSelectionStates.TO_SELECTED) {
+        if (this._rangeState === TO_SELECTED) {
           if (this._selectedRange[0] > this._selectedRange[1]) {
             this._selectedRange.reverse();
           }
@@ -209,13 +207,13 @@ function datepicker_default(Alpine) {
         return this._selectedSingle && this._selectedSingle.getTime() == this.d.getTime();
       },
       isSelectedRange() {
-        if (this._range && this._rangeState === rangeSelectionStates.TO_SELECTED) {
+        if (this._range && this._rangeState === TO_SELECTED) {
           return this._selectedRange[0] <= this.d && this.d <= this._selectedRange[1];
         }
         return false;
       },
       isPartiallySelected() {
-        if (this._range && this._rangeState === rangeSelectionStates.FROM_SELECTED) {
+        if (this._range && this._rangeState === FROM_SELECTED) {
           return this._mouseOverDate >= this.d && this.d >= this._selectedRange[0] || this._mouseOverDate <= this.d && this.d <= this._selectedRange[0];
         }
         return false;
@@ -227,14 +225,15 @@ function datepicker_default(Alpine) {
         }
         if (this._range) {
           this.addRange();
-          this._model = this._selectedRange.map((d) => this.dateToModel(d));
+          if (this._rangeState === TO_SELECTED) {
+            this._model = this._selectedRange.map((d) => this.dateToModel(d));
+            this.$dispatch("datepicker-selection-complete");
+          }
           return;
         }
         this._selectedSingle = this.d;
         this._model = this.dateToModel(this._selectedSingle);
-        if (!this._range || this._rangeState === rangeSelectionStates.TO_SELECTED) {
-          this.$dispatch("datepicker-selection-complete");
-        }
+        this.$dispatch("datepicker-selection-complete");
       },
       prevMonthButton: {
         "@click"() {
