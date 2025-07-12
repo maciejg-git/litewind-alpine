@@ -42,9 +42,10 @@ export default function (Alpine) {
       "inline",
     ];
 
+    let _floating = null 
+
     return {
       _isOpen: false,
-      _floating: null,
       _hideTimeout: null,
       _menuItemsElements: null,
       _focusedMenuItemIndex: -1,
@@ -88,7 +89,7 @@ export default function (Alpine) {
 
           // the x-bind='trigger' is necessary for components that use
           // other components as triggers
-          this._floating = useFloating(
+          _floating = useFloating(
             this.$refs.trigger ||
               this.$root.querySelector("[x-bind='trigger']"),
             this.$refs.menu,
@@ -159,7 +160,7 @@ export default function (Alpine) {
       },
       scheduleHide() {
         return setTimeout(() => {
-          this._floating.destroy();
+          _floating.destroy();
           this._isOpen = false;
         }, 100);
       },
@@ -167,7 +168,7 @@ export default function (Alpine) {
         if (this._triggerEv === "hover") {
           clearTimeout(this._hideTimeout);
         }
-        this._floating.startAutoUpdate();
+        _floating.startAutoUpdate();
         this._isOpen = true;
         this._menuItemsElements = this.$refs.menu.querySelectorAll("[role='menuitem']")
       },
@@ -177,7 +178,7 @@ export default function (Alpine) {
           this._hideTimeout = this.scheduleHide();
           return;
         }
-        this._floating.destroy();
+        _floating.destroy();
         this._isOpen = false;
         this._focusedMenuItemIndex = -1
       },
