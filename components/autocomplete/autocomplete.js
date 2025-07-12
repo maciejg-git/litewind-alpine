@@ -59,9 +59,10 @@ export default function (Alpine) {
       );
     }
 
+    let _floating = null
+
     return {
       _isOpen: false,
-      _floating: null,
       _value: "",
       _externalValue: "",
       _selected: new Map(),
@@ -101,7 +102,7 @@ export default function (Alpine) {
             Alpine.bound(this.$el, "data-no-empty-open") ?? this._noEmptyOpen,
           );
 
-          this._floating = useFloating(
+          _floating = useFloating(
             this.$refs.trigger ||
               this.$root.querySelector("[x-bind='trigger']"),
             this.$refs.menu,
@@ -234,7 +235,7 @@ export default function (Alpine) {
         if (this._isOpen || !this._isFocused) {
           return
         }
-        this._floating.startAutoUpdate();
+        _floating.startAutoUpdate();
         this._isOpen = true;
         if (this._selected.size) this.scrollToFirstSelected();
         else this.$refs.menu.scrollTo(0, 0);
@@ -250,7 +251,7 @@ export default function (Alpine) {
         }
       },
       close() {
-        this._floating.destroy();
+        _floating.destroy();
         this._isOpen = false;
       },
       getSelected() {
