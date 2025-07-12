@@ -46,10 +46,12 @@ export default function (Alpine) {
       visible: true,
     };
 
+    let _invalidateSort = false
+
     return {
       _sortKey: "",
       _sortAsc: 1,
-      _data: [],
+      _sortedTableData: [],
       // props
       _tableData: [],
       _definition: [],
@@ -64,10 +66,15 @@ export default function (Alpine) {
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
-            let data = Alpine.bound(this.$el, "data-items") ?? this._data;
+            let data = Alpine.bound(this.$el, "data-items") ?? [];
             this._tableData = [...data];
-            this._definition = this.getDefinition();
+            _invalidateSort = true
+            this._sortKey = ""
+            this._sortAsc = 1
           });
+          Alpine.effect(() => {
+            this._definition = this.getDefinition();
+          })
           Alpine.effect(() => {
             this._filter = Alpine.bound(this.$el, "data-filter") ?? this._filter;
             this._page = 1;
@@ -98,6 +105,14 @@ export default function (Alpine) {
           })
           this._primaryKey =
             Alpine.bound(this.$el, "data-primary-key") ?? this._primaryKey;
+
+          this.$watch("_sortKey", () => {
+            _invalidateSort = true
+          })
+
+          this.$watch("_sortAsc", () => {
+            _invalidateSort = true
+          })
 
           Alpine.bind(this.$el, {
             ":class"() {
@@ -141,11 +156,19 @@ export default function (Alpine) {
       getDataSorted() {
         if (!this._sortKey) return this._tableData;
 
+        if (!_invalidateSort) {
+          return this._sortedTableData
+        }
+
+        _invalidateSort = false
+
         let compare = new Intl.Collator(this._locale).compare;
 
-        return this._tableData.sort((a, b) =>
+        this._sortedTableData = [...this._tableData].sort((a, b) =>
           itemCompare(a[this._sortKey], b[this._sortKey], this._sortAsc, compare),
         );
+
+        return this._sortedTableData
       },
       getFilterableKeys() {
         return this._definition
@@ -176,7 +199,10 @@ export default function (Alpine) {
         if (typeof this._onFilter === "function") {
           this._onFilter(filteredData);
         }
-        this.$dispatch("update:items-filtered", filteredData)
+
+        this.$nextTick(() => {
+          this.$dispatch("update:items", filteredData)
+        })
 
         if (!this._itemsPerPage) return filteredData;
 

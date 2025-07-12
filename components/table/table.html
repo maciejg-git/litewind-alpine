@@ -74,7 +74,7 @@
       :data-page="$store.table.page"
       class="w-full table-auto border-collapse text-left text-[0.9rem]"
       class-loading="opacity-50 pointer-events-none"
-      @update:items-filtered="$store.table.filteredItemsCount = $event.detail.length"
+      @update:items="$store.table.filteredItemsCount = $event.detail.length"
     >
       <thead>
         <tr>
