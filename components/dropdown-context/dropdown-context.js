@@ -24,9 +24,10 @@ export default function (Alpine) {
       "inline",
     ];
 
+    let _floating = null
+
     return {
       _isOpen: false,
-      _floating: null,
       contextData: {},
       _menuItems: null,
       _focusedMenuItemIndex: -1,
@@ -65,7 +66,7 @@ export default function (Alpine) {
             return { ...acc, [v]: this[v] };
           });
 
-          this._floating = useFloating(null, this.$refs.menu, options);
+          _floating = useFloating(null, this.$refs.menu, options);
         });
 
         Alpine.bind(this.$el, {
@@ -102,13 +103,13 @@ export default function (Alpine) {
         });
       },
       open() {
-        this._floating.startAutoUpdate();
+        _floating.startAutoUpdate();
         this._isOpen = true;
         this._menuItems = this.$refs.menu.querySelectorAll("[role='menuitem']")
         this.$nextTick(() => this.$refs.menu.focus())
       },
       close() {
-        this._floating.destroy();
+        _floating.destroy();
         this._isOpen = false;
         this._focusedMenuItemIndex = -1
       },
@@ -121,7 +122,7 @@ export default function (Alpine) {
             return;
           }
           let mouseEvent = this.$event.detail.$event;
-          this._floating.updateVirtualElement(mouseEvent);
+          _floating.updateVirtualElement(mouseEvent);
           this.contextData = this.$event.detail.data;
           this.open();
         },
