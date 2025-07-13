@@ -43,10 +43,10 @@ export default function (Alpine) {
     ];
 
     let _floating = null 
+    let _hideTimeout = null
 
     return {
       _isOpen: false,
-      _hideTimeout: null,
       _menuItemsElements: null,
       _focusedMenuItemIndex: -1,
       // props
@@ -166,7 +166,7 @@ export default function (Alpine) {
       },
       open() {
         if (this._triggerEv === "hover") {
-          clearTimeout(this._hideTimeout);
+          clearTimeout(_hideTimeout);
         }
         _floating.startAutoUpdate();
         this._isOpen = true;
@@ -175,7 +175,7 @@ export default function (Alpine) {
       close() {
         if (!this._isOpen) return;
         if (this._triggerEv === "hover") {
-          this._hideTimeout = this.scheduleHide();
+          _hideTimeout = this.scheduleHide();
           return;
         }
         _floating.destroy();
@@ -184,12 +184,12 @@ export default function (Alpine) {
       },
       preventHiding() {
         if (this._triggerEv === "hover") {
-          clearTimeout(this._hideTimeout);
+          clearTimeout(_hideTimeout);
         }
       },
       allowHiding() {
         if (this._triggerEv === "hover") {
-          this._hideTimeout = this.scheduleHide();
+          _hideTimeout = this.scheduleHide();
         }
       },
       toggle() {
