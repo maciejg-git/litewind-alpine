@@ -60,6 +60,8 @@ export default function (Alpine) {
     }
 
     let _floating = null
+    let _selectEl = null
+    let _inputEl = null
 
     return {
       _isOpen: false,
@@ -70,9 +72,7 @@ export default function (Alpine) {
       _filteredItems: [],
       _model: null,
       _highlightedIndex: -1,
-      _selectEl: null,
       _isFocused: false,
-      _inputEl: null,
       // props
       _items: [],
       _multiple: false,
@@ -110,8 +110,8 @@ export default function (Alpine) {
           );
         });
 
-        this._selectEl = this.$el;
-        this._inputEl = this.$el.querySelector("[x-bind='input']")
+        _selectEl = this.$el;
+        _inputEl = this.$el.querySelector("[x-bind='input']")
 
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
@@ -312,7 +312,7 @@ export default function (Alpine) {
         "@focusin"() {
           this._isFocused = true
           let item = this._selected.size && this._selected.values().next().value;
-          this._inputEl.style.opacity = 1
+          _inputEl.style.opacity = 1
           if (this._multiple) {
             this._externalValue = ""
             return
@@ -327,19 +327,19 @@ export default function (Alpine) {
           }
           this.close();
           this._isFocused = false
-          this._inputEl.style.opacity = 0
+          _inputEl.style.opacity = 0
         },
         ":data-clearable"() {
-          return Alpine.bound(this._selectEl, "data-clearable");
+          return Alpine.bound(_selectEl, "data-clearable");
         },
         ":data-use-loader"() {
-          return Alpine.bound(this._selectEl, "data-use-loader");
+          return Alpine.bound(_selectEl, "data-use-loader");
         },
         ":data-is-loading"() {
-          return Alpine.bound(this._selectEl, "data-is-loading");
+          return Alpine.bound(_selectEl, "data-is-loading");
         },
         ":data-placeholder"() {
-          return Alpine.bound(this._selectEl, "data-placeholder");
+          return Alpine.bound(_selectEl, "data-placeholder");
         },
         ...aria.trigger,
       },
@@ -356,7 +356,7 @@ export default function (Alpine) {
           if (this.$refs.menu.contains(this.$event.relatedTarget)) {
             return;
           }
-          if (this.$event.relatedTarget === this._inputEl) {
+          if (this.$event.relatedTarget === _inputEl) {
             return
           }
           this.close();
