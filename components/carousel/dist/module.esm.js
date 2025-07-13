@@ -1,10 +1,10 @@
 // components/carousel/carousel.js
 function carousel_default(Alpine) {
   Alpine.data("carousel", () => {
+    let _timer = null;
     return {
       _currentIndex: 0,
       _direction: false,
-      _timer: null,
       // props
       _items: [],
       _autoPlay: false,
@@ -55,12 +55,12 @@ function carousel_default(Alpine) {
         this._currentIndex = this.index;
       },
       startAutoPlay() {
-        this._timer = setInterval(() => {
+        _timer = setInterval(() => {
           this.showNext();
         }, this._autoPlayDelay);
       },
       stopAutoPlay() {
-        clearInterval(this._timer);
+        clearInterval(_timer);
       },
       restartAutoPlay() {
         this.stopAutoPlay();

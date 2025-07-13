@@ -41,15 +41,15 @@ function select_default(Alpine) {
         el.offsetTop - el.parentElement.clientHeight / 2 + el.clientHeight / 2
       );
     };
+    let _floating = null;
+    let _selectEl = null;
     return {
       _isOpen: false,
-      _floating: null,
       _value: "",
       _selected: /* @__PURE__ */ new Map(),
       _selectItems: [],
       _model: null,
       _highlightedIndex: -1,
-      _selectEl: null,
       // props
       _items: [],
       _multiple: false,
@@ -66,13 +66,13 @@ function select_default(Alpine) {
           );
           this._itemText = Alpine.bound(this.$el, "data-item-text") ?? this._itemText;
           this._itemValue = Alpine.bound(this.$el, "data-item-value") ?? this._itemValue;
-          this._floating = useFloating(
+          _floating = useFloating(
             this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"),
             this.$refs.menu,
             { resize: true }
           );
         });
-        this._selectEl = this.$el;
+        _selectEl = this.$el;
         this.inputEl = this.$el.querySelector("[x-bind='input']");
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
@@ -150,7 +150,7 @@ function select_default(Alpine) {
         return this._selectItems;
       },
       open() {
-        this._floating.startAutoUpdate();
+        _floating.startAutoUpdate();
         this._isOpen = true;
         if (this._selected.size) this.scrollToFirstSelected();
         else this.$refs.menu.scrollTo(0, 0);
@@ -166,7 +166,7 @@ function select_default(Alpine) {
         }
       },
       close() {
-        this._floating.destroy();
+        _floating.destroy();
         this._isOpen = false;
       },
       getSelected() {
@@ -223,16 +223,16 @@ function select_default(Alpine) {
           this.close();
         },
         ":data-clearable"() {
-          return Alpine.bound(this._selectEl, "data-clearable");
+          return Alpine.bound(_selectEl, "data-clearable");
         },
         ":data-use-loader"() {
-          return Alpine.bound(this._selectEl, "data-use-loader");
+          return Alpine.bound(_selectEl, "data-use-loader");
         },
         ":data-is-loading"() {
-          return Alpine.bound(this._selectEl, "data-is-loading");
+          return Alpine.bound(_selectEl, "data-is-loading");
         },
         ":data-placeholder"() {
-          return Alpine.bound(this._selectEl, "data-placeholder");
+          return Alpine.bound(_selectEl, "data-placeholder");
         },
         ...aria.trigger
       },

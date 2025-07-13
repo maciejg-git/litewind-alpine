@@ -35,10 +35,11 @@
         filterable: true,
         visible: true
       };
+      let _invalidateSort = false;
       return {
         _sortKey: "",
         _sortAsc: 1,
-        _data: [],
+        _sortedTableData: [],
         // props
         _tableData: [],
         _definition: [],
@@ -52,8 +53,13 @@
         init() {
           this.$nextTick(() => {
             Alpine2.effect(() => {
-              let data = Alpine2.bound(this.$el, "data-items") ?? this._data;
+              let data = Alpine2.bound(this.$el, "data-items") ?? [];
               this._tableData = [...data];
+              _invalidateSort = true;
+              this._sortKey = "";
+              this._sortAsc = 1;
+            });
+            Alpine2.effect(() => {
               this._definition = this.getDefinition();
             });
             Alpine2.effect(() => {
@@ -83,6 +89,12 @@
               );
             });
             this._primaryKey = Alpine2.bound(this.$el, "data-primary-key") ?? this._primaryKey;
+            this.$watch("_sortKey", () => {
+              _invalidateSort = true;
+            });
+            this.$watch("_sortAsc", () => {
+              _invalidateSort = true;
+            });
             Alpine2.bind(this.$el, {
               ":class"() {
                 let classes = this.$el.attributes;
@@ -120,10 +132,15 @@
         },
         getDataSorted() {
           if (!this._sortKey) return this._tableData;
+          if (!_invalidateSort) {
+            return this._sortedTableData;
+          }
+          _invalidateSort = false;
           let compare2 = new Intl.Collator(this._locale).compare;
-          return this._tableData.sort(
+          this._sortedTableData = [...this._tableData].sort(
             (a, b) => itemCompare(a[this._sortKey], b[this._sortKey], this._sortAsc, compare2)
           );
+          return this._sortedTableData;
         },
         getFilterableKeys() {
           return this._definition.filter((k) => k.filterable !== false && k.visible !== false).map((k) => k.key);
@@ -147,7 +164,9 @@
           if (typeof this._onFilter === "function") {
             this._onFilter(filteredData);
           }
-          this.$dispatch("update:items-filtered", filteredData);
+          this.$nextTick(() => {
+            this.$dispatch("update:items", filteredData);
+          });
           if (!this._itemsPerPage) return filteredData;
           return filteredData.slice(
             (this._page - 1) * this._itemsPerPage,

@@ -52,9 +52,11 @@
           `<span class='${classes}'>$1</span>`
         );
       };
+      let _floating = null;
+      let _selectEl = null;
+      let _inputEl = null;
       return {
         _isOpen: false,
-        _floating: null,
         _value: "",
         _externalValue: "",
         _selected: /* @__PURE__ */ new Map(),
@@ -62,9 +64,7 @@
         _filteredItems: [],
         _model: null,
         _highlightedIndex: -1,
-        _selectEl: null,
         _isFocused: false,
-        _inputEl: null,
         // props
         _items: [],
         _multiple: false,
@@ -90,14 +90,14 @@
             this._noEmptyOpen = JSON.parse(
               Alpine2.bound(this.$el, "data-no-empty-open") ?? this._noEmptyOpen
             );
-            this._floating = useFloating(
+            _floating = useFloating(
               this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"),
               this.$refs.menu,
               { resize: true }
             );
           });
-          this._selectEl = this.$el;
-          this._inputEl = this.$el.querySelector("[x-bind='input']");
+          _selectEl = this.$el;
+          _inputEl = this.$el.querySelector("[x-bind='input']");
           Alpine2.bind(this.$el, {
             ["x-modelable"]: "_model",
             async ["@keydown.prevent.down"]() {
@@ -216,7 +216,7 @@
           if (this._isOpen || !this._isFocused) {
             return;
           }
-          this._floating.startAutoUpdate();
+          _floating.startAutoUpdate();
           this._isOpen = true;
           if (this._selected.size) this.scrollToFirstSelected();
           else this.$refs.menu.scrollTo(0, 0);
@@ -232,7 +232,7 @@
           }
         },
         close() {
-          this._floating.destroy();
+          _floating.destroy();
           this._isOpen = false;
         },
         getSelected() {
@@ -293,7 +293,7 @@
           "@focusin"() {
             this._isFocused = true;
             let item = this._selected.size && this._selected.values().next().value;
-            this._inputEl.style.opacity = 1;
+            _inputEl.style.opacity = 1;
             if (this._multiple) {
               this._externalValue = "";
               return;
@@ -308,19 +308,19 @@
             }
             this.close();
             this._isFocused = false;
-            this._inputEl.style.opacity = 0;
+            _inputEl.style.opacity = 0;
           },
           ":data-clearable"() {
-            return Alpine2.bound(this._selectEl, "data-clearable");
+            return Alpine2.bound(_selectEl, "data-clearable");
           },
           ":data-use-loader"() {
-            return Alpine2.bound(this._selectEl, "data-use-loader");
+            return Alpine2.bound(_selectEl, "data-use-loader");
           },
           ":data-is-loading"() {
-            return Alpine2.bound(this._selectEl, "data-is-loading");
+            return Alpine2.bound(_selectEl, "data-is-loading");
           },
           ":data-placeholder"() {
-            return Alpine2.bound(this._selectEl, "data-placeholder");
+            return Alpine2.bound(_selectEl, "data-placeholder");
           },
           ...aria.trigger
         },
@@ -338,7 +338,7 @@
             if (this.$refs.menu.contains(this.$event.relatedTarget)) {
               return;
             }
-            if (this.$event.relatedTarget === this._inputEl) {
+            if (this.$event.relatedTarget === _inputEl) {
               return;
             }
             this.close();
