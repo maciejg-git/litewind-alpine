@@ -48,6 +48,7 @@ export default function (Alpine) {
     };
 
     let _floating = null
+    let _selectEl = null
 
     return {
       _isOpen: false,
@@ -56,7 +57,6 @@ export default function (Alpine) {
       _selectItems: [],
       _model: null,
       _highlightedIndex: -1,
-      _selectEl: null,
       // props
       _items: [],
       _multiple: false,
@@ -85,7 +85,7 @@ export default function (Alpine) {
           );
         });
 
-        this._selectEl = this.$el;
+        _selectEl = this.$el;
         this.inputEl = this.$el.querySelector("[x-bind='input']")
 
         Alpine.bind(this.$el, {
@@ -239,16 +239,16 @@ export default function (Alpine) {
           this.close();
         },
         ":data-clearable"() {
-          return Alpine.bound(this._selectEl, "data-clearable");
+          return Alpine.bound(_selectEl, "data-clearable");
         },
         ":data-use-loader"() {
-          return Alpine.bound(this._selectEl, "data-use-loader");
+          return Alpine.bound(_selectEl, "data-use-loader");
         },
         ":data-is-loading"() {
-          return Alpine.bound(this._selectEl, "data-is-loading");
+          return Alpine.bound(_selectEl, "data-is-loading");
         },
         ":data-placeholder"() {
-          return Alpine.bound(this._selectEl, "data-placeholder");
+          return Alpine.bound(_selectEl, "data-placeholder");
         },
         ...aria.trigger,
       },
