@@ -66,6 +66,7 @@ export default function (Alpine) {
       init() {
         this.$nextTick(() => {
           Alpine.effect(() => {
+            /* The user data is first cloned and then run in order through functions: getDataSorted, getDataFiltered and getDataPaginated. getDataPaginated is used in the template to generate table. If the step is not necessary (filter is empty, no sorting etc) it simply returns result of previous function. Sorting function uses simple cache that is invalidated after user data, sorting key or order changes. */
             let data = Alpine.bound(this.$el, "data-items") ?? [];
             this._tableData = [...data];
             _invalidateSort = true
@@ -77,6 +78,7 @@ export default function (Alpine) {
           })
           Alpine.effect(() => {
             this._filter = Alpine.bound(this.$el, "data-filter") ?? this._filter;
+            // changing filter resets page back to 1
             this._page = 1;
           });
           Alpine.effect(() => {
@@ -84,6 +86,7 @@ export default function (Alpine) {
               Alpine.bound(this.$el, "data-items-per-page") ??
                 this._itemsPerPage,
             );
+            // changing number of items per page resets page back to 1
             this._page = 1;
           });
           Alpine.effect(() => {
@@ -201,6 +204,7 @@ export default function (Alpine) {
         }
 
         this.$nextTick(() => {
+          // dispatch event containing filtered array. This is useful to update pagination or other components
           this.$dispatch("update:items", filteredData)
         })
 

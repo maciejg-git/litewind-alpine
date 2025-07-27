@@ -113,6 +113,7 @@ export default function (Alpine) {
           variant: notify?.variant ?? this._variant,
           options: notify?.options ?? this._options ?? null,
           notifyId: this._notifyId,
+          // the isVisible is used only to trigger transitions
           isVisible: Alpine.reactive({ value: false }),
           timer: null,
         };
@@ -133,6 +134,7 @@ export default function (Alpine) {
 
         this._notifyId++;
 
+        // sticky notifications ignore max notifications limit
         if (newNotify.sticky) {
           newNotify.restartTimer();
           this._notificationsSticky.push(newNotify);
@@ -158,6 +160,7 @@ export default function (Alpine) {
         },
         "x-init"() {
           this.$nextTick(() => (this.notify.isVisible.value = true));
+          // add listeners that remove notification from the array after finished transition
           this.$watch("notify.isVisible.value", (value) => {
             if (value) return;
             Alpine.bind(this.$el, {

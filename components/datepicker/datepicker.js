@@ -155,6 +155,7 @@ export default function (Alpine) {
       weekdays() {
         return this._names.weekdays;
       },
+      // this returns array of dates to display including adjacent months days
       days() {
         let day = getFirstDay(this._year, this._month, this._mondayFirstWeekday);
         let daysInMonth = getCountDaysInMonth(this._year, this._month);
