@@ -71,8 +71,10 @@ export default function (Alpine) {
         return value;
       };
 
+      // initial update of the validation
       validation.updateValue(getter());
 
+      // update validation on each value update
       let watchValue = Alpine.watch(getter, (value) => {
         validation.updateValue(value);
       });

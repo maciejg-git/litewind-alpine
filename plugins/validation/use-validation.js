@@ -24,6 +24,7 @@ export default function useValidation(input, updateValidation) {
     ? mode.split("-")
     : ["blur", "silent"];
 
+  // not required and empty/false value is optional
   let isOptional = (value) => {
     return (
       !rules.includes("required") &&

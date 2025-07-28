@@ -6,8 +6,8 @@ export default function (Alpine) {
       },
       pageButton: {
         ":aria-current"() {
-          return this.isSelected() ? "page" : false
-        }
+          return this.isSelected() ? "page" : false;
+        },
       },
       prevButton: {
         "aria-label": "Previous",
@@ -15,7 +15,7 @@ export default function (Alpine) {
       nextButton: {
         "aria-label": "Next",
       },
-    }
+    };
     let clamp = (v, f, t) => (v < f ? f : v >= t ? t : v);
 
     let getNumberRange = (from, count) => {
@@ -52,7 +52,7 @@ export default function (Alpine) {
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_currentPage",
         });
-        Alpine.bind(this.$el, aria.main)
+        Alpine.bind(this.$el, aria.main);
       },
       getPagesCount() {
         if (this._itemsPerPage <= 0 || this._itemsCount <= 0) return 1;
@@ -66,18 +66,18 @@ export default function (Alpine) {
         let first = this._currentPage - Math.ceil(maxPages / 2) + 1;
         let pagesCount = this.getPagesCount();
         first = clamp(first, 1, pagesCount - maxPages + 1);
-        let p = getNumberRange(first, maxPages);
+        let pages = getNumberRange(first, maxPages);
         if (maxPages >= 5) {
-          if (p[0] != 1) {
-            p[0] = 1;
-            p[1] = "...";
+          if (pages[0] != 1) {
+            pages[0] = 1;
+            pages[1] = "...";
           }
-          if (p[p.length - 1] != pagesCount) {
-            p[p.length - 1] = pagesCount;
-            p[p.length - 2] = "...";
+          if (pages[pages.length - 1] != pagesCount) {
+            pages[pages.length - 1] = pagesCount;
+            pages[pages.length - 2] = "...";
           }
         }
-        return p;
+        return pages;
       },
       isSelected() {
         return this._currentPage === this.page;
@@ -126,4 +126,4 @@ export default function (Alpine) {
       },
     };
   });
-}  
+}

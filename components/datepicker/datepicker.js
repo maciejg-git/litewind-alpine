@@ -21,16 +21,16 @@ export default function (Alpine) {
 
     let isValidLocale = (locale) => {
       try {
-        Intl.getCanonicalLocales(locale)
-        return 1
-      } catch(err) {
-        console.warn(err)
+        Intl.getCanonicalLocales(locale);
+        return 1;
+      } catch (err) {
+        console.warn(err);
       }
-    }
+    };
 
-    const UNSELECTED = 0
-    const FROM_SELECTED = 1
-    const TO_SELECTED = 2
+    const UNSELECTED = 0;
+    const FROM_SELECTED = 1;
+    const TO_SELECTED = 2;
 
     return {
       _today: new Date(),
@@ -57,8 +57,8 @@ export default function (Alpine) {
 
         this.$nextTick(() => {
           Alpine.effect(() => {
-            let locale = Alpine.bound(this.$el, "data-locale") ?? this._locale
-            this._locale = isValidLocale(locale) ? locale : this._locale
+            let locale = Alpine.bound(this.$el, "data-locale") ?? this._locale;
+            this._locale = isValidLocale(locale) ? locale : this._locale;
             this._names.months = this.getMonthNames();
             this._names.weekdays = this.getWeekdayNames();
           });
@@ -121,12 +121,13 @@ export default function (Alpine) {
       },
       getWeekdayNames() {
         return Array.from({ length: 7 }, (v, i) =>
-          new Date(2021, 1, this._mondayFirstWeekday ? i + 1 : i).toLocaleString(
-            this._locale,
-            {
-              weekday: "short",
-            },
-          ),
+          new Date(
+            2021,
+            1,
+            this._mondayFirstWeekday ? i + 1 : i,
+          ).toLocaleString(this._locale, {
+            weekday: "short",
+          }),
         );
       },
       dateToModel(date) {
@@ -141,10 +142,16 @@ export default function (Alpine) {
         });
       },
       setNextMonth() {
-        ({ m: this._month, y: this._year } = nextMonth(this._month, this._year));
+        ({ m: this._month, y: this._year } = nextMonth(
+          this._month,
+          this._year,
+        ));
       },
       setPrevMonth() {
-        ({ m: this._month, y: this._year } = prevMonth(this._month, this._year));
+        ({ m: this._month, y: this._year } = prevMonth(
+          this._month,
+          this._year,
+        ));
       },
       setNextYear() {
         this._year++;
@@ -157,11 +164,16 @@ export default function (Alpine) {
       },
       // this returns array of dates to display including adjacent months days
       days() {
-        let day = getFirstDay(this._year, this._month, this._mondayFirstWeekday);
+        let day = getFirstDay(
+          this._year,
+          this._month,
+          this._mondayFirstWeekday,
+        );
         let daysInMonth = getCountDaysInMonth(this._year, this._month);
 
-        let days = getNumberRange(1, daysInMonth);
-        days = days.map((i) => new Date(Date.UTC(this._year, this._month, i)));
+        let days = getNumberRange(1, daysInMonth).map(
+          (i) => new Date(Date.UTC(this._year, this._month, i)),
+        );
 
         let { m, y } = prevMonth(this._month, this._year);
 
@@ -217,7 +229,7 @@ export default function (Alpine) {
         return this.d.toISOString() + this.isAdjacent();
       },
       getDayText() {
-        return this.d.getDate()
+        return this.d.getDate();
       },
       isToday() {
         return (
@@ -236,10 +248,7 @@ export default function (Alpine) {
         );
       },
       isSelectedRange() {
-        if (
-          this._range &&
-          this._rangeState === TO_SELECTED
-        ) {
+        if (this._range && this._rangeState === TO_SELECTED) {
           return (
             this._selectedRange[0] <= this.d && this.d <= this._selectedRange[1]
           );
@@ -247,12 +256,10 @@ export default function (Alpine) {
         return false;
       },
       isPartiallySelected() {
-        if (
-          this._range &&
-          this._rangeState === FROM_SELECTED
-        ) {
+        if (this._range && this._rangeState === FROM_SELECTED) {
           return (
-            (this._mouseOverDate >= this.d && this.d >= this._selectedRange[0]) ||
+            (this._mouseOverDate >= this.d &&
+              this.d >= this._selectedRange[0]) ||
             (this._mouseOverDate <= this.d && this.d <= this._selectedRange[0])
           );
         }
@@ -316,7 +323,10 @@ export default function (Alpine) {
             c += (classes["class-selected-range"]?.textContent || "") + " ";
           } else if (this.isPartiallySelected()) {
             c += (classes["class-partially-selected"]?.textContent || "") + " ";
-          } else if (typeof this.isDisabled === "function" && this.isDisabled(this.d)) {
+          } else if (
+            typeof this.isDisabled === "function" &&
+            this.isDisabled(this.d)
+          ) {
             c += (classes["class-disabled"]?.textContent || "") + " ";
           } else {
             c += (classes["class-default"]?.textContent || "") + " ";
@@ -337,4 +347,4 @@ export default function (Alpine) {
       },
     };
   });
-}  
+}
