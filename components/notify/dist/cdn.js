@@ -111,6 +111,7 @@
             variant: notify?.variant ?? this._variant,
             options: notify?.options ?? this._options ?? null,
             notifyId: this._notifyId,
+            // the isVisible is used only to trigger transitions
             isVisible: Alpine2.reactive({ value: false }),
             timer: null
           };

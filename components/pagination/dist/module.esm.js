@@ -62,18 +62,18 @@ function pagination_default(Alpine) {
         let first = this._currentPage - Math.ceil(maxPages / 2) + 1;
         let pagesCount = this.getPagesCount();
         first = clamp(first, 1, pagesCount - maxPages + 1);
-        let p = getNumberRange(first, maxPages);
+        let pages = getNumberRange(first, maxPages);
         if (maxPages >= 5) {
-          if (p[0] != 1) {
-            p[0] = 1;
-            p[1] = "...";
+          if (pages[0] != 1) {
+            pages[0] = 1;
+            pages[1] = "...";
           }
-          if (p[p.length - 1] != pagesCount) {
-            p[p.length - 1] = pagesCount;
-            p[p.length - 2] = "...";
+          if (pages[pages.length - 1] != pagesCount) {
+            pages[pages.length - 1] = pagesCount;
+            pages[pages.length - 2] = "...";
           }
         }
-        return p;
+        return pages;
       },
       isSelected() {
         return this._currentPage === this.page;

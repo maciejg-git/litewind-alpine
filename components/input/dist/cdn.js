@@ -59,7 +59,7 @@
           this._value = "";
         },
         input: {
-          // the _externalValue allows components that use input to update its value
+          // the _externalValue allows components that use input component to update its value
           ":value"() {
             return this._externalValue ?? this._value;
           },

@@ -110,12 +110,13 @@
         getWeekdayNames() {
           return Array.from(
             { length: 7 },
-            (v, i) => new Date(2021, 1, this._mondayFirstWeekday ? i + 1 : i).toLocaleString(
-              this._locale,
-              {
-                weekday: "short"
-              }
-            )
+            (v, i) => new Date(
+              2021,
+              1,
+              this._mondayFirstWeekday ? i + 1 : i
+            ).toLocaleString(this._locale, {
+              weekday: "short"
+            })
           );
         },
         dateToModel(date) {
@@ -130,10 +131,16 @@
           });
         },
         setNextMonth() {
-          ({ m: this._month, y: this._year } = nextMonth(this._month, this._year));
+          ({ m: this._month, y: this._year } = nextMonth(
+            this._month,
+            this._year
+          ));
         },
         setPrevMonth() {
-          ({ m: this._month, y: this._year } = prevMonth(this._month, this._year));
+          ({ m: this._month, y: this._year } = prevMonth(
+            this._month,
+            this._year
+          ));
         },
         setNextYear() {
           this._year++;
@@ -144,11 +151,17 @@
         weekdays() {
           return this._names.weekdays;
         },
+        // this returns array of dates to display including adjacent months days
         days() {
-          let day = getFirstDay(this._year, this._month, this._mondayFirstWeekday);
+          let day = getFirstDay(
+            this._year,
+            this._month,
+            this._mondayFirstWeekday
+          );
           let daysInMonth = getCountDaysInMonth(this._year, this._month);
-          let days = getNumberRange(1, daysInMonth);
-          days = days.map((i) => new Date(Date.UTC(this._year, this._month, i)));
+          let days = getNumberRange(1, daysInMonth).map(
+            (i) => new Date(Date.UTC(this._year, this._month, i))
+          );
           let { m, y } = prevMonth(this._month, this._year);
           let daysCountPrev = getCountDaysInMonth(y, m);
           let prevMonthDays = getNumberRange(daysCountPrev - day + 1, day);

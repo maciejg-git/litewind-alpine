@@ -110,6 +110,7 @@ function notify_default(Alpine) {
           variant: notify?.variant ?? this._variant,
           options: notify?.options ?? this._options ?? null,
           notifyId: this._notifyId,
+          // the isVisible is used only to trigger transitions
           isVisible: Alpine.reactive({ value: false }),
           timer: null
         };
