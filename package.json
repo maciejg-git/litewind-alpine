@@ -1,9 +1,9 @@
 {
   "name": "litewind-alpine",
-  "version": "0.1.34",
+  "version": "0.1.35",
   "description": "",
   "exports": {
-    "./breadcrumb.js": "./components/breadcrumb/dist/modules.esm.js",
+    "./breadcrumb.js": "./components/breadcrumb/dist/module.esm.js",
     "./collapse.js": "./components/collapse/dist/module.esm.js",
     "./datepicker.js": "./components/datepicker/dist/module.esm.js",
     "./dropdown.js": "./components/dropdown/dist/module.esm.js",
@@ -20,7 +20,11 @@
     "./input.js": "./components/input/dist/module.esm.js",
     "./select.js": "./components/select/dist/module.esm.js",
     "./textarea.js": "./components/textarea/dist/module.esm.js",
-    "./alert.js": "./components/alert/dist/module.esm.js"
+    "./alert.js": "./components/alert/dist/module.esm.js",
+    "./carousel.js": "./components/carousel/dist/module.esm.js",
+    "./autocomplete.js": "./components/autocomplete/dist/module.esm.js",
+    "./range.js": "./components/range/dist/module.esm.js",
+    "./switch.js": "./components/switch/dist/module.esm.js"
   },
   "scripts": {
     "tailwind": "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch",
