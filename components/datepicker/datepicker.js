@@ -110,6 +110,9 @@ export default function (Alpine) {
 
         Alpine.bind(this.$el, {
           ["x-modelable"]: "_model",
+          "@keyup.escape.window"() {
+            this.cancelRangeSelection()
+          }
         });
       },
       getMonthNames() {
@@ -209,6 +212,11 @@ export default function (Alpine) {
         this._selectedSingle = "";
         this._selectedRange = [];
         this._model = "";
+        this._rangeState = UNSELECTED;
+        this._mouseOverDate = null;
+      },
+      cancelRangeSelection() {
+        this._selectedRange = [];
         this._rangeState = UNSELECTED;
         this._mouseOverDate = null;
       },
