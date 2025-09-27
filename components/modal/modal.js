@@ -76,7 +76,7 @@ export default function (Alpine) {
       },
       positioner: {
       },
-      content: {
+      window: {
         "x-show"() {
           return this._isOpen;
         },

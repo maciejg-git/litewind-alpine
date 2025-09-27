@@ -51,7 +51,7 @@
           class="relative mx-auto flex min-h-full items-center px-6 py-6 md:w-6/12 md:px-0"
         >
           <div
-            x-bind="content"
+            x-bind="window"
             x-alt-transition='{
               "enter": ["opacity-0 scale-[0.97]", "transition ease-out duration-200 delay-100", "opacity-100"],
               "leave": ["opacity-100", "transition ease-in duration-200", "opacity-0 scale-[0.97]"]
@@ -120,7 +120,7 @@
             class="relative mx-auto flex min-h-full w-max items-center md:px-0"
           >
             <div
-              x-bind="content"
+              x-bind="window"
               x-alt-transition='{
                 "enter": ["opacity-0 scale-[0.97]", "transition ease-out duration-200 delay-100", "opacity-100"],
                 "leave": ["opacity-100", "transition ease-in duration-200", "opacity-0 scale-[0.97]"]
