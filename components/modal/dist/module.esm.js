@@ -72,7 +72,7 @@ function modal_default(Alpine) {
         }
       },
       positioner: {},
-      content: {
+      window: {
         "x-show"() {
           return this._isOpen;
         },

@@ -73,7 +73,7 @@
           }
         },
         positioner: {},
-        content: {
+        window: {
           "x-show"() {
             return this._isOpen;
           },
