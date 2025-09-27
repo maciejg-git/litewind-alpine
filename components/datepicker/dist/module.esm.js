@@ -95,7 +95,10 @@ function datepicker_default(Alpine) {
           }
         });
         Alpine.bind(this.$el, {
-          ["x-modelable"]: "_model"
+          ["x-modelable"]: "_model",
+          "@keyup.escape.window"() {
+            this.cancelRangeSelection();
+          }
         });
       },
       getMonthNames() {
@@ -188,6 +191,11 @@ function datepicker_default(Alpine) {
         this._selectedSingle = "";
         this._selectedRange = [];
         this._model = "";
+        this._rangeState = UNSELECTED;
+        this._mouseOverDate = null;
+      },
+      cancelRangeSelection() {
+        this._selectedRange = [];
         this._rangeState = UNSELECTED;
         this._mouseOverDate = null;
       },
