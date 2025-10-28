@@ -78,8 +78,8 @@
             let role = Alpine2.bound(this.$el, "data-role");
             this._role = ariaRoles.includes(role) ? role : null;
             let options = floatingUIoptions.reduce((acc, v) => {
-              return { ...acc, [v]: this[v] };
-            });
+              return { ...acc, [v]: this["_" + v] };
+            }, {});
             _floating = useFloating(
               this.$refs.trigger || this.$root.querySelector("[x-bind='trigger']"),
               this.$refs.menu,
