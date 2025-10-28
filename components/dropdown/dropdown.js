@@ -84,8 +84,8 @@ export default function (Alpine) {
           this._role = ariaRoles.includes(role) ? role : null
 
           let options = floatingUIoptions.reduce((acc, v) => {
-            return { ...acc, [v]: this[v]}
-          })
+            return { ...acc, [v]: this["_" + v]}
+          }, {})
 
           // the x-bind='trigger' is necessary for components that use
           // other components as triggers
