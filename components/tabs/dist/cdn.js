@@ -36,9 +36,7 @@
             }
           });
         },
-        selectTab() {
-          let target = this.$event.target;
-          let tab = target.dataset.tab;
+        selectTab(tab) {
           this._selectedTab = tab;
         },
         isSelected() {
@@ -50,7 +48,7 @@
         },
         label: {
           "@click"() {
-            this.selectTab();
+            this.selectTab(this.$el.dataset.tab);
           },
           "@focusin"() {
             this.$el.scrollIntoView({ behavior: "smooth", block: "nearest" });
