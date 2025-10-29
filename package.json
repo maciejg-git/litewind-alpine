@@ -1,6 +1,6 @@
 {
   "name": "litewind-alpine",
-  "version": "0.1.38",
+  "version": "0.1.39",
   "description": "",
   "exports": {
     "./breadcrumb.js": "./components/breadcrumb/dist/module.esm.js",
