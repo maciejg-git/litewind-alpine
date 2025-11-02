@@ -19,7 +19,6 @@ function tabs_default(Alpine) {
       _selectedTab: "",
       _transition: "",
       init() {
-        this._selectedTab = Alpine.bound(this.$el, "data-selected-tab") ?? this._selectedTab;
         this.$nextTick(() => {
           Alpine.effect(() => {
             this._selectedTab = Alpine.bound(this.$el, "data-selected-tab") ?? this._selectedTab;
@@ -39,7 +38,7 @@ function tabs_default(Alpine) {
         this._selectedTab = tab;
       },
       isSelected() {
-        let tab = this.$el.dataset.tab;
+        let tab = this.$el.closest("[data-tab]")?.dataset.tab;
         return this._selectedTab === tab;
       },
       tabBar: {

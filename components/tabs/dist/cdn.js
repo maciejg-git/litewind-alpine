@@ -20,7 +20,6 @@
         _selectedTab: "",
         _transition: "",
         init() {
-          this._selectedTab = Alpine2.bound(this.$el, "data-selected-tab") ?? this._selectedTab;
           this.$nextTick(() => {
             Alpine2.effect(() => {
               this._selectedTab = Alpine2.bound(this.$el, "data-selected-tab") ?? this._selectedTab;
@@ -40,7 +39,7 @@
           this._selectedTab = tab;
         },
         isSelected() {
-          let tab = this.$el.dataset.tab;
+          let tab = this.$el.closest("[data-tab]")?.dataset.tab;
           return this._selectedTab === tab;
         },
         tabBar: {
