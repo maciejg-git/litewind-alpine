@@ -79,14 +79,14 @@
                 </button>
               </template>
             </header>
-            <main class="px-6 py-5">
+            <div class="px-6 py-5">
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry's standard dummy text
               ever since the 1500s, when an unknown printer took a galley of
               type and scrambled it to make a type specimen book. It has
               survived not only five centuries, but also the leap into
               electronic typesetting, remaining essentially unchanged.
-            </main>
+            </div>
             <footer class="flex justify-end gap-x-6 px-10 py-6">
               <button @click="close()" class="font-semibold">OK</button>
               <button @click="close()" class="font-semibold">Close</button>
@@ -128,7 +128,7 @@
               x-trap="_isOpen"
               class="flex-1 overflow-auto rounded-md bg-white text-text-800 shadow-lg dark:bg-dark-800 dark:text-text-300"
             >
-              <main class="group relative">
+              <div class="group relative">
                 <img
                   :src="'./' + images[currentImage]"
                   alt=""
@@ -191,7 +191,7 @@
                     />
                   </svg>
                 </button>
-              </main>
+              </div>
             </div>
           </div>
         </div>
