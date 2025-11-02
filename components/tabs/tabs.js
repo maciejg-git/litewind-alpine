@@ -41,7 +41,7 @@ export default function (Alpine) {
         this._selectedTab = tab;
       },
       isSelected() {
-        let tab = this.$el.dataset.tab;
+        let tab = this.$el.closest('[data-tab]')?.dataset.tab;
         return this._selectedTab === tab;
       },
       tabBar: {
