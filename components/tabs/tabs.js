@@ -20,8 +20,6 @@ export default function (Alpine) {
       _transition: "",
 
       init() {
-        this._selectedTab =
-          Alpine.bound(this.$el, "data-selected-tab") ?? this._selectedTab;
         this.$nextTick(() => {
           Alpine.effect(() => {
             this._selectedTab =
