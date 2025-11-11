@@ -193,6 +193,7 @@ function table_default(Alpine) {
       header: {
         "@click"() {
           if (!this.isSortable()) return;
+          _invalidateSort = true;
           this._sortAsc = this._sortKey === this.col.key ? -this._sortAsc : 1;
           this._sortKey = this.col.key;
         },
