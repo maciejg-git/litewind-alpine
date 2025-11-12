@@ -15,18 +15,8 @@ export default function (Alpine) {
       _interactive: false,
 
       init() {
-        this._interactive = JSON.parse(
-          Alpine.bound(this.$el, "data-interactive") ?? this._interactive,
-        );
-
         Alpine.bind(this.$el, {
           "x-modelable": "_value",
-          "@click"() {
-            if (!this._interactive) return;
-            let ev = this.$event;
-            let x = (ev.x - ev.target.offsetLeft) / ev.target.clientWidth;
-            this.$dispatch("progress-clicked", x);
-          },
         });
 
         Alpine.bind(this.$el, aria.main)
